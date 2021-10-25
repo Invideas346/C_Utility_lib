@@ -1,6 +1,9 @@
-#include "linkedLists.h"
+#include <linkedLists.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
 
-static Node *init_node(const void *data, uint32_t size)
+static Node *init_node(const void *data, ui32 size)
 {
     Node *node = malloc(sizeof(Node));
     node->data = malloc(size);
@@ -10,19 +13,20 @@ static Node *init_node(const void *data, uint32_t size)
     return node;
 }
 
-static Node *get_node(LinkedList *list, uint32_t position)
+static Node *get_node(LinkedList *list, ui32 position)
 {
+    assert(list->initalized == true);
     Node *temp = NULL;
-    if (position >= list->size || list->size == 0)
+    if(position >= list->size || list->size == 0)
     {
         return NULL;
     }
 
-    if (position >= (int)(list->size / 2))
+    if(position >= (int) (list->size / 2))
     {
         temp = list->tail;
-        uint32_t i = list->size - 1;
-        while (i != position)
+        ui32 i = list->size - 1;
+        while(i != position)
         {
             temp = temp->previous;
             i--;
@@ -31,8 +35,8 @@ static Node *get_node(LinkedList *list, uint32_t position)
     else
     {
         temp = list->head;
-        uint32_t i = 0;
-        while (i != position)
+        ui32 i = 0;
+        while(i != position)
         {
             temp = temp->next;
             i++;
@@ -41,14 +45,16 @@ static Node *get_node(LinkedList *list, uint32_t position)
     return temp;
 }
 
-static void *get_data(LinkedList *list, uint32_t position)
+static void *get_data(LinkedList *list, ui32 position)
 {
+    assert(list->initalized == true);
     return get_node(list, position)->data;
 }
 
 static void clear(LinkedList *list)
 {
-    for (uint32_t i = 0; i < list->size; i++)
+    assert(list->initalized == true);
+    for(ui32 i = 0; i < list->size; i++)
     {
         free(list->get_node(list, i)->data);
         free(list->get_node(list, i));
@@ -58,10 +64,11 @@ static void clear(LinkedList *list)
     list->tail = NULL;
 }
 
-static void push_back(LinkedList *list, void* data, uint32_t size)
+static void push_back(LinkedList *list, void *data, ui32 size)
 {
+    assert(list->initalized == true);
     Node *new_node = init_node(data, size);
-    if (list->size == 0)
+    if(list->size == 0)
     {
         list->head = new_node;
         list->tail = new_node;
@@ -72,13 +79,14 @@ static void push_back(LinkedList *list, void* data, uint32_t size)
         list->tail->next = new_node;
         list->tail = new_node;
     }
-    list->size++;  
+    list->size++;
 }
 
-static void push_front(LinkedList *list, void* data, uint32_t size)
+static void push_front(LinkedList *list, void *data, ui32 size)
 {
+    assert(list->initalized == true);
     Node *new_node = init_node(data, size);
-    if (list->size == 0)
+    if(list->size == 0)
     {
         list->head = new_node;
         list->tail = new_node;
@@ -89,11 +97,12 @@ static void push_front(LinkedList *list, void* data, uint32_t size)
         list->head->previous = new_node;
         list->head = new_node;
     }
-    list->size++;    
+    list->size++;
 }
 
-static void* pop_back(LinkedList *list)
+static void *pop_back(LinkedList *list)
 {
+    assert(list->initalized == true);
     if(list->size == 0)
     {
         return NULL;
@@ -106,8 +115,9 @@ static void* pop_back(LinkedList *list)
     return temp;
 }
 
-static void* pop_front(LinkedList *list)
+static void *pop_front(LinkedList *list)
 {
+    assert(list->initalized == true);
     if(list->size == 0)
     {
         return NULL;
@@ -122,7 +132,8 @@ static void* pop_front(LinkedList *list)
 
 LinkedList *init_list(void)
 {
-    LinkedList *list = malloc(sizeof(LinkedList));
+    LinkedList *list = (LinkedList *) malloc(sizeof(LinkedList));
+
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;
@@ -135,5 +146,7 @@ LinkedList *init_list(void)
     list->get_node = get_node;
     list->get_data = get_data;
     list->clear = clear;
+
+    list->initalized = true;
     return list;
 }
