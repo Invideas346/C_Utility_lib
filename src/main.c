@@ -1,20 +1,21 @@
 #include <stdio.h>
-#include <stdlib.h>
-
 #include <linkedLists.h>
-#include <stringStruct.h>
+#include <dynamicArray.h>
 
-int main(int argc, const char *argv[])
+int main(void)
 {
-    string *aa = init_string("Hallo");
-    printf("%s\n", aa->value);
-
-    printf("%d", aa->equal_cstr(aa, "Hallo"));
-
-    LinkedList *list = init_list();
-    free(list);
-
-    aa->clear(aa);
-    free(aa);
+    int numbers[] = {1,2,3,4,5,6,7,8,9,10,11,12};
+    dynamicArray* array = init_dynamicArray(0, sizeof(ui32));
+    for(int i = 0; i < 12; ++i)
+    {
+        array->push_back(array, &numbers[i]);
+    }
+    for(int i = 0; i < 12; ++i)
+    {
+        ui32* testNum = array->at(array, i);
+        printf("%d. Number: %d\n", i, *testNum);
+        free(testNum);
+    }
+    free(array);
     return 0;
 }

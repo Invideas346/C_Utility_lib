@@ -3,7 +3,4 @@ project(CUtility)
 
 include_directories(include)
 
-# set(LIBARY ON)
-set(EXE ON)
-
 add_subdirectory(src)

@@ -130,14 +130,8 @@ static void *pop_front(LinkedList *list)
     return temp;
 }
 
-LinkedList *init_list(void)
+static void assignMethods(LinkedList *list)
 {
-    LinkedList *list = (LinkedList *) malloc(sizeof(LinkedList));
-
-    list->head = NULL;
-    list->tail = NULL;
-    list->size = 0;
-
     list->push_back = push_back;
     list->push_front = push_front;
     list->pop_back = pop_back;
@@ -146,6 +140,21 @@ LinkedList *init_list(void)
     list->get_node = get_node;
     list->get_data = get_data;
     list->clear = clear;
+}
+
+LinkedList *init_list(void)
+{
+    LinkedList *list = (LinkedList *) malloc(sizeof(LinkedList));
+    if(list == NULL)
+    {
+        return NULL;
+    }
+
+    list->head = NULL;
+    list->tail = NULL;
+    list->size = 0;
+
+    assignMethods(list);
 
     list->initalized = true;
     return list;

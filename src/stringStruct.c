@@ -70,28 +70,47 @@ static boolean equal_cstr(const string* str, const char* str1)
     return (boolean) !strcmp(str->value, str1);
 }
 
+static char* subString(const string* str, ui32 position1, ui32 position2)
+{
+    assert(str->initalized == true);
+    if(position1 >= position2){
+        return NULL;
+    }
+    size_t size = (position2 - position1);
+    char* temp = (char*)malloc(size + 1);
+    memcpy(temp, str->value + position1, position2 - position1);
+    temp[size] = '\0';
+    return temp;
+}
+
+static void assignMethods(string* str)
+{
+    str->clear = clear;
+    str->append = append;
+    str->append_cstr = append_cstr;
+    str->set = set;
+    str->set_cstr = set_cstr;
+    str->find_cstr = find_cstr;
+    str->find = find;
+    str->equal_cstr = equal_cstr;
+    str->equal = equal;
+    str->subString = subString;
+}
+
 string* init_string(const char* value)
 {
     ui32 size = strlen(value);
     string* newString = malloc(sizeof(string));
+    if(newString == NULL)
+    {
+        return NULL;
+    }
 
     newString->value = malloc(size + 1);
     strcpy(newString->value, value);
     newString->size = size;
 
-    newString->clear = clear;
-
-    newString->append = append;
-    newString->append_cstr = append_cstr;
-
-    newString->set = set;
-    newString->set_cstr = set_cstr;
-
-    newString->find_cstr = find_cstr;
-    newString->find = find;
-
-    newString->equal_cstr = equal_cstr;
-    newString->equal = equal;
+    assignMethods(newString);
 
     newString->initalized = true;
     return newString;

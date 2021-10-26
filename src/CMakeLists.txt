@@ -4,6 +4,7 @@ set(SOURCE_FILES
     main.c
     linkedLists.c
     stringStruct.c
+    dynamicArray.c
 )
 
 if(LIBARY)
