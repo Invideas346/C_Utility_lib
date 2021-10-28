@@ -19,7 +19,6 @@ static void* push_back(dynamicArray* array, const void* data)
     realloc(array->data, array->size * array->objectSize);
     memcpy(array->data + ARRAY_INDEX(array->size - 1), data, array->objectSize);
     return (array->data + ARRAY_INDEX(array->size - 1));
-
 }
 
 static void* push_front(dynamicArray* array, const void* data)
@@ -75,9 +74,7 @@ static void* at(dynamicArray* array, ui32 position)
     {
         return NULL;
     }
-    void* data = malloc(array->objectSize);
-    memcpy(data, array->data + ARRAY_INDEX(position), array->objectSize);
-    return data;
+    return array->data + ARRAY_INDEX(position);
 }
 
 boolean resize(dynamicArray* array, ui32 numElements)
@@ -115,7 +112,8 @@ dynamicArray* init_dynamicArray(ui32 size, ui32 objectSize)
     return array;
 }
 
-dynamicArray* init_dynamicArray_data(ui32 size, const void* data, ui32 objectSize) {
+dynamicArray* init_dynamicArray_data(ui32 size, const void* data, ui32 objectSize)
+{
     dynamicArray* array = (dynamicArray*) malloc(sizeof(dynamicArray));
     if(array == NULL)
     {

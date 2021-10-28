@@ -73,11 +73,12 @@ static boolean equal_cstr(const string* str, const char* str1)
 static char* subString(const string* str, ui32 position1, ui32 position2)
 {
     assert(str->initalized == true);
-    if(position1 >= position2){
+    if(position1 >= position2)
+    {
         return NULL;
     }
     size_t size = (position2 - position1);
-    char* temp = (char*)malloc(size + 1);
+    char* temp = (char*) malloc(size + 1);
     memcpy(temp, str->value + position1, position2 - position1);
     temp[size] = '\0';
     return temp;

@@ -4,7 +4,7 @@
 
 int main(void)
 {
-    int numbers[] = {1,2,3,4,5,6,7,8,9,10,11,12};
+    int numbers[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
     dynamicArray* array = init_dynamicArray(0, sizeof(ui32));
     for(int i = 0; i < 12; ++i)
     {
