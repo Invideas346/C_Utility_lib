@@ -84,6 +84,13 @@ static char* subString(const string* str, ui32 position1, ui32 position2)
     return temp;
 }
 
+static string* copy(const string* str)
+{
+    string* newString = init_string_heap(str->value);
+    assert(newString != NULL);
+    return newString;
+}
+
 static void assignMethods(string* str)
 {
     str->clear = clear;
@@ -96,9 +103,10 @@ static void assignMethods(string* str)
     str->equal_cstr = equal_cstr;
     str->equal = equal;
     str->subString = subString;
+    str->copy = copy;
 }
 
-string* init_string(const char* value)
+string* init_string_heap(const char* value)
 {
     ui32 size = strlen(value);
     string* newString = malloc(sizeof(string));
@@ -114,5 +122,17 @@ string* init_string(const char* value)
     assignMethods(newString);
 
     newString->initalized = true;
+    return newString;
+}
+
+string init_string_stack(const char* value)
+{
+    ui32 size = strlen(value);
+    string newString;
+    newString.value = malloc(size + 1);
+    strcpy(newString.value, value);
+    newString.size = size;
+    assignMethods(&newString);
+    newString.initalized = true;
     return newString;
 }

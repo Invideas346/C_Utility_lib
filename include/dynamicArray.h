@@ -16,7 +16,7 @@ struct dynamicArray
     ui32 objectSize;
     ui32 size;
 
-    boolean initalized;
+    boolean initalised;
 
     /**
      * @brief Adds an item to the back of the array.

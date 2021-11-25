@@ -84,8 +84,16 @@ struct string
      * Null gets returned if the position are not valid.
      */
     char* (*subString)(const string* str, ui32 position1, ui32 position2);
+
+    /**
+     * @brief Returns a copy of the string struct.
+     * @param str
+     * @return Returns a copy of itself.
+     */
+    string* (*copy)(const string* str);
 };
 
-string* init_string(const char* value);
+string* init_string_heap(const char* value);
+string init_string_stack(const char* value);
 
 #endif  // __STRINGSTRUCT_H__
