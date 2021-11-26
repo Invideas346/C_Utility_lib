@@ -5,7 +5,9 @@ set(SOURCE_FILES
     linkedLists.c
     stringStruct.c
     dynamicArray.c
-        keyMap.c)
+    keyMap.c
+    manchester.c
+)
 
 if(LIBARY)
     add_library(${PROJECT_NAME} ${SOURCE_FILES})
