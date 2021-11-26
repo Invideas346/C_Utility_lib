@@ -13,6 +13,8 @@ struct KeyPair{
     string key;
     size_t size;
     void* data;
+
+    void (*clear)(KeyPair* pair);
 };
 
 KeyPair* init_keypair_heap(string* key, void* data, size_t size);
@@ -20,7 +22,7 @@ KeyPair init_keypair_stack(string* key, void* data, size_t size);
 
 typedef struct KeyMap KeyMap;
 struct KeyMap{
-    KeyPair *pairs;
+    KeyPair** pairs;
     ui32 count;
 
     boolean isInitialised;
@@ -31,9 +33,13 @@ struct KeyMap{
     void (*remove_last)(KeyMap* self);
 
     void (*clear)(KeyMap* self);
+    KeyPair* (*at)(KeyMap* self, ui32 index);
 };
 
 KeyMap* init_keyMap_heap();
 KeyMap init_keyMap_stack();
+
+KeyPair* init_keypair_heap_cstr(const char* key, void* data, size_t size);
+KeyPair init_keypair_stack_cstr(const char* key, void* data, size_t size);
 
 #endif  // CUTILITY_KEYMAP_H
