@@ -9,10 +9,13 @@
 #include <stringStruct.h>
 
 typedef struct KeyPair KeyPair;
-struct KeyPair{
+struct KeyPair
+{
     string key;
     size_t size;
     void* data;
+
+    boolean isInitialised;
 
     void (*clear)(KeyPair* pair);
 };
@@ -21,16 +24,19 @@ KeyPair* init_keypair_heap(string* key, void* data, size_t size);
 KeyPair init_keypair_stack(string* key, void* data, size_t size);
 
 typedef struct KeyMap KeyMap;
-struct KeyMap{
+struct KeyMap
+{
     KeyPair** pairs;
     ui32 count;
 
     boolean isInitialised;
 
-    void (*add)(KeyMap* self, KeyPair* pair);
-    void (*remove_index)(KeyMap* self, ui32 index);
-    void (*remove_key)(KeyMap* self, string key);
-    void (*remove_last)(KeyMap* self);
+    KeyPair* (*add)(KeyMap* self, KeyPair* pair);
+    void* (*remove_index)(KeyMap* self, ui32 index);
+    void* (*remove_key)(KeyMap* self, const string* key);
+    void* (*remove_key_cstr)(KeyMap* self, const char* key);
+    KeyPair* (*find)(KeyMap* self, const string* key);
+    KeyPair* (*find_cstr)(KeyMap* self, const char* key);
 
     void (*clear)(KeyMap* self);
     KeyPair* (*at)(KeyMap* self, ui32 index);

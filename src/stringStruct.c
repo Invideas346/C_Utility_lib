@@ -8,13 +8,23 @@ static void clear(string* str)
     assert(str->initalized == true);
     free(str->value);
     str->size = 0;
+    str->value = NULL;
 }
 
 static void append_cstr(string* str, const char* stringToAppend)
 {
     assert(str->initalized == true);
     ui32 sizeToAppend = strlen(stringToAppend);
-    realloc(str->value, sizeToAppend + str->size + 1);
+    if(str->value == NULL)
+    {
+        void* newAddress = malloc(sizeof(char) * sizeToAppend);
+        assert(newAddress != NULL);
+    }
+    else
+    {
+        void* newAddress = realloc(str->value, sizeToAppend + str->size + 1);
+        assert(newAddress != NULL);
+    }
     strcat(str->value, stringToAppend);
     str->size = sizeToAppend + str->size;
 }
@@ -22,7 +32,16 @@ static void append_cstr(string* str, const char* stringToAppend)
 static void append(string* str, const string* stringToAppend)
 {
     assert(str->initalized == true && stringToAppend->initalized == true);
-    realloc(str->value, stringToAppend->size + str->size + 1);
+    if(str->value == NULL)
+    {
+        void* newAddress = malloc(sizeof(char) * stringToAppend->size + 1);
+        assert(newAddress != NULL);
+    }
+    else
+    {
+        void* newAddress = realloc(str->value, stringToAppend->size + str->size + 1);
+        assert(newAddress != NULL);
+    }
     strcat(str->value, stringToAppend->value);
     str->size = stringToAppend->size + str->size;
 }
@@ -49,13 +68,21 @@ static void set(string* str, const string* stringToBeSet)
 static ui32 find_cstr(const string* str, const char* str1)
 {
     assert(str->initalized == true);
-    return (ui32) (strstr(str->value, str1) - str->value);
+    if(str->value == NULL)
+    {
+        return INDEX_NOTFOUND;
+    }
+    return (ui32)(strstr(str->value, str1) - str->value);
 }
 
 static ui32 find(const string* str, const string* str1)
 {
     assert(str->initalized == true && str1->initalized == true);
-    return (ui32) (strstr(str->value, str1->value) - str->value);
+    if(str->value == NULL)
+    {
+        return INDEX_NOTFOUND;
+    }
+    return (ui32)(strstr(str->value, str1->value) - str->value);
 }
 
 static boolean equal(const string* str, const string* str1)
@@ -114,13 +141,10 @@ string* init_string_heap(const char* value)
     {
         return NULL;
     }
-
     newString->value = malloc(size + 1);
     strcpy(newString->value, value);
     newString->size = size;
-
     assignMethods(newString);
-
     newString->initalized = true;
     return newString;
 }
