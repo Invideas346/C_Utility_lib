@@ -7,7 +7,7 @@
 #include <string.h>
 #include <keyMap.h>
 
-// TODO: Research whether 1 can be a valid pointer if not change the PARAMETER_ERROR to 0 or
+// TODO: Research whether 1 can be a valid pointer if not change the NULL to 0 or
 // something like that
 
 static ui32 find_index_keymap(KeyMap* self, const char* key)
@@ -32,7 +32,7 @@ static KeyPair* add_keymap(KeyMap* self, KeyPair* pair)
         self->pairs = (KeyPair**) malloc(self->count * sizeof(KeyPair*));
         if(self->pairs == NULL)
         {
-            return ALLOCATION_ERROR;
+            return NULL;
         }
     }
     else
@@ -40,7 +40,7 @@ static KeyPair* add_keymap(KeyMap* self, KeyPair* pair)
         self->pairs = (KeyPair**) realloc(self->pairs, self->count * sizeof(KeyPair*));
         if(self->pairs == NULL)
         {
-            return ALLOCATION_ERROR;
+            return NULL;
         }
     }
     self->pairs[self->count - 1] = init_keypair_heap(&pair->key, pair->data, pair->size);
@@ -52,25 +52,24 @@ static void* remove_index(KeyMap* self, ui32 index)
     assert(self->isInitialised == true);
     if(self->count == 0)
     {
-        return PARAMETER_ERROR;
+        return NULL;
     }
     KeyPair** pair = (KeyPair**) malloc(sizeof(KeyPair*) * self->count - 1);
     for(ui32 i = 0, k = 0; i < self->count; i++)
     {
-        KeyPair* tempPair = self->pairs[i];
         if(i != index)
         {
-            pair[k] = tempPair;
+            pair[k] = self->pairs[i];
         }
         else
         {
-            tempPair->clear(tempPair);
+            self->pairs[i]->clear(self->pairs[i]);
         }
     }
     void* newAddress = realloc(self->pairs, sizeof(KeyPair*) * self->count - 1);
     if(newAddress == NULL)
     {
-        return ALLOCATION_ERROR;
+        return NULL;
     }
     memcpy(self->pairs, pair, sizeof(KeyPair*) * self->count - 1);
     self->count--;
@@ -83,7 +82,7 @@ static void* remove_key(KeyMap* self, const string* key)
     ui32 index = find_index_keymap(self, key->value);
     if(index == INDEX_NOTFOUND)
     {
-        return PARAMETER_ERROR;
+        return NULL;
     }
     return self->remove_index(self, index);
 }
@@ -106,10 +105,9 @@ static KeyPair* at(KeyMap* self, ui32 index)
     assert(self->isInitialised == true);
     if(index >= self->count)
     {
-        return PARAMETER_ERROR;
+        return NULL;
     }
-    KeyPair* pair = self->pairs[index];
-    return pair;
+    return self->pairs[index];
 }
 
 static void* remove_key_cstr(KeyMap* self, const char* key)
@@ -118,7 +116,7 @@ static void* remove_key_cstr(KeyMap* self, const char* key)
     ui32 index = find_index_keymap(self, key);
     if(index == INDEX_NOTFOUND)
     {
-        return PARAMETER_ERROR;
+        return NULL;
     }
     return self->remove_index(self, index);
 }
@@ -126,27 +124,23 @@ static void* remove_key_cstr(KeyMap* self, const char* key)
 static KeyPair* find_cstr(KeyMap* self, const char* key)
 {
     assert(self->isInitialised == true);
-    KeyPair* pair = NULL;
     ui32 index = find_index_keymap(self, key);
     if(index == INDEX_NOTFOUND)
     {
-        return PARAMETER_ERROR;
+        return NULL;
     }
-    pair = self->at(self, index);
-    return pair;
+    return self->at(self, index);
 }
 
 static KeyPair* find(KeyMap* self, const string* key)
 {
     assert(self->isInitialised == true);
-    KeyPair* pair = NULL;
     ui32 index = find_index_keymap(self, key->value);
     if(index == INDEX_NOTFOUND)
     {
-        return PARAMETER_ERROR;
+        return NULL;
     }
-    pair = self->at(self, index);
-    return pair;
+    return self->at(self, index);
 }
 
 static KeyMap* assign_methods_keymap(KeyMap* map)
@@ -197,7 +191,7 @@ KeyPair* init_keypair_heap(string* key, void* data, size_t size)
     KeyPair* newKeyPair = (KeyPair*) malloc(sizeof(KeyPair));
     if(newKeyPair == NULL)
     {
-        return ALLOCATION_ERROR;
+        return NULL;
     }
     newKeyPair->size = size;
     newKeyPair->data = malloc(size);
@@ -213,13 +207,13 @@ KeyPair* init_keypair_heap_cstr(const char* key, void* data, size_t size)
     KeyPair* newKeyPair = (KeyPair*) malloc(sizeof(KeyPair));
     if(newKeyPair == NULL)
     {
-        return ALLOCATION_ERROR;
+        return NULL;
     }
     newKeyPair->size = size;
     newKeyPair->data = malloc(size);
     if(newKeyPair->data == NULL)
     {
-        return ALLOCATION_ERROR;
+        return NULL;
     }
     memcpy(newKeyPair->data, data, size);
     newKeyPair->key = init_string_stack(key);

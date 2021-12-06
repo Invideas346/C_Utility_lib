@@ -15,13 +15,12 @@ static Node *init_node(const void *data, ui32 size)
 
 static Node *get_node(LinkedList *list, ui32 position)
 {
-    assert(list->initalized == true);
+    assert(list->isInitalised == true);
     Node *temp = NULL;
     if(position >= list->size || list->size == 0)
     {
         return NULL;
     }
-
     if(position >= (int) (list->size / 2))
     {
         temp = list->tail;
@@ -47,13 +46,13 @@ static Node *get_node(LinkedList *list, ui32 position)
 
 static void *get_data(LinkedList *list, ui32 position)
 {
-    assert(list->initalized == true);
+    assert(list->isInitalised == true);
     return get_node(list, position)->data;
 }
 
 static void clear(LinkedList *list)
 {
-    assert(list->initalized == true);
+    assert(list->isInitalised == true);
     for(ui32 i = 0; i < list->size; i++)
     {
         free(list->get_node(list, i)->data);
@@ -66,7 +65,7 @@ static void clear(LinkedList *list)
 
 static void push_back(LinkedList *list, void *data, ui32 size)
 {
-    assert(list->initalized == true);
+    assert(list->isInitalised == true);
     Node *new_node = init_node(data, size);
     if(list->size == 0)
     {
@@ -84,7 +83,7 @@ static void push_back(LinkedList *list, void *data, ui32 size)
 
 static void push_front(LinkedList *list, void *data, ui32 size)
 {
-    assert(list->initalized == true);
+    assert(list->isInitalised == true);
     Node *new_node = init_node(data, size);
     if(list->size == 0)
     {
@@ -102,7 +101,7 @@ static void push_front(LinkedList *list, void *data, ui32 size)
 
 static void *pop_back(LinkedList *list)
 {
-    assert(list->initalized == true);
+    assert(list->isInitalised == true);
     if(list->size == 0)
     {
         return NULL;
@@ -117,7 +116,7 @@ static void *pop_back(LinkedList *list)
 
 static void *pop_front(LinkedList *list)
 {
-    assert(list->initalized == true);
+    assert(list->isInitalised == true);
     if(list->size == 0)
     {
         return NULL;
@@ -149,13 +148,10 @@ LinkedList *init_list(void)
     {
         return NULL;
     }
-
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;
-
     assignMethods(list);
-
-    list->initalized = true;
+    list->isInitalised = true;
     return list;
 }

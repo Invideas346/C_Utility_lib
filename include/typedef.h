@@ -9,9 +9,6 @@
 // 0xffffffff could be reached but is extremly unlikely.
 #define INDEX_NOTFOUND 0xffffffff
 
-#define ALLOCATION_ERROR (void*) 0
-#define PARAMETER_ERROR (void*) 1
-
 typedef uint8_t boolean;
 
 typedef uint8_t ui8;

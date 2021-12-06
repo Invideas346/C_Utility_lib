@@ -6,12 +6,13 @@
 
 typedef struct string string;
 
+// TODO: Implement void* to most function to indicate whether the operation was successful.
 struct string
 {
     char* value;
     ui32 size;
 
-    boolean initalized;
+    boolean isInitalised;
 
     /**
      * @brief Resizes the array to 0 effectively freeing the memory.
@@ -24,26 +25,26 @@ struct string
      * @param str
      * @param stringToAppend
      */
-    void (*append_cstr)(string* str, const char* stringToAppend);
+    void* (*append_cstr)(string* str, const char* stringToAppend);
     /**
      * @brief Appends a string to the end of the string.
      * @param str
      * @param otherString
      */
-    void (*append)(string* str, const string* otherString);
+    void* (*append)(string* str, const string* otherString);
 
     /**
      * @brief Sets the string with the passed in char-array.
      * @param str
      * @param stringToBeSet
      */
-    void (*set_cstr)(string* str, const char* stringToBeSet);
+    void* (*set_cstr)(string* str, const char* stringToBeSet);
     /**
      * @brief Sets the string with the passed in string.
      * @param str
      * @param otherString
      */
-    void (*set)(string* str, const string* otherString);
+    void* (*set)(string* str, const string* otherString);
 
     /**
      * @brief Finds a series of characters in the string.

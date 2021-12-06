@@ -10,29 +10,29 @@
 
 static void* push_back(dynamicArray* array, const void* data)
 {
-    assert(array->initalised == true);
+    assert(array->isInitalised == true);
     if(array->objectSize == 0)
     {
-        return PARAMETER_ERROR;
+        return NULL;
     }
     array->size += 1;
     void* success = realloc(array->data, array->size * array->objectSize);
     memcpy(array->data + ARRAY_INDEX(array->size - 1), data, array->objectSize);
-    return (array->data + ARRAY_INDEX(array->size - 1));
+    return array->data + ARRAY_INDEX(array->size - 1);
 }
 
 static void* push_front(dynamicArray* array, const void* data)
 {
-    assert(array->initalised == true);
+    assert(array->isInitalised == true);
     if(array->objectSize == 0)
     {
-        return PARAMETER_ERROR;
+        return NULL;
     }
     array->size += 1;
     void* newAddress = realloc(array->data, array->size * array->objectSize);
     if(newAddress == NULL)
     {
-        return ALLOCATION_ERROR;
+        return NULL;
     }
     memcpy(array->data + ARRAY_INDEX(1), array->data + ARRAY_INDEX(0), array->objectSize);
     memcpy(array->data + ARRAY_INDEX(0), data, array->objectSize);
@@ -41,10 +41,10 @@ static void* push_front(dynamicArray* array, const void* data)
 
 static void* pop_back(dynamicArray* array)
 {
-    assert(array->initalised == true);
+    assert(array->isInitalised == true);
     if(array->size == 0 || array->objectSize <= 0)
     {
-        return PARAMETER_ERROR;
+        return NULL;
     }
     void* data = malloc(array->objectSize);
     memcpy(data, array->data + ARRAY_INDEX(array->size - 1), array->objectSize);
@@ -52,17 +52,17 @@ static void* pop_back(dynamicArray* array)
     void* newAddress = realloc(array->data, array->size * array->objectSize);
     if(newAddress == NULL)
     {
-        return ALLOCATION_ERROR;
+        return NULL;
     }
     return data;
 }
 
 static void* pop_front(dynamicArray* array)
 {
-    assert(array->initalised == true);
+    assert(array->isInitalised == true);
     if(array->size == 0 || array->objectSize <= 0)
     {
-        return PARAMETER_ERROR;
+        return NULL;
     }
     void* data = malloc(array->objectSize);
     memcpy(data, array->data + ARRAY_INDEX(0), array->objectSize);
@@ -72,7 +72,7 @@ static void* pop_front(dynamicArray* array)
     void* newAddress = realloc(array->data, array->size * array->objectSize);
     if(newAddress == NULL)
     {
-        return ALLOCATION_ERROR;
+        return NULL;
     }
     memcpy(array->data, temp, array->size * array->objectSize);
     free(temp);
@@ -81,17 +81,17 @@ static void* pop_front(dynamicArray* array)
 
 static void* at(dynamicArray* array, ui32 position)
 {
-    assert(array->initalised == true);
+    assert(array->isInitalised == true);
     if(array->size == 0 || array->objectSize <= 0)
     {
-        return PARAMETER_ERROR;
+        return NULL;
     }
     return array->data + ARRAY_INDEX(position);
 }
 
 boolean resize(dynamicArray* array, ui32 numElements)
 {
-    assert(array->initalised == true);
+    assert(array->isInitalised == true);
     if(array->size == 0 || array->objectSize <= 0 || numElements < 0)
     {
         return false;
@@ -118,13 +118,13 @@ dynamicArray* init_dynamicArray(ui32 size, ui32 objectSize)
     dynamicArray* array = (dynamicArray*) malloc(sizeof(dynamicArray));
     if(array == NULL)
     {
-        return ALLOCATION_ERROR;
+        return NULL;
     }
     array->size = size;
     array->objectSize = objectSize;
     array->data = malloc(size * objectSize);
     assignMethods(array);
-    array->initalised = true;
+    array->isInitalised = true;
     return array;
 }
 
@@ -133,13 +133,13 @@ dynamicArray* init_dynamicArray_data(ui32 size, const void* data, ui32 objectSiz
     dynamicArray* array = (dynamicArray*) malloc(sizeof(dynamicArray));
     if(array == NULL)
     {
-        return ALLOCATION_ERROR;
+        return NULL;
     }
     array->size = size;
     array->objectSize = objectSize;
     array->data = malloc(size * objectSize);
     memcpy(array->data, data, size * objectSize);
     assignMethods(array);
-    array->initalised = true;
+    array->isInitalised = true;
     return array;
 }
