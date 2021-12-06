@@ -135,7 +135,6 @@ static void assignMethods(LinkedList *list)
     list->push_front = push_front;
     list->pop_back = pop_back;
     list->pop_front = pop_front;
-
     list->get_node = get_node;
     list->get_data = get_data;
     list->clear = clear;

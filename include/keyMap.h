@@ -108,6 +108,15 @@ struct KeyMap
      * If a error occured or the index is invalid NULL is returned.
      */
     KeyPair* (*at)(KeyMap* self, ui32 index);
+
+    /**
+     * @brief Creates a copy of itself.
+     */
+    KeyMap* (*copy_heap)(KeyMap* self);
+    /**
+     * @brief Creates a copy of itself.
+     */
+    KeyMap (*copy_stack)(KeyMap* self);
 };
 
 /**

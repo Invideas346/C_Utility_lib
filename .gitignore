@@ -53,10 +53,3 @@ dkms.conf
 
 .vscode
 build
-
-cmake-build-debug
-cmake-build-release
-cmake-build-library-debug
-cmake-build-library-release
-cmake-build-exe
-cmake-build-libary

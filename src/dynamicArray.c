@@ -8,7 +8,7 @@
 
 #define ARRAY_INDEX(index) ((index) * (array->objectSize))
 
-static void* push_back(dynamicArray* array, const void* data)
+static void* push_back(DynamicArray* array, const void* data)
 {
     assert(array->isInitalised == true);
     if(array->objectSize == 0)
@@ -21,7 +21,7 @@ static void* push_back(dynamicArray* array, const void* data)
     return array->data + ARRAY_INDEX(array->size - 1);
 }
 
-static void* push_front(dynamicArray* array, const void* data)
+static void* push_front(DynamicArray* array, const void* data)
 {
     assert(array->isInitalised == true);
     if(array->objectSize == 0)
@@ -39,7 +39,7 @@ static void* push_front(dynamicArray* array, const void* data)
     return array->data + ARRAY_INDEX(0);
 }
 
-static void* pop_back(dynamicArray* array)
+static void* pop_back(DynamicArray* array)
 {
     assert(array->isInitalised == true);
     if(array->size == 0 || array->objectSize <= 0)
@@ -57,7 +57,7 @@ static void* pop_back(dynamicArray* array)
     return data;
 }
 
-static void* pop_front(dynamicArray* array)
+static void* pop_front(DynamicArray* array)
 {
     assert(array->isInitalised == true);
     if(array->size == 0 || array->objectSize <= 0)
@@ -79,7 +79,7 @@ static void* pop_front(dynamicArray* array)
     return data;
 }
 
-static void* at(dynamicArray* array, ui32 position)
+static void* at(DynamicArray* array, ui32 position)
 {
     assert(array->isInitalised == true);
     if(array->size == 0 || array->objectSize <= 0)
@@ -89,7 +89,7 @@ static void* at(dynamicArray* array, ui32 position)
     return array->data + ARRAY_INDEX(position);
 }
 
-boolean resize(dynamicArray* array, ui32 numElements)
+boolean resize(DynamicArray* array, ui32 numElements)
 {
     assert(array->isInitalised == true);
     if(array->size == 0 || array->objectSize <= 0 || numElements < 0)
@@ -104,18 +104,35 @@ boolean resize(dynamicArray* array, ui32 numElements)
     return true;
 }
 
-static void assignMethods(dynamicArray* array)
+static DynamicArray* copy_heap(DynamicArray* array)
+{
+    assert(array->isInitalised == true);
+    DynamicArray* copy = init_dynamicArray_heap_data(array->size, array->data, array->objectSize);
+    return copy;
+}
+
+static DynamicArray copy_stack(DynamicArray* array)
+{
+    assert(array->isInitalised == true);
+    DynamicArray copy = init_dynamicArray_stack_data(array->size, array->data, array->objectSize);
+    return copy;
+}
+
+static void assignMethods(DynamicArray* array)
 {
     array->push_back = push_back;
     array->push_front = push_front;
     array->pop_back = pop_back;
     array->pop_front = pop_front;
     array->at = at;
+    array->resize = resize;
+    array->copy_heap = copy_heap;
+    array->copy_stack = copy_stack;
 }
 
-dynamicArray* init_dynamicArray(ui32 size, ui32 objectSize)
+DynamicArray* init_dynamicArray_heap(ui32 size, ui32 objectSize)
 {
-    dynamicArray* array = (dynamicArray*) malloc(sizeof(dynamicArray));
+    DynamicArray* array = (DynamicArray*) malloc(sizeof(DynamicArray));
     if(array == NULL)
     {
         return NULL;
@@ -128,9 +145,9 @@ dynamicArray* init_dynamicArray(ui32 size, ui32 objectSize)
     return array;
 }
 
-dynamicArray* init_dynamicArray_data(ui32 size, const void* data, ui32 objectSize)
+DynamicArray* init_dynamicArray_heap_data(ui32 size, const void* data, ui32 objectSize)
 {
-    dynamicArray* array = (dynamicArray*) malloc(sizeof(dynamicArray));
+    DynamicArray* array = (DynamicArray*) malloc(sizeof(DynamicArray));
     if(array == NULL)
     {
         return NULL;
@@ -141,5 +158,28 @@ dynamicArray* init_dynamicArray_data(ui32 size, const void* data, ui32 objectSiz
     memcpy(array->data, data, size * objectSize);
     assignMethods(array);
     array->isInitalised = true;
+    return array;
+}
+
+DynamicArray init_dynamicArray_stack(ui32 size, ui32 objectSize)
+{
+    DynamicArray array;
+    array.size = size;
+    array.objectSize = objectSize;
+    array.data = malloc(size * objectSize);
+    assignMethods(&array);
+    array.isInitalised = true;
+    return array;
+}
+
+DynamicArray init_dynamicArray_stack_data(ui32 size, const void* data, ui32 objectSize)
+{
+    DynamicArray array;
+    array.size = size;
+    array.objectSize = objectSize;
+    array.data = malloc(size * objectSize);
+    memcpy(array.data, data, size * objectSize);
+    assignMethods(&array);
+    array.isInitalised = true;
     return array;
 }

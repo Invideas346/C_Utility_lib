@@ -91,7 +91,14 @@ struct string
      * @param str
      * @return Returns a copy of itself.
      */
-    string* (*copy)(const string* str);
+    string* (*copy_heap)(const string* str);
+
+    /**
+     * @brief Returns a copy of the string struct.
+     * @param str
+     * @return Returns a copy of itself.
+     */
+    string (*copy_stack)(const string* str);
 };
 
 string* init_string_heap(const char* value);

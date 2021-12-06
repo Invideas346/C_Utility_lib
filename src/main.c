@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <keyMap.h>
 #include <manchester.h>
+#include <dynamicArray.h>
 
 int main(void)
 {
@@ -14,5 +15,5 @@ int main(void)
     pair.clear(&pair);
     pair1.clear(&pair1);
     map.clear(&map);
-    return 0;
+    return EXIT_SUCCESS;
 }

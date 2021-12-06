@@ -123,9 +123,15 @@ static char* subString(const string* str, ui32 position1, ui32 position2)
     return temp;
 }
 
-static string* copy(const string* str)
+static string* copy_heap(const string* str)
 {
     string* newString = init_string_heap(str->value);
+    return newString;
+}
+
+static string copy_stack(const string* str)
+{
+    string newString = init_string_stack(str->value);
     return newString;
 }
 
@@ -141,7 +147,8 @@ static void assignMethods(string* str)
     str->equal_cstr = equal_cstr;
     str->equal = equal;
     str->subString = subString;
-    str->copy = copy;
+    str->copy_heap = copy_heap;
+    str->copy_stack = copy_stack;
 }
 
 string* init_string_heap(const char* value)

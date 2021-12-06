@@ -89,6 +89,7 @@ static void* remove_key(KeyMap* self, const string* key)
 
 static void clear_keymap(KeyMap* self)
 {
+    assert(self->isInitialised == true);
     for(ui32 i = 0; i < self->count; ++i)
     {
         KeyPair* pair = *self->pairs;
@@ -143,7 +144,29 @@ static KeyPair* find(KeyMap* self, const string* key)
     return self->at(self, index);
 }
 
-static KeyMap* assign_methods_keymap(KeyMap* map)
+static KeyMap* copy_heap(KeyMap* self)
+{
+    assert(self->isInitialised == true);
+    KeyMap* copy = init_keyMap_heap();
+    for(ui32 i = 0; i < self->count; i++)
+    {
+        copy->add(copy, self->at(self, i));
+    }
+    return copy;
+}
+
+static KeyMap copy_stack(KeyMap* self)
+{
+    assert(self->isInitialised == true);
+    KeyMap copy = init_keyMap_stack();
+    for(ui32 i = 0; i < self->count; i++)
+    {
+        copy.add(&copy, self->at(self, i));
+    }
+    return copy;
+}
+
+static void assign_methods_keymap(KeyMap* map)
 {
     map->add = add_keymap;
     map->remove_index = remove_index;
@@ -153,14 +176,15 @@ static KeyMap* assign_methods_keymap(KeyMap* map)
     map->remove_key_cstr = remove_key_cstr;
     map->find_cstr = find_cstr;
     map->find = find;
-    return map;
+    map->copy_heap = copy_heap;
+    map->copy_stack = copy_stack;
 }
 
 KeyMap* init_keyMap_heap()
 {
     KeyMap* map = (KeyMap*) malloc(sizeof(KeyMap));
     map->count = 0;
-    map = assign_methods_keymap(map);
+    assign_methods_keymap(map);
     map->isInitialised = true;
     return map;
 }
@@ -176,6 +200,7 @@ KeyMap init_keyMap_stack()
 
 static void clear_keypair(KeyPair* pair)
 {
+    assert(pair->isInitialised == true);
     pair->key.clear(&pair->key);
     free(pair->data);
 }
