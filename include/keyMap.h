@@ -2,8 +2,8 @@
 // Created by wolfgang on 11.11.2021.
 //
 
-#ifndef CUTILITY_KEYMAP_H
-#define CUTILITY_KEYMAP_H
+#ifndef __CUTILITY_KEYMAP_H__
+#define __CUTILITY_KEYMAP_H__
 
 #include <typedef.h>
 #include <stringStruct.h>
@@ -11,7 +11,7 @@
 typedef struct KeyPair KeyPair;
 struct KeyPair
 {
-    string key;
+    String key;
     size_t size;
     void* data;
 
@@ -27,12 +27,12 @@ struct KeyPair
  * @brief Creates a new KeyPair initalized with all function pointers.
  * @return KeyMap*
  */
-KeyPair* init_keypair_heap(string* key, void* data, size_t size);
+KeyPair* init_keypair_heap(String* key, void* data, size_t size);
 /**
  * @brief Creates a new KeyPair initalized with all function pointers.
  * @return KeyMap
  */
-KeyPair init_keypair_stack(string* key, void* data, size_t size);
+KeyPair init_keypair_stack(String* key, void* data, size_t size);
 
 /**
  * @brief Creates a new KeyPair initalized with all function pointers.
@@ -71,7 +71,7 @@ struct KeyMap
      * @return Returns the pointer onto the keymap is successful. If a error occured NULL is
      * returned.
      */
-    void* (*remove_key)(KeyMap* self, const string* key);
+    void* (*remove_key)(KeyMap* self, const String* key);
 
     /**
      * @brief Removes a KeyPair based on a string.
@@ -85,7 +85,7 @@ struct KeyMap
      * @return Returns the pointer onto the Keypair matching the passed in string.
      * If a error occured or the key was not found NULL is returned.
      */
-    KeyPair* (*find)(KeyMap* self, const string* key);
+    KeyPair* (*find)(KeyMap* self, const String* key);
 
     /**
      * @brief Finds a KeyPair based on a string.
@@ -130,4 +130,4 @@ KeyMap* init_keyMap_heap();
  */
 KeyMap init_keyMap_stack();
 
-#endif  // CUTILITY_KEYMAP_H
+#endif  // __CUTILITY_KEYMAP_H__

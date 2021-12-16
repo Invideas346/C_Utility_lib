@@ -2,8 +2,8 @@
 // Created by Wolfgang Aigner on 26.10.2021.
 //
 
-#ifndef _DYNAMICARRAY_H
-#define _DYNAMICARRAY_H
+#ifndef __DYNAMICARRAY_H__
+#define __DYNAMICARRAY_H__
 
 #include <stdlib.h>
 #include <typedef.h>
@@ -18,6 +18,11 @@ struct DynamicArray
 
     boolean isInitalised;
 
+    /**
+     * @brief Removes all indecies and frees the occupied heap memory.
+     * 
+     */
+    void (*clear)(DynamicArray* array);
     /**
      * @brief Adds an item to the back of the array.
      * @param array
@@ -41,14 +46,14 @@ struct DynamicArray
      * @return Returns a pointer to a heap allocated object containing the value of removes item.
      * Returns NULL if a error occured.
      */
-    void* (*pop_back)(DynamicArray* array);
+    boolean (*pop_back)(DynamicArray* array);
     /**
      * @brief Removes the first item of the array.
      * @param array
      * @return Returns a pointer to a heap allocated object containing the value of removes item.
      * Returns NULL if a error occured.
      */
-    void* (*pop_front)(DynamicArray* array);
+    boolean (*pop_front)(DynamicArray* array);
 
     /**
      * @brief Returns the pointer to the specified element within the array.
@@ -82,12 +87,12 @@ struct DynamicArray
  * @brief Creates a new dynamic array initalized with all function pointers.
  * @return dynamicArray*
  */
-DynamicArray* init_dynamicArray_heap(ui32 size, ui32 objectSize);
+DynamicArray* init_DYNAMICARRAY_Heap(ui32 size, ui32 objectSize);
 /**
  * @brief Creates a new dynamic array initalized with all function pointers.
  * @return dynamicArray*
  */
-DynamicArray* init_dynamicArray_heap_data(ui32 size, const void* data, ui32 objectSize);
+DynamicArray* init_DYNAMICARRAY_Heap_data(ui32 size, const void* data, ui32 objectSize);
 
 /**
  * @brief Creates a new dynamic array initalized with all function pointers.
@@ -100,4 +105,4 @@ DynamicArray init_dynamicArray_stack(ui32 size, ui32 objectSize);
  */
 DynamicArray init_dynamicArray_stack_data(ui32 size, const void* data, ui32 objectSize);
 
-#endif  // _DYNAMICARRAY_H
+#endif  // __DYNAMICARRAY_H__

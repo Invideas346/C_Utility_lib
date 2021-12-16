@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-static void clear(string* str)
+static void clear(String* str)
 {
     assert(str->isInitalised == true);
     free(str->value);
@@ -11,7 +11,7 @@ static void clear(string* str)
     str->value = NULL;
 }
 
-static void* append_cstr(string* str, const char* stringToAppend)
+static boolean append_cstr(String* str, const char* stringToAppend)
 {
     assert(str->isInitalised == true);
     ui32 sizeToAppend = strlen(stringToAppend);
@@ -20,7 +20,7 @@ static void* append_cstr(string* str, const char* stringToAppend)
         void* newAddress = malloc(sizeof(char) * sizeToAppend);
         if(newAddress == NULL)
         {
-            return NULL;
+            return false;
         }
     }
     else
@@ -28,14 +28,15 @@ static void* append_cstr(string* str, const char* stringToAppend)
         void* newAddress = realloc(str->value, sizeToAppend + str->size + 1);
         if(newAddress == NULL)
         {
-            return NULL;
+            return false;
         }
     }
     strcat(str->value, stringToAppend);
     str->size = sizeToAppend + str->size;
+    return true;
 }
 
-static void* append(string* str, const string* stringToAppend)
+static boolean append(String* str, const String* stringToAppend)
 {
     assert(str->isInitalised == true && stringToAppend->isInitalised == true);
     if(str->value == NULL)
@@ -43,7 +44,7 @@ static void* append(string* str, const string* stringToAppend)
         void* newAddress = malloc(sizeof(char) * stringToAppend->size + 1);
         if(newAddress == NULL)
         {
-            return NULL;
+            return false;
         }
     }
     else
@@ -51,33 +52,44 @@ static void* append(string* str, const string* stringToAppend)
         void* newAddress = realloc(str->value, stringToAppend->size + str->size + 1);
         if(newAddress == NULL)
         {
-            return NULL;
+            return false;
         }
     }
     strcat(str->value, stringToAppend->value);
     str->size = stringToAppend->size + str->size;
+    return true;
 }
 
-static void* set_cstr(string* str, const char* stringToBeSet)
+static boolean set_cstr(String* str, const char* stringToBeSet)
 {
     assert(str->isInitalised == true);
     ui32 sizeToBeSet = strlen(stringToBeSet);
     free(str->value);
     str->value = malloc(sizeToBeSet + 1);
+    if(str->value == NULL)
+    {
+        return false;
+    }
     strcpy(str->value, stringToBeSet);
     str->size = sizeToBeSet;
+    return true;
 }
 
-static void* set(string* str, const string* stringToBeSet)
+static boolean set(String* str, const String* stringToBeSet)
 {
     assert(str->isInitalised == true && stringToBeSet->isInitalised == true);
     free(str->value);
     str->value = malloc(stringToBeSet->size + 1);
+    if(str->value == NULL)
+    {
+        return false;
+    }
     strcpy(str->value, stringToBeSet->value);
     str->size = stringToBeSet->size;
+    return true;
 }
 
-static ui32 find_cstr(const string* str, const char* str1)
+static ui32 find_cstr(const String* str, const char* str1)
 {
     assert(str->isInitalised == true);
     if(str->value == NULL)
@@ -87,7 +99,7 @@ static ui32 find_cstr(const string* str, const char* str1)
     return (ui32)(strstr(str->value, str1) - str->value);
 }
 
-static ui32 find(const string* str, const string* str1)
+static ui32 find(const String* str, const String* str1)
 {
     assert(str->isInitalised == true && str1->isInitalised == true);
     if(str->value == NULL)
@@ -97,19 +109,19 @@ static ui32 find(const string* str, const string* str1)
     return (ui32)(strstr(str->value, str1->value) - str->value);
 }
 
-static boolean equal(const string* str, const string* str1)
+static boolean equal(const String* str, const String* str1)
 {
     assert(str->isInitalised == true && str1->isInitalised == true);
     return (boolean) !strcmp(str->value, str1->value);
 }
 
-static boolean equal_cstr(const string* str, const char* str1)
+static boolean equal_cstr(const String* str, const char* str1)
 {
     assert(str->isInitalised == true);
     return (boolean) !strcmp(str->value, str1);
 }
 
-static char* subString(const string* str, ui32 position1, ui32 position2)
+static char* subString(const String* str, ui32 position1, ui32 position2)
 {
     assert(str->isInitalised == true);
     if(position1 >= position2)
@@ -123,19 +135,19 @@ static char* subString(const string* str, ui32 position1, ui32 position2)
     return temp;
 }
 
-static string* copy_heap(const string* str)
+static String* copy_heap(const String* str)
 {
-    string* newString = init_string_heap(str->value);
+    String* newString = init_string_heap(str->value);
     return newString;
 }
 
-static string copy_stack(const string* str)
+static String copy_stack(const String* str)
 {
-    string newString = init_string_stack(str->value);
+    String newString = init_string_stack(str->value);
     return newString;
 }
 
-static void assignMethods(string* str)
+static void assignMethods(String* str)
 {
     str->clear = clear;
     str->append = append;
@@ -151,10 +163,10 @@ static void assignMethods(string* str)
     str->copy_stack = copy_stack;
 }
 
-string* init_string_heap(const char* value)
+String* init_string_heap(const char* value)
 {
     ui32 size = strlen(value);
-    string* newString = malloc(sizeof(string));
+    String* newString = malloc(sizeof(String));
     if(newString == NULL)
     {
         return NULL;
@@ -167,10 +179,10 @@ string* init_string_heap(const char* value)
     return newString;
 }
 
-string init_string_stack(const char* value)
+String init_string_stack(const char* value)
 {
     ui32 size = strlen(value);
-    string newString;
+    String newString;
     newString.value = malloc(size + 1);
     strcpy(newString.value, value);
     newString.size = size;

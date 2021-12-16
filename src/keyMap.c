@@ -76,7 +76,7 @@ static void* remove_index(KeyMap* self, ui32 index)
     return self->pairs;
 }
 
-static void* remove_key(KeyMap* self, const string* key)
+static void* remove_key(KeyMap* self, const String* key)
 {
     assert(self->isInitialised == true);
     ui32 index = find_index_keymap(self, key->value);
@@ -133,7 +133,7 @@ static KeyPair* find_cstr(KeyMap* self, const char* key)
     return self->at(self, index);
 }
 
-static KeyPair* find(KeyMap* self, const string* key)
+static KeyPair* find(KeyMap* self, const String* key)
 {
     assert(self->isInitialised == true);
     ui32 index = find_index_keymap(self, key->value);
@@ -211,7 +211,7 @@ static KeyPair* assign_methods_keypair(KeyPair* pair)
     return pair;
 }
 
-KeyPair* init_keypair_heap(string* key, void* data, size_t size)
+KeyPair* init_keypair_heap(String* key, void* data, size_t size)
 {
     KeyPair* newKeyPair = (KeyPair*) malloc(sizeof(KeyPair));
     if(newKeyPair == NULL)
@@ -247,7 +247,7 @@ KeyPair* init_keypair_heap_cstr(const char* key, void* data, size_t size)
     return newKeyPair;
 }
 
-KeyPair init_keypair_stack(string* key, void* data, size_t size)
+KeyPair init_keypair_stack(String* key, void* data, size_t size)
 {
     KeyPair newKeyPair;
     newKeyPair.size = size;

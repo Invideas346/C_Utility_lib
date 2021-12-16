@@ -2,18 +2,15 @@
 #include <keyMap.h>
 #include <manchester.h>
 #include <dynamicArray.h>
+#include <string.h>
+
+// TODO: Figure out whether to store pointer referneces in the data structs or make copies of them
 
 int main(void)
 {
-    ui32 num = 420;
-    KeyPair pair = init_keypair_stack_cstr("test", &num, sizeof(ui32));
-    KeyPair pair1 = init_keypair_stack_cstr("test1", &num, sizeof(ui32));
-    KeyMap map = init_keyMap_stack();
-    map.add(&map, &pair);
-    map.add(&map, &pair1);
-    map.remove_index(&map, 0);
-    pair.clear(&pair);
-    pair1.clear(&pair1);
-    map.clear(&map);
+    String name = init_string_stack("Wolfgang Aigner");
+    name.append_cstr(&name, "123");
+    printf("My name is %s", name.value);
+    name.clear(&name);
     return EXIT_SUCCESS;
 }
