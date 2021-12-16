@@ -9,10 +9,12 @@
 
 // TODO: Research whether 1 can be a valid pointer if not change the NULL to 0 or
 // something like that
+#define ASSERT_INIT(x) assert(x->isInitialised)
 
+//! not tested yet
 static ui32 find_index_keymap(KeyMap* self, const char* key)
 {
-    assert(self->isInitialised == true);
+    ASSERT_INIT(self);
     for(ui32 i = 0; i < self->count; i++)
     {
         if(self->at(self, i)->key.equal_cstr(&self->at(self, i)->key, key))
@@ -23,9 +25,10 @@ static ui32 find_index_keymap(KeyMap* self, const char* key)
     return INDEX_NOTFOUND;
 }
 
+//! not tested yet
 static KeyPair* add_keymap(KeyMap* self, KeyPair* pair)
 {
-    assert(self->isInitialised == true);
+    ASSERT_INIT(self);
     self->count++;
     if(self->count == 1)
     {
@@ -47,9 +50,10 @@ static KeyPair* add_keymap(KeyMap* self, KeyPair* pair)
     return self->pairs[self->count - 1];
 }
 
+//! not tested yet
 static void* remove_index(KeyMap* self, ui32 index)
 {
-    assert(self->isInitialised == true);
+    ASSERT_INIT(self);
     if(self->count == 0)
     {
         return NULL;
@@ -76,9 +80,10 @@ static void* remove_index(KeyMap* self, ui32 index)
     return self->pairs;
 }
 
+//! not tested yet
 static void* remove_key(KeyMap* self, const String* key)
 {
-    assert(self->isInitialised == true);
+    ASSERT_INIT(self);
     ui32 index = find_index_keymap(self, key->value);
     if(index == INDEX_NOTFOUND)
     {
@@ -87,9 +92,10 @@ static void* remove_key(KeyMap* self, const String* key)
     return self->remove_index(self, index);
 }
 
+//! not tested yet
 static void clear_keymap(KeyMap* self)
 {
-    assert(self->isInitialised == true);
+    ASSERT_INIT(self);
     for(ui32 i = 0; i < self->count; ++i)
     {
         KeyPair* pair = *self->pairs;
@@ -101,9 +107,10 @@ static void clear_keymap(KeyMap* self)
     self->count = 0;
 }
 
+//! not tested yet
 static KeyPair* at(KeyMap* self, ui32 index)
 {
-    assert(self->isInitialised == true);
+    ASSERT_INIT(self);
     if(index >= self->count)
     {
         return NULL;
@@ -111,9 +118,10 @@ static KeyPair* at(KeyMap* self, ui32 index)
     return self->pairs[index];
 }
 
+//! not tested yet
 static void* remove_key_cstr(KeyMap* self, const char* key)
 {
-    assert(self->isInitialised == true);
+    ASSERT_INIT(self);
     ui32 index = find_index_keymap(self, key);
     if(index == INDEX_NOTFOUND)
     {
@@ -122,9 +130,10 @@ static void* remove_key_cstr(KeyMap* self, const char* key)
     return self->remove_index(self, index);
 }
 
+//! not tested yet
 static KeyPair* find_cstr(KeyMap* self, const char* key)
 {
-    assert(self->isInitialised == true);
+    ASSERT_INIT(self);
     ui32 index = find_index_keymap(self, key);
     if(index == INDEX_NOTFOUND)
     {
@@ -133,9 +142,10 @@ static KeyPair* find_cstr(KeyMap* self, const char* key)
     return self->at(self, index);
 }
 
+//! not tested yet
 static KeyPair* find(KeyMap* self, const String* key)
 {
-    assert(self->isInitialised == true);
+    ASSERT_INIT(self);
     ui32 index = find_index_keymap(self, key->value);
     if(index == INDEX_NOTFOUND)
     {
@@ -144,9 +154,10 @@ static KeyPair* find(KeyMap* self, const String* key)
     return self->at(self, index);
 }
 
+//! not tested yet
 static KeyMap* copy_heap(KeyMap* self)
 {
-    assert(self->isInitialised == true);
+    ASSERT_INIT(self);
     KeyMap* copy = init_keyMap_heap();
     for(ui32 i = 0; i < self->count; i++)
     {
@@ -155,9 +166,10 @@ static KeyMap* copy_heap(KeyMap* self)
     return copy;
 }
 
+//! not tested yet
 static KeyMap copy_stack(KeyMap* self)
 {
-    assert(self->isInitialised == true);
+    ASSERT_INIT(self);
     KeyMap copy = init_keyMap_stack();
     for(ui32 i = 0; i < self->count; i++)
     {

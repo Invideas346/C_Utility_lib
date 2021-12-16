@@ -3,6 +3,8 @@
 #include <string.h>
 #include <assert.h>
 
+#define ASSERT_INIT(x) assert(x->isInitalised)
+
 static Node *init_node(const void *data, ui32 size)
 {
     Node *node = malloc(sizeof(Node));
@@ -13,9 +15,10 @@ static Node *init_node(const void *data, ui32 size)
     return node;
 }
 
+//! not tested yet
 static Node *get_node(LinkedList *list, ui32 position)
 {
-    assert(list->isInitalised == true);
+    ASSERT_INIT(list);
     Node *temp = NULL;
     if(position >= list->size || list->size == 0)
     {
@@ -44,15 +47,17 @@ static Node *get_node(LinkedList *list, ui32 position)
     return temp;
 }
 
+//! not tested yet
 static void *get_data(LinkedList *list, ui32 position)
 {
-    assert(list->isInitalised == true);
+    ASSERT_INIT(list);
     return get_node(list, position)->data;
 }
 
+//! not tested yet
 static void clear(LinkedList *list)
 {
-    assert(list->isInitalised == true);
+    ASSERT_INIT(list);
     for(ui32 i = 0; i < list->size; i++)
     {
         free(list->get_node(list, i)->data);
@@ -63,9 +68,10 @@ static void clear(LinkedList *list)
     list->tail = NULL;
 }
 
+//! not tested yet
 static void push_back(LinkedList *list, void *data, ui32 size)
 {
-    assert(list->isInitalised == true);
+    ASSERT_INIT(list);
     Node *new_node = init_node(data, size);
     if(list->size == 0)
     {
@@ -81,9 +87,10 @@ static void push_back(LinkedList *list, void *data, ui32 size)
     list->size++;
 }
 
+//! not tested yet
 static void push_front(LinkedList *list, void *data, ui32 size)
 {
-    assert(list->isInitalised == true);
+    ASSERT_INIT(list);
     Node *new_node = init_node(data, size);
     if(list->size == 0)
     {
@@ -99,9 +106,10 @@ static void push_front(LinkedList *list, void *data, ui32 size)
     list->size++;
 }
 
+//! not tested yet
 static void *pop_back(LinkedList *list)
 {
-    assert(list->isInitalised == true);
+    ASSERT_INIT(list);
     if(list->size == 0)
     {
         return NULL;
@@ -114,9 +122,10 @@ static void *pop_back(LinkedList *list)
     return temp;
 }
 
+//! not tested yet
 static void *pop_front(LinkedList *list)
 {
-    assert(list->isInitalised == true);
+    ASSERT_INIT(list);
     if(list->size == 0)
     {
         return NULL;

@@ -20,6 +20,12 @@ struct String
     void (*clear)(String* str);
 
     /**
+     * @brief Inserts a given string at the specified index.
+     *
+     */
+    boolean (*insert)(String* self, String* str, ui32 index);
+
+    /**
      * @brief Appends a char-array to the end of the string.
      * @param str
      * @param stringToAppend

@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.16.3)
 
-
 if(LIBARY)
     set(SOURCE_FILES
         linkedLists.c

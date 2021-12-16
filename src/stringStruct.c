@@ -3,17 +3,21 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#define ASSERT_INIT(x) assert(x->isInitalised)
+
+//! not tested yet
 static void clear(String* str)
 {
-    assert(str->isInitalised == true);
+    ASSERT_INIT(str);
     free(str->value);
     str->size = 0;
     str->value = NULL;
 }
 
+//! not tested yet
 static boolean append_cstr(String* str, const char* stringToAppend)
 {
-    assert(str->isInitalised == true);
+    ASSERT_INIT(str);
     ui32 sizeToAppend = strlen(stringToAppend);
     if(str->value == NULL)
     {
@@ -36,6 +40,7 @@ static boolean append_cstr(String* str, const char* stringToAppend)
     return true;
 }
 
+//! not tested yet
 static boolean append(String* str, const String* stringToAppend)
 {
     assert(str->isInitalised == true && stringToAppend->isInitalised == true);
@@ -60,9 +65,10 @@ static boolean append(String* str, const String* stringToAppend)
     return true;
 }
 
+//! not tested yet
 static boolean set_cstr(String* str, const char* stringToBeSet)
 {
-    assert(str->isInitalised == true);
+    ASSERT_INIT(str);
     ui32 sizeToBeSet = strlen(stringToBeSet);
     free(str->value);
     str->value = malloc(sizeToBeSet + 1);
@@ -75,9 +81,11 @@ static boolean set_cstr(String* str, const char* stringToBeSet)
     return true;
 }
 
+//! not tested yet
 static boolean set(String* str, const String* stringToBeSet)
 {
-    assert(str->isInitalised == true && stringToBeSet->isInitalised == true);
+    ASSERT_INIT(str);
+    ASSERT_INIT(stringToBeSet);
     free(str->value);
     str->value = malloc(stringToBeSet->size + 1);
     if(str->value == NULL)
@@ -89,9 +97,10 @@ static boolean set(String* str, const String* stringToBeSet)
     return true;
 }
 
+//! not tested yet
 static ui32 find_cstr(const String* str, const char* str1)
 {
-    assert(str->isInitalised == true);
+    ASSERT_INIT(str);
     if(str->value == NULL)
     {
         return INDEX_NOTFOUND;
@@ -99,9 +108,11 @@ static ui32 find_cstr(const String* str, const char* str1)
     return (ui32)(strstr(str->value, str1) - str->value);
 }
 
+//! not tested yet
 static ui32 find(const String* str, const String* str1)
 {
-    assert(str->isInitalised == true && str1->isInitalised == true);
+    ASSERT_INIT(str);
+    ASSERT_INIT(str1);
     if(str->value == NULL)
     {
         return INDEX_NOTFOUND;
@@ -109,21 +120,49 @@ static ui32 find(const String* str, const String* str1)
     return (ui32)(strstr(str->value, str1->value) - str->value);
 }
 
+//! not tested yet
 static boolean equal(const String* str, const String* str1)
 {
-    assert(str->isInitalised == true && str1->isInitalised == true);
+    ASSERT_INIT(str);
+    ASSERT_INIT(str1);
     return (boolean) !strcmp(str->value, str1->value);
 }
 
+//! not tested yet
 static boolean equal_cstr(const String* str, const char* str1)
 {
-    assert(str->isInitalised == true);
+    ASSERT_INIT(str);
     return (boolean) !strcmp(str->value, str1);
 }
 
+//! not tested yet
+static boolean insert(String* self, String* str, ui32 index)
+{
+    ASSERT_INIT(str);
+    ASSERT_INIT(self);
+    if(index >= self->size || str->size == 0)
+    {
+        return false;
+    }
+    char* copy = malloc(self->size);
+    strncpy(copy, self->value, index);
+    strcat(copy, str->value);
+    strcat(copy, self->value[index]);
+    self->size += str->size;
+    char* newAddress = realloc(self->value, self->size);
+    if(newAddress == NULL)
+    {
+        return false;
+    }
+    strcpy(self->value, copy);
+    free(copy);
+    return true;
+}
+
+//! not tested yet
 static char* subString(const String* str, ui32 position1, ui32 position2)
 {
-    assert(str->isInitalised == true);
+    ASSERT_INIT(str);
     if(position1 >= position2)
     {
         return NULL;
@@ -135,14 +174,18 @@ static char* subString(const String* str, ui32 position1, ui32 position2)
     return temp;
 }
 
+//! not tested yet
 static String* copy_heap(const String* str)
 {
+    ASSERT_INIT(str);
     String* newString = init_string_heap(str->value);
     return newString;
 }
 
+//! not tested yet
 static String copy_stack(const String* str)
 {
+    ASSERT_INIT(str);
     String newString = init_string_stack(str->value);
     return newString;
 }

@@ -7,10 +7,12 @@
 #include <assert.h>
 
 #define ARRAY_INDEX(index) ((index) * (array->objectSize))
+#define ASSERT_INIT(x) assert(x->isInitalised)
 
+//! not tested yet
 static void* push_back(DynamicArray* array, const void* data)
 {
-    assert(array->isInitalised == true);
+    ASSERT_INIT(array);
     if(array->objectSize == 0)
     {
         return NULL;
@@ -21,9 +23,10 @@ static void* push_back(DynamicArray* array, const void* data)
     return array->data + ARRAY_INDEX(array->size - 1);
 }
 
+//! not tested yet
 static void* push_front(DynamicArray* array, const void* data)
 {
-    assert(array->isInitalised == true);
+    ASSERT_INIT(array);
     if(array->objectSize == 0)
     {
         return NULL;
@@ -39,9 +42,10 @@ static void* push_front(DynamicArray* array, const void* data)
     return array->data + ARRAY_INDEX(0);
 }
 
+//! not tested yet
 static boolean pop_back(DynamicArray* array)
 {
-    assert(array->isInitalised == true);
+    ASSERT_INIT(array);
     if(array->size == 0 || array->objectSize <= 0)
     {
         return false;
@@ -55,9 +59,10 @@ static boolean pop_back(DynamicArray* array)
     return true;
 }
 
+//! not tested yet
 static boolean pop_front(DynamicArray* array)
 {
-    assert(array->isInitalised == true);
+    ASSERT_INIT(array);
     if(array->size == 0 || array->objectSize <= 0)
     {
         return false;
@@ -76,9 +81,10 @@ static boolean pop_front(DynamicArray* array)
     return true;
 }
 
+//! not tested yet
 static void* at(DynamicArray* array, ui32 position)
 {
-    assert(array->isInitalised == true);
+    ASSERT_INIT(array);
     if(array->size == 0 || array->objectSize <= 0)
     {
         return NULL;
@@ -86,9 +92,10 @@ static void* at(DynamicArray* array, ui32 position)
     return array->data + ARRAY_INDEX(position);
 }
 
+//! not tested yet
 boolean resize(DynamicArray* array, ui32 numElements)
 {
-    assert(array->isInitalised == true);
+    ASSERT_INIT(array);
     if(array->size == 0 || array->objectSize <= 0 || numElements < 0)
     {
         return false;
@@ -101,23 +108,26 @@ boolean resize(DynamicArray* array, ui32 numElements)
     return true;
 }
 
+//! not tested yet
 static DynamicArray* copy_heap(DynamicArray* array)
 {
-    assert(array->isInitalised == true);
-    DynamicArray* copy =
-        init_DYNAMICARRAY_Heap_data(array->size, array->data, array->objectSize);
+    ASSERT_INIT(array);
+    DynamicArray* copy = init_DYNAMICARRAY_Heap_data(array->size, array->data, array->objectSize);
     return copy;
 }
 
+//! not tested yet
 static DynamicArray copy_stack(DynamicArray* array)
 {
-    assert(array->isInitalised == true);
+    ASSERT_INIT(array);
     DynamicArray copy = init_dynamicArray_stack_data(array->size, array->data, array->objectSize);
     return copy;
 }
 
+//! not tested yet
 static void clear(DynamicArray* array)
 {
+    ASSERT_INIT(array);
     free(array->data);
     array->size = 0;
 }

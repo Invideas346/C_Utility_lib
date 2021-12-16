@@ -3,6 +3,7 @@
 //
 #include <manchester.h>
 
+//! not tested yet
 ui8 man_dec_8(ui16 data, MAN_POLARITY polarity)
 {
     ui8 decData = 0;
@@ -33,6 +34,7 @@ ui8 man_dec_8(ui16 data, MAN_POLARITY polarity)
     }
     return decData;
 }
+//! not tested yet
 ui16 man_dec_16(ui32 data, MAN_POLARITY polarity)
 {
     ui16 decData = 0;
@@ -59,6 +61,7 @@ ui16 man_dec_16(ui32 data, MAN_POLARITY polarity)
     }
     return decData;
 }
+//! not tested yet
 ui32 man_dec_32(ui64 data, MAN_POLARITY polarity)
 {
     ui32 decData = 0;
@@ -86,6 +89,7 @@ ui32 man_dec_32(ui64 data, MAN_POLARITY polarity)
     return decData;
 }
 
+//! not tested yet
 ui16 man_enc_8(ui8 data, MAN_POLARITY polarity)
 {
     ui16 encData = 0;
@@ -124,6 +128,7 @@ ui16 man_enc_8(ui8 data, MAN_POLARITY polarity)
     }
     return encData;
 }
+//! not tested yet
 ui32 man_enc_16(ui16 data, MAN_POLARITY polarity)
 {
     ui32 encData = 0;
@@ -150,6 +155,7 @@ ui32 man_enc_16(ui16 data, MAN_POLARITY polarity)
     }
     return encData;
 }
+//! not tested yet
 ui64 man_enc_32(ui32 data, MAN_POLARITY polarity)
 {
     ui64 encData = 0u;
