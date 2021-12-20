@@ -7,11 +7,4 @@
 // TODO: Go over all functions ever implemented and check the behaviour of them
 // TODO: Figure out whether to store pointer referneces in the data structs or make copies of them
 
-int main(void)
-{
-    String name = init_string_stack("Wolfgang Aigner");
-    name.append_cstr(&name, "123");
-    printf("My name is %s", name.value);
-    name.clear(&name);
-    return EXIT_SUCCESS;
-}
+int main(void) { return EXIT_SUCCESS; }

@@ -9,7 +9,6 @@
 #define ARRAY_INDEX(index) ((index) * (array->objectSize))
 #define ASSERT_INIT(x) assert(x->isInitalised)
 
-//! not tested yet
 static void* push_back(DynamicArray* array, const void* data)
 {
     ASSERT_INIT(array);
@@ -18,12 +17,15 @@ static void* push_back(DynamicArray* array, const void* data)
         return NULL;
     }
     array->size += 1;
-    void* success = realloc(array->data, array->size * array->objectSize);
+    void* newAddress = realloc(array->data, array->size * array->objectSize);
+    if(newAddress == NULL)
+    {
+        return NULL;
+    }
     memcpy(array->data + ARRAY_INDEX(array->size - 1), data, array->objectSize);
     return array->data + ARRAY_INDEX(array->size - 1);
 }
 
-//! not tested yet
 static void* push_front(DynamicArray* array, const void* data)
 {
     ASSERT_INIT(array);
@@ -37,12 +39,15 @@ static void* push_front(DynamicArray* array, const void* data)
     {
         return NULL;
     }
-    memcpy(array->data + ARRAY_INDEX(1), array->data + ARRAY_INDEX(0), array->objectSize);
+    if(array->size != 1)
+    {
+        memcpy(array->data + ARRAY_INDEX(1), array->data + ARRAY_INDEX(0),
+               array->objectSize * (array->size - 1));
+    }
     memcpy(array->data + ARRAY_INDEX(0), data, array->objectSize);
     return array->data + ARRAY_INDEX(0);
 }
 
-//! not tested yet
 static boolean pop_back(DynamicArray* array)
 {
     ASSERT_INIT(array);
@@ -59,7 +64,6 @@ static boolean pop_back(DynamicArray* array)
     return true;
 }
 
-//! not tested yet
 static boolean pop_front(DynamicArray* array)
 {
     ASSERT_INIT(array);
@@ -69,6 +73,10 @@ static boolean pop_front(DynamicArray* array)
     }
     array->size -= 1;
     void* temp = malloc(array->objectSize * array->size);
+    if(temp == NULL)
+    {
+        return false;
+    }
     memcpy(temp, array->data + ARRAY_INDEX(1), array->size * array->objectSize);
     void* newAddress = realloc(array->data, array->size * array->objectSize);
     if(newAddress == NULL)
@@ -81,7 +89,6 @@ static boolean pop_front(DynamicArray* array)
     return true;
 }
 
-//! not tested yet
 static void* at(DynamicArray* array, ui32 position)
 {
     ASSERT_INIT(array);
@@ -92,11 +99,10 @@ static void* at(DynamicArray* array, ui32 position)
     return array->data + ARRAY_INDEX(position);
 }
 
-//! not tested yet
 boolean resize(DynamicArray* array, ui32 numElements)
 {
     ASSERT_INIT(array);
-    if(array->size == 0 || array->objectSize <= 0 || numElements < 0)
+    if(array->objectSize <= 0 || numElements < 0)
     {
         return false;
     }
@@ -105,18 +111,17 @@ boolean resize(DynamicArray* array, ui32 numElements)
     {
         return false;
     }
+    array->size = numElements;
     return true;
 }
 
-//! not tested yet
 static DynamicArray* copy_heap(DynamicArray* array)
 {
     ASSERT_INIT(array);
-    DynamicArray* copy = init_DYNAMICARRAY_Heap_data(array->size, array->data, array->objectSize);
+    DynamicArray* copy = init_dynamicArray_heap_data(array->size, array->data, array->objectSize);
     return copy;
 }
 
-//! not tested yet
 static DynamicArray copy_stack(DynamicArray* array)
 {
     ASSERT_INIT(array);
@@ -124,11 +129,11 @@ static DynamicArray copy_stack(DynamicArray* array)
     return copy;
 }
 
-//! not tested yet
 static void clear(DynamicArray* array)
 {
     ASSERT_INIT(array);
     free(array->data);
+    array->data = NULL;
     array->size = 0;
 }
 
@@ -164,7 +169,7 @@ DynamicArray* init_DYNAMICARRAY_Heap(ui32 size, ui32 objectSize)
     return array;
 }
 
-DynamicArray* init_DYNAMICARRAY_Heap_data(ui32 size, const void* data, ui32 objectSize)
+DynamicArray* init_dynamicArray_heap_data(ui32 size, const void* data, ui32 objectSize)
 {
     DynamicArray* array = (DynamicArray*) malloc(sizeof(DynamicArray));
     if(array == NULL)

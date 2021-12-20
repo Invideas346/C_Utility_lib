@@ -8,6 +8,10 @@
 #include <stdlib.h>
 #include <typedef.h>
 
+// TODO: Maybe implement a foreach methode into which a function gets passed like void (*)(void*data, ui32 index)
+// TODO: Maybe implement a toString function (not sure it is really ever gonna be needed)
+// TODO: Implement a remove via index function.
+
 typedef struct DynamicArray DynamicArray;
 
 struct DynamicArray
@@ -20,7 +24,7 @@ struct DynamicArray
 
     /**
      * @brief Removes all indecies and frees the occupied heap memory.
-     * 
+     *
      */
     void (*clear)(DynamicArray* array);
     /**
@@ -92,7 +96,7 @@ DynamicArray* init_DYNAMICARRAY_Heap(ui32 size, ui32 objectSize);
  * @brief Creates a new dynamic array initalized with all function pointers.
  * @return dynamicArray*
  */
-DynamicArray* init_DYNAMICARRAY_Heap_data(ui32 size, const void* data, ui32 objectSize);
+DynamicArray* init_dynamicArray_heap_data(ui32 size, const void* data, ui32 objectSize);
 
 /**
  * @brief Creates a new dynamic array initalized with all function pointers.
