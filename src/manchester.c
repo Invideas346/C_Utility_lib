@@ -2,6 +2,7 @@
 // Created by wolfgang on 26.11.2021.
 //
 #include <manchester.h>
+#include <stdio.h>
 
 //! not tested yet
 ui8 man_dec_8(ui16 data, MAN_POLARITY polarity)
@@ -181,4 +182,32 @@ ui64 man_enc_32(ui32 data, MAN_POLARITY polarity)
             break;
     }
     return encData;
+}
+
+void bin_output8(ui8 data)
+{
+    char output[9] = {'0', '0', '0', '0', '0', '0', '0', '0', 0};
+    for(ui32 i = 0; i < 8; i++)
+    {
+        output[7 - i] += ((data & (0x1 << i)) >> i);
+    }
+    printf("%s", output);
+}
+void bin_output16(ui16 data)
+{
+    bin_output8((data & (0xff << 8)) >> 8);
+    printf(" ");
+    bin_output8(data & 0xff);
+}
+void bin_output32(ui32 data)
+{
+    bin_output16((ui16)((data & (0xffff << 16)) >> 16));
+    printf(" ");
+    bin_output16(data & 0xffff);
+}
+void bin_output64(ui64 data)
+{
+    bin_output32((data & ((ui64) 0xffffffff << 32)) >> 32);
+    printf(" ");
+    bin_output32((ui32)(data & 0xffffffff));
 }

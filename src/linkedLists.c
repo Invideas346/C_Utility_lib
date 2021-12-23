@@ -1,3 +1,7 @@
+//
+// Created by Wolfgang Aigner on 26.10.2021.
+//
+
 #include <linkedLists.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,7 +19,6 @@ static Node *init_node(const void *data, ui32 size)
     return node;
 }
 
-//! not tested yet
 static Node *get_node(LinkedList *list, ui32 position)
 {
     ASSERT_INIT(list);
@@ -47,14 +50,12 @@ static Node *get_node(LinkedList *list, ui32 position)
     return temp;
 }
 
-//! not tested yet
 static void *get_data(LinkedList *list, ui32 position)
 {
     ASSERT_INIT(list);
     return get_node(list, position)->data;
 }
 
-//! not tested yet
 static void clear(LinkedList *list)
 {
     ASSERT_INIT(list);
@@ -68,7 +69,6 @@ static void clear(LinkedList *list)
     list->tail = NULL;
 }
 
-//! not tested yet
 static void push_back(LinkedList *list, void *data, ui32 size)
 {
     ASSERT_INIT(list);
@@ -87,7 +87,6 @@ static void push_back(LinkedList *list, void *data, ui32 size)
     list->size++;
 }
 
-//! not tested yet
 static void push_front(LinkedList *list, void *data, ui32 size)
 {
     ASSERT_INIT(list);
@@ -106,7 +105,6 @@ static void push_front(LinkedList *list, void *data, ui32 size)
     list->size++;
 }
 
-//! not tested yet
 static void *pop_back(LinkedList *list)
 {
     ASSERT_INIT(list);
@@ -122,7 +120,6 @@ static void *pop_back(LinkedList *list)
     return temp;
 }
 
-//! not tested yet
 static void *pop_front(LinkedList *list)
 {
     ASSERT_INIT(list);

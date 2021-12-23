@@ -21,4 +21,9 @@ ui16 man_enc_8(ui8 data, MAN_POLARITY polarity);
 ui32 man_enc_16(ui16 data, MAN_POLARITY polarity);
 ui64 man_enc_32(ui32 data, MAN_POLARITY polarity);
 
+void bin_output8(ui8 data);
+void bin_output16(ui16 data);
+void bin_output32(ui32 data);
+void bin_output64(ui64 data);
+
 #endif  // __MANCHESTER_H__

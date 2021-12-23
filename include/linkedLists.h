@@ -42,12 +42,14 @@ struct LinkedList
      * @brief Removes a element from the end of the array.
      * @param list
      * @return A pointer to a newly created pointer with the removes value. Null if unsuccessful.
+     * Free has to be called on the returend pointer.
      */
     void* (*pop_back)(LinkedList* list);
     /**
      * @brief Removes a element from the beginning of the array.
      * @param list
      * @return A pointer to a newly created pointer with the removes value. Null if unsuccessful.
+     * Free has to be called on the returend pointer.
      */
     void* (*pop_front)(LinkedList* list);
 

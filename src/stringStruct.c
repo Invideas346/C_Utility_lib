@@ -1,4 +1,9 @@
+//
+// Created by Wolfgang Aigner on 26.10.2021.
+//
+
 #include <stringStruct.h>
+#include <linkedLists.h>
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
