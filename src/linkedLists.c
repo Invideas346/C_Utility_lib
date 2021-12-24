@@ -146,7 +146,7 @@ static void assignMethods(LinkedList *list)
     list->clear = clear;
 }
 
-LinkedList *init_list(void)
+LinkedList *init_list_heap(void)
 {
     LinkedList *list = (LinkedList *) malloc(sizeof(LinkedList));
     if(list == NULL)
@@ -158,5 +158,16 @@ LinkedList *init_list(void)
     list->size = 0;
     assignMethods(list);
     list->isInitalised = true;
+    return list;
+}
+
+LinkedList init_list_stack(void)
+{
+    LinkedList list;
+    list.head = NULL;
+    list.tail = NULL;
+    list.size = 0;
+    assignMethods(&list);
+    list.isInitalised = true;
     return list;
 }

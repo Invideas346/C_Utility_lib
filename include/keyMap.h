@@ -15,7 +15,7 @@ struct KeyPair
     size_t size;
     void* data;
 
-    boolean isInitialised;
+    boolean isInitalised;
 
     /**
      * @brief Clear a KeyPair and effecticly frees all allocated memory.
@@ -51,7 +51,7 @@ struct KeyMap
     KeyPair** pairs;
     ui32 count;
 
-    boolean isInitialised;
+    boolean isInitalised;
 
     /**
      * @brief Adds an KeyPair to the array.
@@ -61,21 +61,21 @@ struct KeyMap
 
     /**
      * @brief Removes a KeyPair from the array based on the index.
-     * @return Returns the pointer onto the keymap is successful. If a error occured NULL is
+     * @return Returns the pointer onto the keymap is successful. If an error occured NULL is
      * returned.
      */
     void* (*remove_index)(KeyMap* self, ui32 index);
 
     /**
      * @brief Removes a KeyPair based on a string.
-     * @return Returns the pointer onto the keymap is successful. If a error occured NULL is
+     * @return Returns the pointer onto the keymap is successful. If an error occured NULL is
      * returned.
      */
     void* (*remove_key)(KeyMap* self, const String* key);
 
     /**
      * @brief Removes a KeyPair based on a string.
-     * @return Returns the pointer onto the keymap is successful. If a error occured NULL is
+     * @return Returns the pointer onto the keymap is successful. If an error occured NULL is
      * returned.
      */
     void* (*remove_key_cstr)(KeyMap* self, const char* key);
@@ -83,14 +83,14 @@ struct KeyMap
     /**
      * @brief Finds a KeyPair based on a string.
      * @return Returns the pointer onto the Keypair matching the passed in string.
-     * If a error occured or the key was not found NULL is returned.
+     * If an error occured or the key was not found NULL is returned.
      */
     KeyPair* (*find)(KeyMap* self, const String* key);
 
     /**
      * @brief Finds a KeyPair based on a string.
      * @return Returns the pointer onto the Keypair matching the passed in string.
-     * If a error occured or the key was not found NULL is returned.
+     * If an error occured or the key was not found NULL is returned.
      */
     KeyPair* (*find_cstr)(KeyMap* self, const char* key);
 
@@ -105,7 +105,7 @@ struct KeyMap
      * The pointer can be motified as neede but it should be kept in mind that this is not a copy
      * it's the actual pointer residing within the array.
      * @return Returns the pointer onto the Keypair located on the passed in index.
-     * If a error occured or the index is invalid NULL is returned.
+     * If an error occured or the index is invalid NULL is returned.
      */
     KeyPair* (*at)(KeyMap* self, ui32 index);
 

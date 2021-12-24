@@ -76,6 +76,7 @@ struct LinkedList
     void (*clear)(LinkedList* list);
 };
 
-LinkedList* init_list(void);
+LinkedList init_list_stack(void);
+LinkedList* init_list_heap(void);
 
 #endif  // __LINKEDLISTS_H__
