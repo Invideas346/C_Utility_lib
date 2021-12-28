@@ -18,7 +18,7 @@ struct DynamicArray
 {
     void* data;
     ui32 objectSize;
-    ui32 size;
+    ui32 length;
 
     boolean isInitalised;
 

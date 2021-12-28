@@ -9,7 +9,7 @@ typedef struct String String;
 struct String
 {
     char* value;
-    ui32 size;
+    ui32 length;
 
     boolean isInitalised;
 
@@ -24,6 +24,12 @@ struct String
      *
      */
     boolean (*insert)(String* self, String* str, ui32 index);
+
+    /**
+     * @brief Inserts a given string at the specified index.
+     *
+     */
+    boolean (*insert_cstr)(String* self, const char* str, ui32 index);
 
     /**
      * @brief Appends a char-array to the end of the string.
@@ -89,7 +95,7 @@ struct String
      * @return Returns a new string with the corresponding string.
      * Null gets returned if the position are not valid.
      */
-    char* (*subString)(const String* str, ui32 position1, ui32 position2);
+    char* (*sub_string)(const String* str, ui32 position1, ui32 position2);
 
     /**
      * @brief Returns a copy of the string struct.

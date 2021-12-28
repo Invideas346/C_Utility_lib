@@ -14,7 +14,7 @@
 static ui32 find_index_keymap(KeyMap* self, const char* key)
 {
     ASSERT_INIT(self);
-    for(ui32 i = 0; i < self->count; i++)
+    for(ui32 i = 0; i < self->length; i++)
     {
         if(self->at(self, i)->key.equal_cstr(&self->at(self, i)->key, key))
         {
@@ -28,10 +28,10 @@ static KeyPair* add_keymap(KeyMap* self, KeyPair* pair)
 {
     ASSERT_INIT(self);
     ASSERT_INIT(pair);
-    self->count++;
-    if(self->count == 1)
+    self->length++;
+    if(self->length == 1)
     {
-        self->pairs = (KeyPair**) malloc(self->count * sizeof(KeyPair*));
+        self->pairs = (KeyPair**) malloc(self->length * sizeof(KeyPair*));
         if(self->pairs == NULL)
         {
             return NULL;
@@ -39,25 +39,25 @@ static KeyPair* add_keymap(KeyMap* self, KeyPair* pair)
     }
     else
     {
-        self->pairs = (KeyPair**) realloc(self->pairs, self->count * sizeof(KeyPair*));
+        self->pairs = (KeyPair**) realloc(self->pairs, self->length * sizeof(KeyPair*));
         if(self->pairs == NULL)
         {
             return NULL;
         }
     }
-    self->pairs[self->count - 1] = init_keypair_heap(&pair->key, pair->data, pair->size);
-    return self->pairs[self->count - 1];
+    self->pairs[self->length - 1] = init_keypair_heap(&pair->key, pair->data, pair->size);
+    return self->pairs[self->length - 1];
 }
 
 static void* remove_index(KeyMap* self, ui32 index)
 {
     ASSERT_INIT(self);
-    if(self->count == 0)
+    if(self->length == 0)
     {
         return NULL;
     }
-    KeyPair** pair = (KeyPair**) malloc(sizeof(KeyPair*) * self->count - 1);
-    for(ui32 i = 0, k = 0; i < self->count; i++)
+    KeyPair** pair = (KeyPair**) malloc(sizeof(KeyPair*) * self->length - 1);
+    for(ui32 i = 0, k = 0; i < self->length; i++)
     {
         if(i != index)
         {
@@ -68,13 +68,13 @@ static void* remove_index(KeyMap* self, ui32 index)
             self->pairs[i]->clear(self->pairs[i]);
         }
     }
-    void* newAddress = realloc(self->pairs, sizeof(KeyPair*) * self->count - 1);
+    void* newAddress = realloc(self->pairs, sizeof(KeyPair*) * self->length - 1);
     if(newAddress == NULL)
     {
         return NULL;
     }
-    memcpy(self->pairs, pair, sizeof(KeyPair*) * self->count - 1);
-    self->count--;
+    memcpy(self->pairs, pair, sizeof(KeyPair*) * self->length - 1);
+    self->length--;
     return self->pairs;
 }
 
@@ -93,7 +93,7 @@ static void* remove_key(KeyMap* self, const String* key)
 static void clear_keymap(KeyMap* self)
 {
     ASSERT_INIT(self);
-    for(ui32 i = 0; i < self->count; ++i)
+    for(ui32 i = 0; i < self->length; ++i)
     {
         KeyPair* pair = self->pairs[i];
         pair->key.clear(&pair->key);
@@ -101,13 +101,13 @@ static void clear_keymap(KeyMap* self)
         free(pair);
     }
     free(self->pairs);
-    self->count = 0;
+    self->length = 0;
 }
 
 static KeyPair* at(KeyMap* self, ui32 index)
 {
     ASSERT_INIT(self);
-    if(index >= self->count)
+    if(index >= self->length)
     {
         return NULL;
     }
@@ -152,7 +152,7 @@ static KeyMap* copy_heap(KeyMap* self)
 {
     ASSERT_INIT(self);
     KeyMap* copy = init_keyMap_heap();
-    for(ui32 i = 0; i < self->count; i++)
+    for(ui32 i = 0; i < self->length; i++)
     {
         copy->add(copy, self->at(self, i));
     }
@@ -163,7 +163,7 @@ static KeyMap copy_stack(KeyMap* self)
 {
     ASSERT_INIT(self);
     KeyMap copy = init_keyMap_stack();
-    for(ui32 i = 0; i < self->count; i++)
+    for(ui32 i = 0; i < self->length; i++)
     {
         copy.add(&copy, self->at(self, i));
     }
@@ -187,7 +187,7 @@ static void assign_methods_keymap(KeyMap* map)
 KeyMap* init_keyMap_heap()
 {
     KeyMap* map = (KeyMap*) malloc(sizeof(KeyMap));
-    map->count = 0;
+    map->length = 0;
     assign_methods_keymap(map);
     map->isInitalised = true;
     return map;
@@ -196,7 +196,7 @@ KeyMap* init_keyMap_heap()
 KeyMap init_keyMap_stack()
 {
     KeyMap map;
-    map.count = 0;
+    map.length = 0;
     assign_methods_keymap(&map);
     map.isInitalised = true;
     return map;

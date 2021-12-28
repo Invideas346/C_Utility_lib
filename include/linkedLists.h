@@ -18,7 +18,7 @@ struct LinkedList
 {
     Node* head;
     Node* tail;
-    ui32 size;
+    ui32 length;
 
     boolean isInitalised;
 

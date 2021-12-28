@@ -23,14 +23,14 @@ static Node *get_node(LinkedList *list, ui32 position)
 {
     ASSERT_INIT(list);
     Node *temp = NULL;
-    if(position >= list->size || list->size == 0)
+    if(position >= list->length || list->length == 0)
     {
         return NULL;
     }
-    if(position >= (int) (list->size / 2))
+    if(position >= (int) (list->length / 2))
     {
         temp = list->tail;
-        ui32 i = list->size - 1;
+        ui32 i = list->length - 1;
         while(i != position)
         {
             temp = temp->previous;
@@ -59,12 +59,12 @@ static void *get_data(LinkedList *list, ui32 position)
 static void clear(LinkedList *list)
 {
     ASSERT_INIT(list);
-    for(ui32 i = 0; i < list->size; i++)
+    for(ui32 i = 0; i < list->length; i++)
     {
         free(list->get_node(list, i)->data);
         free(list->get_node(list, i));
     }
-    list->size = 0;
+    list->length = 0;
     list->head = NULL;
     list->tail = NULL;
 }
@@ -73,7 +73,7 @@ static void push_back(LinkedList *list, void *data, ui32 size)
 {
     ASSERT_INIT(list);
     Node *new_node = init_node(data, size);
-    if(list->size == 0)
+    if(list->length == 0)
     {
         list->head = new_node;
         list->tail = new_node;
@@ -84,14 +84,14 @@ static void push_back(LinkedList *list, void *data, ui32 size)
         list->tail->next = new_node;
         list->tail = new_node;
     }
-    list->size++;
+    list->length++;
 }
 
 static void push_front(LinkedList *list, void *data, ui32 size)
 {
     ASSERT_INIT(list);
     Node *new_node = init_node(data, size);
-    if(list->size == 0)
+    if(list->length == 0)
     {
         list->head = new_node;
         list->tail = new_node;
@@ -102,13 +102,13 @@ static void push_front(LinkedList *list, void *data, ui32 size)
         list->head->previous = new_node;
         list->head = new_node;
     }
-    list->size++;
+    list->length++;
 }
 
 static void *pop_back(LinkedList *list)
 {
     ASSERT_INIT(list);
-    if(list->size == 0)
+    if(list->length == 0)
     {
         return NULL;
     }
@@ -116,14 +116,14 @@ static void *pop_back(LinkedList *list)
     Node *previous = list->tail->previous;
     free(list->tail);
     list->tail = previous;
-    list->size--;
+    list->length--;
     return temp;
 }
 
 static void *pop_front(LinkedList *list)
 {
     ASSERT_INIT(list);
-    if(list->size == 0)
+    if(list->length == 0)
     {
         return NULL;
     }
@@ -131,7 +131,7 @@ static void *pop_front(LinkedList *list)
     Node *next = list->head->next;
     free(list->head);
     list->head = next;
-    list->size--;
+    list->length--;
     return temp;
 }
 
@@ -155,7 +155,7 @@ LinkedList *init_list_heap(void)
     }
     list->head = NULL;
     list->tail = NULL;
-    list->size = 0;
+    list->length = 0;
     assignMethods(list);
     list->isInitalised = true;
     return list;
@@ -166,7 +166,7 @@ LinkedList init_list_stack(void)
     LinkedList list;
     list.head = NULL;
     list.tail = NULL;
-    list.size = 0;
+    list.length = 0;
     assignMethods(&list);
     list.isInitalised = true;
     return list;

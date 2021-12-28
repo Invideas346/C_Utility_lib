@@ -49,7 +49,7 @@ typedef struct KeyMap KeyMap;
 struct KeyMap
 {
     KeyPair** pairs;
-    ui32 count;
+    ui32 length;
 
     boolean isInitalised;
 
