@@ -5,8 +5,6 @@
 #include <linkedLists.h>
 #include <string.h>
 
-// TODO: Figure out whether to store pointer referneces in the data structs or make copies of them.
-
 int main(void)
 {
     String str = init_string_stack("Test");
