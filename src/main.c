@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <keyMap.h>
 #include <manchester.h>
-#include <dynamicArray.h>
+#include <vector.h>
 #include <linkedLists.h>
 #include <string.h>
 

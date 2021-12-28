@@ -2,14 +2,14 @@
 // Created by Wolfgang Aigner on 26.10.2021.
 //
 
-#include <dynamicArray.h>
+#include <vector.h>
 #include <string.h>
 #include <assert.h>
 
 #define ARRAY_INDEX(index) ((index) * (array->objectSize))
 #define ASSERT_INIT(x) assert(x->isInitalised)
 
-static void* push_back(DynamicArray* array, const void* data)
+static void* push_back(Vector* array, const void* data)
 {
     ASSERT_INIT(array);
     if(array->objectSize == 0)
@@ -26,7 +26,7 @@ static void* push_back(DynamicArray* array, const void* data)
     return array->data + ARRAY_INDEX(array->length - 1);
 }
 
-static void* push_front(DynamicArray* array, const void* data)
+static void* push_front(Vector* array, const void* data)
 {
     ASSERT_INIT(array);
     if(array->objectSize == 0)
@@ -48,7 +48,7 @@ static void* push_front(DynamicArray* array, const void* data)
     return array->data + ARRAY_INDEX(0);
 }
 
-static boolean pop_back(DynamicArray* array)
+static boolean pop_back(Vector* array)
 {
     ASSERT_INIT(array);
     if(array->length == 0 || array->objectSize <= 0)
@@ -64,7 +64,7 @@ static boolean pop_back(DynamicArray* array)
     return true;
 }
 
-static boolean pop_front(DynamicArray* array)
+static boolean pop_front(Vector* array)
 {
     ASSERT_INIT(array);
     if(array->length == 0 || array->objectSize <= 0)
@@ -89,7 +89,7 @@ static boolean pop_front(DynamicArray* array)
     return true;
 }
 
-static void* at(DynamicArray* array, ui32 position)
+static void* at(Vector* array, ui32 position)
 {
     ASSERT_INIT(array);
     if(array->length == 0 || array->objectSize <= 0)
@@ -99,7 +99,7 @@ static void* at(DynamicArray* array, ui32 position)
     return array->data + ARRAY_INDEX(position);
 }
 
-boolean resize(DynamicArray* array, ui32 numElements)
+boolean resize(Vector* array, ui32 numElements)
 {
     ASSERT_INIT(array);
     if(array->objectSize <= 0 || numElements < 0)
@@ -115,21 +115,21 @@ boolean resize(DynamicArray* array, ui32 numElements)
     return true;
 }
 
-static DynamicArray* copy_heap(DynamicArray* array)
+static Vector* copy_heap(Vector* array)
 {
     ASSERT_INIT(array);
-    DynamicArray* copy = init_dynamicArray_heap_data(array->length, array->data, array->objectSize);
+    Vector* copy = init_vector_heap_data(array->length, array->data, array->objectSize);
     return copy;
 }
 
-static DynamicArray copy_stack(DynamicArray* array)
+static Vector copy_stack(Vector* array)
 {
     ASSERT_INIT(array);
-    DynamicArray copy = init_dynamicArray_stack_data(array->length, array->data, array->objectSize);
+    Vector copy = init_vector_stack_data(array->length, array->data, array->objectSize);
     return copy;
 }
 
-static void clear(DynamicArray* array)
+static void clear(Vector* array)
 {
     ASSERT_INIT(array);
     free(array->data);
@@ -137,7 +137,7 @@ static void clear(DynamicArray* array)
     array->length = 0;
 }
 
-static void assignMethods(DynamicArray* array)
+static void assignMethods(Vector* array)
 {
     array->push_back = push_back;
     array->push_front = push_front;
@@ -150,9 +150,9 @@ static void assignMethods(DynamicArray* array)
     array->clear = clear;
 }
 
-DynamicArray* init_DYNAMICARRAY_Heap(ui32 size, ui32 objectSize)
+Vector* init_vector_heap(ui32 size, ui32 objectSize)
 {
-    DynamicArray* array = (DynamicArray*) malloc(sizeof(DynamicArray));
+    Vector* array = (Vector*) malloc(sizeof(Vector));
     if(array == NULL)
     {
         return NULL;
@@ -169,9 +169,9 @@ DynamicArray* init_DYNAMICARRAY_Heap(ui32 size, ui32 objectSize)
     return array;
 }
 
-DynamicArray* init_dynamicArray_heap_data(ui32 size, const void* data, ui32 objectSize)
+Vector* init_vector_heap_data(ui32 size, const void* data, ui32 objectSize)
 {
-    DynamicArray* array = (DynamicArray*) malloc(sizeof(DynamicArray));
+    Vector* array = (Vector*) malloc(sizeof(Vector));
     if(array == NULL)
     {
         return NULL;
@@ -189,9 +189,9 @@ DynamicArray* init_dynamicArray_heap_data(ui32 size, const void* data, ui32 obje
     return array;
 }
 
-DynamicArray init_dynamicArray_stack(ui32 size, ui32 objectSize)
+Vector init_vector_stack(ui32 size, ui32 objectSize)
 {
-    DynamicArray array;
+    Vector array;
     array.length = size;
     array.objectSize = objectSize;
     array.data = malloc(size * objectSize);
@@ -204,9 +204,9 @@ DynamicArray init_dynamicArray_stack(ui32 size, ui32 objectSize)
     return array;
 }
 
-DynamicArray init_dynamicArray_stack_data(ui32 size, const void* data, ui32 objectSize)
+Vector init_vector_stack_data(ui32 size, const void* data, ui32 objectSize)
 {
-    DynamicArray array;
+    Vector array;
     array.length = size;
     array.objectSize = objectSize;
     array.data = malloc(size * objectSize);

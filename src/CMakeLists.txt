@@ -4,7 +4,7 @@ if(LIBARY)
     set(SOURCE_FILES
         linkedLists.c
         stringStruct.c
-        dynamicArray.c
+        vector.c
         keyMap.c
         manchester.c
     )
@@ -16,7 +16,7 @@ if(EXE)
         main.c
         linkedLists.c
         stringStruct.c
-        dynamicArray.c
+        vector.c
         keyMap.c
         manchester.c
     )

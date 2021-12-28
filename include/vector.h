@@ -2,8 +2,8 @@
 // Created by Wolfgang Aigner on 26.10.2021.
 //
 
-#ifndef __DYNAMICARRAY_H__
-#define __DYNAMICARRAY_H__
+#ifndef __Vector_H__
+#define __Vector_H__
 
 #include <stdlib.h>
 #include <typedef.h>
@@ -12,9 +12,9 @@
 // TODO: Maybe implement a toString function (not sure it is really ever gonna be needed)
 // TODO: Implement a remove via index function.
 
-typedef struct DynamicArray DynamicArray;
+typedef struct Vector Vector;
 
-struct DynamicArray
+struct Vector
 {
     void* data;
     ui32 objectSize;
@@ -26,7 +26,7 @@ struct DynamicArray
      * @brief Removes all indecies and frees the occupied heap memory.
      *
      */
-    void (*clear)(DynamicArray* array);
+    void (*clear)(Vector* array);
     /**
      * @brief Adds an item to the back of the array.
      * @param array
@@ -34,7 +34,7 @@ struct DynamicArray
      * @return Returns the pointer to the added item.
      * Returns NULL if a error occured.
      */
-    void* (*push_back)(DynamicArray* array, const void* data);
+    void* (*push_back)(Vector* array, const void* data);
     /**
      * @brief Adds an item to the front of the array.
      * @param array
@@ -42,7 +42,7 @@ struct DynamicArray
      * @return Returns the pointer to the added item.
      * Returns NULL if a error occured.
      */
-    void* (*push_front)(DynamicArray* array, const void* data);
+    void* (*push_front)(Vector* array, const void* data);
 
     /**
      * @brief Removes the last item of the array.
@@ -50,14 +50,14 @@ struct DynamicArray
      * @return Returns a pointer to a heap allocated object containing the value of removes item.
      * Returns NULL if a error occured.
      */
-    boolean (*pop_back)(DynamicArray* array);
+    boolean (*pop_back)(Vector* array);
     /**
      * @brief Removes the first item of the array.
      * @param array
      * @return Returns a pointer to a heap allocated object containing the value of removes item.
      * Returns NULL if a error occured.
      */
-    boolean (*pop_front)(DynamicArray* array);
+    boolean (*pop_front)(Vector* array);
 
     /**
      * @brief Returns the pointer to the specified element within the array.
@@ -67,7 +67,7 @@ struct DynamicArray
      * @return Returns the pointer to the specified element within the array.
      * Returns NULL if a error occured.
      */
-    void* (*at)(DynamicArray* array, ui32 position);
+    void* (*at)(Vector* array, ui32 position);
 
     /**
      * @brief Resizes the array with the specified number of elements.
@@ -75,38 +75,38 @@ struct DynamicArray
      * @param numElements
      * @return Returns whether the operation was successful. Returns NULL if a error occured.
      */
-    boolean (*resize)(DynamicArray* array, ui32 numElements);
+    boolean (*resize)(Vector* array, ui32 numElements);
 
     /**
      * @brief Returns a copy of itself.
      */
-    DynamicArray* (*copy_heap)(DynamicArray* array);
+    Vector* (*copy_heap)(Vector* array);
     /**
      * @brief Returns a copy of itself.
      */
-    DynamicArray (*copy_stack)(DynamicArray* array);
+    Vector (*copy_stack)(Vector* array);
 };
 
 /**
  * @brief Creates a new dynamic array initalized with all function pointers.
- * @return dynamicArray*
+ * @return Vector*
  */
-DynamicArray* init_DYNAMICARRAY_Heap(ui32 size, ui32 objectSize);
+Vector* init_vector_heap(ui32 size, ui32 objectSize);
 /**
  * @brief Creates a new dynamic array initalized with all function pointers.
- * @return dynamicArray*
+ * @return Vector*
  */
-DynamicArray* init_dynamicArray_heap_data(ui32 size, const void* data, ui32 objectSize);
+Vector* init_vector_heap_data(ui32 size, const void* data, ui32 objectSize);
 
 /**
  * @brief Creates a new dynamic array initalized with all function pointers.
- * @return dynamicArray*
+ * @return Vector*
  */
-DynamicArray init_dynamicArray_stack(ui32 size, ui32 objectSize);
+Vector init_vector_stack(ui32 size, ui32 objectSize);
 /**
  * @brief Creates a new dynamic array initalized with all function pointers.
- * @return dynamicArray*
+ * @return Vector*
  */
-DynamicArray init_dynamicArray_stack_data(ui32 size, const void* data, ui32 objectSize);
+Vector init_vector_stack_data(ui32 size, const void* data, ui32 objectSize);
 
-#endif  // __DYNAMICARRAY_H__
+#endif  // __Vector_H__
