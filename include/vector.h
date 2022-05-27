@@ -17,10 +17,10 @@ typedef struct Vector Vector;
 struct Vector
 {
     void* data;
-    ui32 objectSize;
+    ui32 object_size;
     ui32 length;
 
-    boolean isInitalised;
+    boolean is_initialized;
 
     /**
      * @brief Removes all indecies and frees the occupied heap memory.

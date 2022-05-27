@@ -7,7 +7,7 @@
 #include <string.h>
 #include <assert.h>
 
-#define ASSERT_INIT(x) assert(x->isInitalised)
+#define ASSERT_INIT(x) assert(x->is_initialized)
 
 static Node *init_node(const void *data, ui32 size)
 {
@@ -135,7 +135,7 @@ static void *pop_front(LinkedList *list)
     return temp;
 }
 
-static void assignMethods(LinkedList *list)
+static void assign_methods(LinkedList *list)
 {
     list->push_back = push_back;
     list->push_front = push_front;
@@ -156,8 +156,8 @@ LinkedList *init_list_heap(void)
     list->head = NULL;
     list->tail = NULL;
     list->length = 0;
-    assignMethods(list);
-    list->isInitalised = true;
+    assign_methods(list);
+    list->is_initialized = TRUE;
     return list;
 }
 
@@ -167,7 +167,7 @@ LinkedList init_list_stack(void)
     list.head = NULL;
     list.tail = NULL;
     list.length = 0;
-    assignMethods(&list);
-    list.isInitalised = true;
+    assign_methods(&list);
+    list.is_initialized = TRUE;
     return list;
 }

@@ -15,7 +15,7 @@ struct KeyPair
     size_t size;
     void* data;
 
-    boolean isInitalised;
+    boolean is_initialized;
 
     /**
      * @brief Clear a KeyPair and effecticly frees all allocated memory.
@@ -51,7 +51,7 @@ struct KeyMap
     KeyPair** pairs;
     ui32 length;
 
-    boolean isInitalised;
+    boolean is_initialized;
 
     /**
      * @brief Adds an KeyPair to the array.

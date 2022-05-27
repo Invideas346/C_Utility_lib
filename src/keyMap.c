@@ -9,14 +9,15 @@
 
 // TODO: Research whether 1 can be a valid pointer if not change the NULL to 0 or
 // something like that
-#define ASSERT_INIT(x) assert(x->isInitalised)
+#define ASSERT_INIT(x) assert(x->is_initialized)
 
 static ui32 find_index_keymap(KeyMap* self, const char* key)
 {
     ASSERT_INIT(self);
+    STRING_ERROR_CODE code;
     for(ui32 i = 0; i < self->length; i++)
     {
-        if(self->at(self, i)->key.equal_cstr(&self->at(self, i)->key, key))
+        if(self->at(self, i)->key.equal_cstr(&self->at(self, i)->key, key, &code))
         {
             return i;
         }
@@ -93,10 +94,11 @@ static void* remove_key(KeyMap* self, const String* key)
 static void clear_keymap(KeyMap* self)
 {
     ASSERT_INIT(self);
+    STRING_ERROR_CODE code;
     for(ui32 i = 0; i < self->length; ++i)
     {
         KeyPair* pair = self->pairs[i];
-        pair->key.clear(&pair->key);
+        pair->key.clear(&pair->key, &code);
         free(pair->data);
         free(pair);
     }
@@ -189,7 +191,7 @@ KeyMap* init_keyMap_heap()
     KeyMap* map = (KeyMap*) malloc(sizeof(KeyMap));
     map->length = 0;
     assign_methods_keymap(map);
-    map->isInitalised = true;
+    map->is_initialized = TRUE;
     return map;
 }
 
@@ -198,14 +200,15 @@ KeyMap init_keyMap_stack()
     KeyMap map;
     map.length = 0;
     assign_methods_keymap(&map);
-    map.isInitalised = true;
+    map.is_initialized = TRUE;
     return map;
 }
 
 static void clear_keypair(KeyPair* pair)
 {
-    assert(pair->isInitalised == true);
-    pair->key.clear(&pair->key);
+    assert(pair->is_initialized == TRUE);
+    STRING_ERROR_CODE code;
+    pair->key.clear(&pair->key, &code);
     free(pair->data);
 }
 
@@ -226,9 +229,10 @@ KeyPair* init_keypair_heap(String* key, void* data, size_t size)
     newKeyPair->size = size;
     newKeyPair->data = malloc(size);
     memcpy(newKeyPair->data, data, size);
-    newKeyPair->key = key->copy_stack(key);
+    STRING_ERROR_CODE code;
+    newKeyPair->key = key->copy_stack(key, &code);
     assign_methods_keypair(newKeyPair);
-    newKeyPair->isInitalised = true;
+    newKeyPair->is_initialized = TRUE;
     return newKeyPair;
 }
 
@@ -246,9 +250,10 @@ KeyPair* init_keypair_heap_cstr(const char* key, void* data, size_t size)
         return NULL;
     }
     memcpy(newKeyPair->data, data, size);
-    newKeyPair->key = init_string_stack(key);
+    STRING_ERROR_CODE code;
+    newKeyPair->key = init_string_stack(key, &code);
     assign_methods_keypair(newKeyPair);
-    newKeyPair->isInitalised = true;
+    newKeyPair->is_initialized = TRUE;
     return newKeyPair;
 }
 
@@ -263,9 +268,10 @@ KeyPair init_keypair_stack(String* key, void* data, size_t size)
         return newKeyPair;
     }
     memcpy(newKeyPair.data, data, size);
-    newKeyPair.key = key->copy_stack(key);
+    STRING_ERROR_CODE code;
+    newKeyPair.key = key->copy_stack(key, &code);
     assign_methods_keypair(&newKeyPair);
-    newKeyPair.isInitalised = true;
+    newKeyPair.is_initialized = TRUE;
     return newKeyPair;
 }
 
@@ -279,8 +285,9 @@ KeyPair init_keypair_stack_cstr(const char* key, void* data, size_t size)
         return newKeyPair;
     }
     memcpy(newKeyPair.data, data, size);
-    newKeyPair.key = init_string_stack(key);
+    STRING_ERROR_CODE code;
+    newKeyPair.key = init_string_stack(key, &code);
     assign_methods_keypair(&newKeyPair);
-    newKeyPair.isInitalised = true;
+    newKeyPair.is_initialized = TRUE;
     return newKeyPair;
 }

@@ -3,219 +3,302 @@
 //
 
 #include <stringStruct.h>
-#include <linkedLists.h>
 #include <string.h>
 #include <stdlib.h>
-#include <assert.h>
 
-#define ASSERT_INIT(x) assert(x->isInitalised)
+#define ASSIGN_ERROR_CODE(var, code) \
+    if(var != NULL) *var = code
 
-static void clear(String* str)
+static void clear(String* str, STRING_ERROR_CODE* error_code)
 {
-    ASSERT_INIT(str);
+    if(!str->is_initialized)
+    {
+        ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
+        return;
+    }
     free(str->value);
     str->length = 0;
     str->value = NULL;
+    ASSIGN_ERROR_CODE(error_code, OK);
 }
 
-static boolean append_cstr(String* str, const char* stringToAppend)
+static boolean append_cstr(String* str, const char* string_to_append, STRING_ERROR_CODE* error_code)
 {
-    ASSERT_INIT(str);
-    ui32 sizeToAppend = strlen(stringToAppend);
+    if(!str->is_initialized)
+    {
+        ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
+        return FALSE;
+    }
+    ui32 size_to_append = strlen(string_to_append);
     if(str->value == NULL)
     {
-        void* newAddress = malloc(sizeof(char) * sizeToAppend);
-        if(newAddress == NULL)
+        void* new_address = malloc(sizeof(char) * size_to_append);
+        if(new_address == NULL)
         {
-            return false;
+            ASSIGN_ERROR_CODE(error_code, MEMORY_ALLOCATION_ERROR);
+            return FALSE;
         }
     }
     else
     {
-        void* newAddress = realloc(str->value, sizeToAppend + str->length + 1);
-        if(newAddress == NULL)
+        void* new_address = realloc(str->value, size_to_append + str->length + 1);
+        if(new_address == NULL)
         {
-            return false;
+            ASSIGN_ERROR_CODE(error_code, MEMORY_ALLOCATION_ERROR);
+            return FALSE;
         }
     }
-    strcat(str->value, stringToAppend);
-    str->length = sizeToAppend + str->length;
-    return true;
+    strncat(str->value, string_to_append, size_to_append);
+    str->length = size_to_append + str->length;
+    str->value[str->length] = 0;
+    ASSIGN_ERROR_CODE(error_code, OK);
+    return TRUE;
 }
 
-//! not tested yet
-static boolean append(String* str, const String* stringToAppend)
+static boolean append(String* str, const String* string_to_append, STRING_ERROR_CODE* error_code)
 {
-    assert(str->isInitalised == true && stringToAppend->isInitalised == true);
+    if(!str->is_initialized)
+    {
+        ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
+        return FALSE;
+    }
     if(str->value == NULL)
     {
-        void* newAddress = malloc(sizeof(char) * stringToAppend->length + 1);
-        if(newAddress == NULL)
+        void* new_address = malloc(sizeof(char) * string_to_append->length + 1);
+        if(new_address == NULL)
         {
-            return false;
+            ASSIGN_ERROR_CODE(error_code, MEMORY_ALLOCATION_ERROR);
+            return FALSE;
         }
     }
     else
     {
-        void* newAddress = realloc(str->value, stringToAppend->length + str->length + 1);
-        if(newAddress == NULL)
+        void* new_address = realloc(str->value, string_to_append->length + str->length + 1);
+        if(new_address == NULL)
         {
-            return false;
+            ASSIGN_ERROR_CODE(error_code, MEMORY_ALLOCATION_ERROR);
+            return FALSE;
         }
     }
-    strcat(str->value, stringToAppend->value);
-    str->length = stringToAppend->length + str->length;
-    return true;
+    strncat(str->value, string_to_append->value, string_to_append->length);
+    str->length = string_to_append->length + str->length;
+    str->value[str->length] = 0;
+    ASSIGN_ERROR_CODE(error_code, OK);
+    return TRUE;
 }
 
-static boolean set_cstr(String* str, const char* stringToBeSet)
+static boolean set_cstr(String* str, const char* string_to_be_set, STRING_ERROR_CODE* error_code)
 {
-    ASSERT_INIT(str);
-    ui32 sizeToBeSet = strlen(stringToBeSet);
+    if(!str->is_initialized)
+    {
+        ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
+        return FALSE;
+    }
+    ui32 size_to_be_set = strlen(string_to_be_set);
     free(str->value);
-    str->value = malloc(sizeToBeSet + 1);
+    str->value = malloc(size_to_be_set + 1);
     if(str->value == NULL)
     {
-        return false;
+        ASSIGN_ERROR_CODE(error_code, MEMORY_ALLOCATION_ERROR);
+        return FALSE;
     }
-    strcpy(str->value, stringToBeSet);
-    str->length = sizeToBeSet;
-    return true;
+    strncpy(str->value, string_to_be_set, size_to_be_set);
+    str->length = size_to_be_set;
+    str->value[str->length] = 0;
+    ASSIGN_ERROR_CODE(error_code, OK);
+    return TRUE;
 }
 
-//! not tested yet
-static boolean set(String* str, const String* stringToBeSet)
+static boolean set(String* str, const String* string_to_be_set, STRING_ERROR_CODE* error_code)
 {
-    ASSERT_INIT(str);
-    ASSERT_INIT(stringToBeSet);
+    if(!str->is_initialized || !string_to_be_set->is_initialized)
+    {
+        ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
+        return FALSE;
+    }
     free(str->value);
-    str->value = malloc(stringToBeSet->length + 1);
+    str->value = malloc(string_to_be_set->length + 1);
     if(str->value == NULL)
     {
-        return false;
+        ASSIGN_ERROR_CODE(error_code, MEMORY_ALLOCATION_ERROR);
+        return FALSE;
     }
-    strcpy(str->value, stringToBeSet->value);
-    str->length = stringToBeSet->length;
-    return true;
+    strncpy(str->value, string_to_be_set->value, string_to_be_set->length);
+    str->length = string_to_be_set->length;
+    str->value[str->length] = 0;
+    ASSIGN_ERROR_CODE(error_code, OK);
+    return TRUE;
 }
 
-static ui32 find_cstr(const String* str, const char* str1)
+static ui32 find_cstr(const String* str, const char* str1, STRING_ERROR_CODE* error_code)
 {
-    ASSERT_INIT(str);
+    if(!str->is_initialized)
+    {
+        ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
+        return INDEX_NOTFOUND;
+    }
     if(str->value == NULL)
     {
         return INDEX_NOTFOUND;
     }
-    return (ui32)(strstr(str->value, str1) - str->value);
+    ASSIGN_ERROR_CODE(error_code, OK);
+    const char* index = strstr(str->value, str1);
+    return (index == NULL) ? (ui32) INDEX_NOTFOUND : (ui32) (index - str->value);
 }
 
-//! not tested yet
-static ui32 find(const String* str, const String* str1)
+static ui32 find(const String* str, const String* str1, STRING_ERROR_CODE* error_code)
 {
-    ASSERT_INIT(str);
-    ASSERT_INIT(str1);
+    if(!str->is_initialized || !str1->is_initialized)
+    {
+        ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
+        return INDEX_NOTFOUND;
+    }
     if(str->value == NULL)
     {
         return INDEX_NOTFOUND;
     }
-    return (ui32)(strstr(str->value, str1->value) - str->value);
+    ASSIGN_ERROR_CODE(error_code, OK);
+    const char* index = strstr(str->value, str1->value);
+    return (index == NULL) ? (ui32) INDEX_NOTFOUND : (ui32) (index - str->value);
 }
 
 //! not tested yet
-static boolean equal(const String* str, const String* str1)
+static boolean equal(const String* str, const String* str1, STRING_ERROR_CODE* error_code)
 {
-    ASSERT_INIT(str);
-    ASSERT_INIT(str1);
+    if(!str->is_initialized || !str1->is_initialized)
+    {
+        ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
+        return FALSE;
+    }
+    ASSIGN_ERROR_CODE(error_code, OK);
     return (boolean) !strcmp(str->value, str1->value);
 }
 
-static boolean equal_cstr(const String* str, const char* str1)
+static boolean equal_cstr(const String* str, const char* str1, STRING_ERROR_CODE* error_code)
 {
-    ASSERT_INIT(str);
+    if(!str->is_initialized || str1 == NULL)
+    {
+        ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
+        return FALSE;
+    }
+    ASSIGN_ERROR_CODE(error_code, OK);
     return (boolean) !strcmp(str->value, str1);
 }
 
 //! not tested yet
-static boolean insert(String* self, String* str, ui32 index)
+static boolean insert(String* self, String* str, ui32 index, STRING_ERROR_CODE* error_code)
 {
-    ASSERT_INIT(str);
-    ASSERT_INIT(self);
+    if(!str->is_initialized || !self->is_initialized)
+    {
+        ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
+        return FALSE;
+    }
     if(index >= self->length || str->length == 0)
     {
-        return false;
+        return FALSE;
     }
     char* copy = malloc(self->length);
     strncpy(copy, self->value, index);
-    strcat(copy, str->value);
-    strcat(copy, &self->value[index]);
+    strncat(copy, str->value, strlen(str->value));
+    strncat(copy, &self->value[index], strlen(str->value) - index);
     self->length += str->length;
-    char* newAddress = realloc(self->value, self->length);
-    if(newAddress == NULL)
+    char* new_address = realloc(self->value, self->length);
+    if(new_address == NULL)
     {
-        return false;
+        ASSIGN_ERROR_CODE(error_code, MEMORY_ALLOCATION_ERROR);
+        return FALSE;
     }
-    strcpy(self->value, copy);
+    strncpy(self->value, copy, self->length);
     free(copy);
-    return true;
+    ASSIGN_ERROR_CODE(error_code, OK);
+    return TRUE;
 }
 
-static boolean insert_cstr(String* self, const char* str, ui32 index)
+//! not tested yet
+static boolean insert_cstr(String* self, const char* str, ui32 index, STRING_ERROR_CODE* error_code)
 {
-    ASSERT_INIT(self);
-    ui32 strLen = strlen(str);
-    if(index >= self->length || strLen == 0)
+    if(!self->is_initialized)
     {
-        return false;
+        ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
+        return FALSE;
     }
-    char* copy = malloc(self->length + strLen + 1);
+    ui32 str_len = strlen(str);
+    if(index >= self->length || str_len == 0)
+    {
+        return FALSE;
+    }
+    char* copy = malloc(self->length + str_len + 1);
     strncpy(copy, self->value, index);
     copy[index] = 0;
     strcat(copy, str);
     strcat(copy, &self->value[index]);
-    copy[self->length + strLen] = 0;
-    self->length += strLen;
-    char* newAddress = realloc(self->value, self->length);
-    if(newAddress == NULL)
+    copy[self->length + str_len] = 0;
+    self->length += str_len;
+    char* new_address = realloc(self->value, self->length);
+    if(new_address == NULL)
     {
-        return false;
+        ASSIGN_ERROR_CODE(error_code, MEMORY_ALLOCATION_ERROR);
+        return FALSE;
     }
-    strcpy(self->value, copy);
+    strncpy(self->value, copy, str_len);
     free(copy);
-    return true;
+    ASSIGN_ERROR_CODE(error_code, OK);
+    return TRUE;
 }
 
 //! not tested yet
-static char* sub_string(const String* str, ui32 position1, ui32 position2)
+static char* sub_string(const String* str, ui32 position1, ui32 position2,
+                        STRING_ERROR_CODE* error_code)
 {
-    ASSERT_INIT(str);
+    if(!str->is_initialized)
+    {
+        ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
+        return NULL;
+    }
     if(position1 >= position2)
     {
         return NULL;
     }
     size_t size = (position2 - position1);
     char* temp = (char*) malloc(size + 1);
+    if(temp == NULL)
+    {
+        ASSIGN_ERROR_CODE(error_code, MEMORY_ALLOCATION_ERROR);
+        return NULL;
+    }
     memcpy(temp, str->value + position1, position2 - position1);
     temp[size] = '\0';
+    ASSIGN_ERROR_CODE(error_code, OK);
     return temp;
 }
 
 //! not tested yet
-static String* copy_heap(const String* str)
+static String* copy_heap(const String* str, STRING_ERROR_CODE* error_code)
 {
-    ASSERT_INIT(str);
-    String* newString = init_string_heap(str->value);
-    return newString;
+    if(!str->is_initialized)
+    {
+        ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
+        return NULL;
+    }
+    String* new_string = init_string_heap(str->value, error_code);
+    ASSIGN_ERROR_CODE(error_code, OK);
+    return new_string;
 }
 
 //! not tested yet
-static String copy_stack(const String* str)
+static String copy_stack(const String* str, STRING_ERROR_CODE* error_code)
 {
-    ASSERT_INIT(str);
-    String newString = init_string_stack(str->value);
-    return newString;
+    if(!str->is_initialized)
+    {
+        ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
+        return *str;
+    }
+    String new_string = init_string_stack(str->value, error_code);
+    ASSIGN_ERROR_CODE(error_code, OK);
+    return new_string;
 }
 
-static void assignMethods(String* str)
+static void assign_methods(String* str)
 {
     str->clear = clear;
     str->append = append;
@@ -233,30 +316,43 @@ static void assignMethods(String* str)
     str->insert_cstr = insert_cstr;
 }
 
-String* init_string_heap(const char* value)
+String* init_string_heap(const char* value, STRING_ERROR_CODE* error_code)
 {
     ui32 size = strlen(value);
-    String* newString = malloc(sizeof(String));
-    if(newString == NULL)
+    String* new_string = malloc(sizeof(String));
+    if(new_string == NULL)
     {
+        ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
         return NULL;
     }
-    newString->value = malloc(size + 1);
-    strcpy(newString->value, value);
-    newString->length = size;
-    assignMethods(newString);
-    newString->isInitalised = true;
-    return newString;
+    new_string->value = malloc(size + 1);
+    if(new_string->value == NULL)
+    {
+        ASSIGN_ERROR_CODE(error_code, MEMORY_ALLOCATION_ERROR);
+        return NULL;
+    }
+    strncpy(new_string->value, value, size);
+    new_string->length = size;
+    assign_methods(new_string);
+    new_string->is_initialized = TRUE;
+    ASSIGN_ERROR_CODE(error_code, OK);
+    return new_string;
 }
 
-String init_string_stack(const char* value)
+String init_string_stack(const char* value, STRING_ERROR_CODE* error_code)
 {
     ui32 size = strlen(value);
-    String newString;
-    newString.value = malloc(size + 1);
-    strcpy(newString.value, value);
-    newString.length = size;
-    assignMethods(&newString);
-    newString.isInitalised = true;
-    return newString;
+    String new_string;
+    new_string.value = malloc(size + 1);
+    if(new_string.value == NULL)
+    {
+        ASSIGN_ERROR_CODE(error_code, MEMORY_ALLOCATION_ERROR);
+        return new_string;
+    }
+    strncpy(new_string.value, value, size);
+    new_string.length = size;
+    assign_methods(&new_string);
+    new_string.is_initialized = TRUE;
+    ASSIGN_ERROR_CODE(error_code, OK);
+    return new_string;
 }

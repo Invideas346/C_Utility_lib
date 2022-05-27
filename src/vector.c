@@ -6,35 +6,35 @@
 #include <string.h>
 #include <assert.h>
 
-#define ARRAY_INDEX(index) ((index) * (array->objectSize))
-#define ASSERT_INIT(x) assert(x->isInitalised)
+#define ARRAY_INDEX(index) ((index) * (array->object_size))
+#define ASSERT_INIT(x) assert(x->is_initialized)
 
 static void* push_back(Vector* array, const void* data)
 {
     ASSERT_INIT(array);
-    if(array->objectSize == 0)
+    if(array->object_size == 0)
     {
         return NULL;
     }
     array->length += 1;
-    void* newAddress = realloc(array->data, array->length * array->objectSize);
+    void* newAddress = realloc(array->data, array->length * array->object_size);
     if(newAddress == NULL)
     {
         return NULL;
     }
-    memcpy(array->data + ARRAY_INDEX(array->length - 1), data, array->objectSize);
+    memcpy(array->data + ARRAY_INDEX(array->length - 1), data, array->object_size);
     return array->data + ARRAY_INDEX(array->length - 1);
 }
 
 static void* push_front(Vector* array, const void* data)
 {
     ASSERT_INIT(array);
-    if(array->objectSize == 0)
+    if(array->object_size == 0)
     {
         return NULL;
     }
     array->length += 1;
-    void* newAddress = realloc(array->data, array->length * array->objectSize);
+    void* newAddress = realloc(array->data, array->length * array->object_size);
     if(newAddress == NULL)
     {
         return NULL;
@@ -42,57 +42,57 @@ static void* push_front(Vector* array, const void* data)
     if(array->length != 1)
     {
         memcpy(array->data + ARRAY_INDEX(1), array->data + ARRAY_INDEX(0),
-               array->objectSize * (array->length - 1));
+               array->object_size * (array->length - 1));
     }
-    memcpy(array->data + ARRAY_INDEX(0), data, array->objectSize);
+    memcpy(array->data + ARRAY_INDEX(0), data, array->object_size);
     return array->data + ARRAY_INDEX(0);
 }
 
 static boolean pop_back(Vector* array)
 {
     ASSERT_INIT(array);
-    if(array->length == 0 || array->objectSize <= 0)
+    if(array->length == 0 || array->object_size <= 0)
     {
-        return false;
+        return FALSE;
     }
     array->length -= 1;
-    void* newAddress = realloc(array->data, array->length * array->objectSize);
+    void* newAddress = realloc(array->data, array->length * array->object_size);
     if(newAddress == NULL)
     {
-        return false;
+        return FALSE;
     }
-    return true;
+    return TRUE;
 }
 
 static boolean pop_front(Vector* array)
 {
     ASSERT_INIT(array);
-    if(array->length == 0 || array->objectSize <= 0)
+    if(array->length == 0 || array->object_size <= 0)
     {
-        return false;
+        return FALSE;
     }
     array->length -= 1;
-    void* temp = malloc(array->objectSize * array->length);
+    void* temp = malloc(array->object_size * array->length);
     if(temp == NULL)
     {
-        return false;
+        return FALSE;
     }
-    memcpy(temp, array->data + ARRAY_INDEX(1), array->length * array->objectSize);
-    void* newAddress = realloc(array->data, array->length * array->objectSize);
+    memcpy(temp, array->data + ARRAY_INDEX(1), array->length * array->object_size);
+    void* newAddress = realloc(array->data, array->length * array->object_size);
     if(newAddress == NULL)
     {
         free(temp);
-        return false;
+        return FALSE;
     }
-    memcpy(array->data, temp, array->length * array->objectSize);
+    memcpy(array->data, temp, array->length * array->object_size);
     free(temp);
-    return true;
+    return TRUE;
 }
 
 static void* at(Vector* array, ui32 position)
 {
     ASSERT_INIT(array);
-    if(array->length == 0 || array->objectSize <= 0)
+    if(array->length == 0 || array->object_size <= 0)
     {
         return NULL;
     }
@@ -102,30 +102,30 @@ static void* at(Vector* array, ui32 position)
 boolean resize(Vector* array, ui32 numElements)
 {
     ASSERT_INIT(array);
-    if(array->objectSize <= 0 || numElements < 0)
+    if(array->object_size <= 0 || numElements < 0)
     {
-        return false;
+        return FALSE;
     }
-    void* newAddress = realloc(array->data, array->objectSize * numElements);
+    void* newAddress = realloc(array->data, array->object_size * numElements);
     if(newAddress == NULL)
     {
-        return false;
+        return FALSE;
     }
     array->length = numElements;
-    return true;
+    return TRUE;
 }
 
 static Vector* copy_heap(Vector* array)
 {
     ASSERT_INIT(array);
-    Vector* copy = init_vector_heap_data(array->length, array->data, array->objectSize);
+    Vector* copy = init_vector_heap_data(array->length, array->data, array->object_size);
     return copy;
 }
 
 static Vector copy_stack(Vector* array)
 {
     ASSERT_INIT(array);
-    Vector copy = init_vector_stack_data(array->length, array->data, array->objectSize);
+    Vector copy = init_vector_stack_data(array->length, array->data, array->object_size);
     return copy;
 }
 
@@ -137,7 +137,7 @@ static void clear(Vector* array)
     array->length = 0;
 }
 
-static void assignMethods(Vector* array)
+static void assign_methods(Vector* array)
 {
     array->push_back = push_back;
     array->push_front = push_front;
@@ -158,14 +158,14 @@ Vector* init_vector_heap(ui32 size, ui32 objectSize)
         return NULL;
     }
     array->length = size;
-    array->objectSize = objectSize;
+    array->object_size = objectSize;
     array->data = malloc(size * objectSize);
     if(array->data == NULL)
     {
         return array;
     }
-    assignMethods(array);
-    array->isInitalised = true;
+    assign_methods(array);
+    array->is_initialized = TRUE;
     return array;
 }
 
@@ -177,15 +177,15 @@ Vector* init_vector_heap_data(ui32 size, const void* data, ui32 objectSize)
         return NULL;
     }
     array->length = size;
-    array->objectSize = objectSize;
+    array->object_size = objectSize;
     array->data = malloc(size * objectSize);
     if(array->data == NULL)
     {
         return array;
     }
     memcpy(array->data, data, size * objectSize);
-    assignMethods(array);
-    array->isInitalised = true;
+    assign_methods(array);
+    array->is_initialized = TRUE;
     return array;
 }
 
@@ -193,14 +193,14 @@ Vector init_vector_stack(ui32 size, ui32 objectSize)
 {
     Vector array;
     array.length = size;
-    array.objectSize = objectSize;
+    array.object_size = objectSize;
     array.data = malloc(size * objectSize);
     if(array.data == NULL)
     {
         return array;
     }
-    assignMethods(&array);
-    array.isInitalised = true;
+    assign_methods(&array);
+    array.is_initialized = TRUE;
     return array;
 }
 
@@ -208,14 +208,14 @@ Vector init_vector_stack_data(ui32 size, const void* data, ui32 objectSize)
 {
     Vector array;
     array.length = size;
-    array.objectSize = objectSize;
+    array.object_size = objectSize;
     array.data = malloc(size * objectSize);
     if(array.data == NULL)
     {
         return array;
     }
     memcpy(array.data, data, size * objectSize);
-    assignMethods(&array);
-    array.isInitalised = true;
+    assign_methods(&array);
+    array.is_initialized = TRUE;
     return array;
 }

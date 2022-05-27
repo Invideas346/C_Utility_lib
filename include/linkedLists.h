@@ -20,7 +20,7 @@ struct LinkedList
     Node* tail;
     ui32 length;
 
-    boolean isInitalised;
+    boolean is_initialized;
 
     /**
      * @brief Adds a new element at the end of the array.

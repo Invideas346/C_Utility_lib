@@ -6,56 +6,66 @@
 
 typedef struct String String;
 
+typedef enum STRING_ERROR_CODE
+{
+    OK = 0,
+    GENERAL_ERROR = 1,
+    STRING_NOT_INITIALIZED = 2,
+    MEMORY_ALLOCATION_ERROR = 3
+} STRING_ERROR_CODE;
+
 struct String
 {
     char* value;
     ui32 length;
 
-    boolean isInitalised;
+    boolean is_initialized;
 
     /**
      * @brief Resizes the array to 0 effectively freeing the memory.
      * @param str
      */
-    void (*clear)(String* str);
+    void (*clear)(String* str, STRING_ERROR_CODE* error_code);
 
     /**
      * @brief Inserts a given string at the specified index.
      *
      */
-    boolean (*insert)(String* self, String* str, ui32 index);
+    boolean (*insert)(String* self, String* str, ui32 index, STRING_ERROR_CODE* error_code);
 
     /**
      * @brief Inserts a given string at the specified index.
      *
      */
-    boolean (*insert_cstr)(String* self, const char* str, ui32 index);
+    boolean (*insert_cstr)(String* self, const char* str, ui32 index,
+                           STRING_ERROR_CODE* error_code);
 
     /**
      * @brief Appends a char-array to the end of the string.
      * @param str
-     * @param stringToAppend
+     * @param string_to_append
      */
-    boolean (*append_cstr)(String* str, const char* stringToAppend);
+    boolean (*append_cstr)(String* str, const char* string_to_append,
+                           STRING_ERROR_CODE* error_code);
     /**
      * @brief Appends a string to the end of the string.
      * @param str
-     * @param otherString
+     * @param other_string
      */
-    boolean (*append)(String* str, const String* otherString);
+    boolean (*append)(String* str, const String* other_string, STRING_ERROR_CODE* error_code);
 
     /**
      * @brief Sets the string with the passed in char-array.
      * @param str
-     * @param stringToBeSet
+     * @param string_to_be_set
      */
-    boolean (*set_cstr)(String* str, const char* stringToBeSet);
+    boolean (*set_cstr)(String* str, const char* string_to_be_set, STRING_ERROR_CODE* error_code);
     /**
      * @brief Sets the string with the passed in string.
      * @param str
-     * @param otherString
+     * @param other_string
      */
-    boolean (*set)(String* str, const String* otherString);
+    boolean (*set)(String* str, const String* other_string, STRING_ERROR_CODE* error_code);
 
     /**
      * @brief Finds a series of characters in the string.
@@ -63,14 +73,14 @@ struct String
      * @param str1
      * @return Returns the position in the string if found. A negative number if not found.
      */
-    ui32 (*find_cstr)(const String* str, const char* str1);
+    ui32 (*find_cstr)(const String* str, const char* str1, STRING_ERROR_CODE* error_code);
     /**
      * @brief Finds a series of characters in the string.
      * @param str
      * @param str1
      * @return Returns the position in the string if found. A negative number if not found.
      */
-    ui32 (*find)(const String* str, const String* str1);
+    ui32 (*find)(const String* str, const String* str1, STRING_ERROR_CODE* error_code);
 
     /**
      * @brief Compares two strings for equality.
@@ -78,14 +88,14 @@ struct String
      * @param str1
      * @return Whether the two strings are equal.
      */
-    boolean (*equal_cstr)(const String* str, const char* str1);
+    boolean (*equal_cstr)(const String* str, const char* str1, STRING_ERROR_CODE* error_code);
     /**
      * @brief Compares two strings for equality.
      * @param str
      * @param str1
      * @return Whether the two strings are equal.
      */
-    boolean (*equal)(const String* str, const String* str1);
+    boolean (*equal)(const String* str, const String* str1, STRING_ERROR_CODE* error_code);
 
     /**
      * @brief Returns a new string with the corresponding string.
@@ -95,24 +105,25 @@ struct String
      * @return Returns a new string with the corresponding string.
      * Null gets returned if the position are not valid.
      */
-    char* (*sub_string)(const String* str, ui32 position1, ui32 position2);
+    char* (*sub_string)(const String* str, ui32 position1, ui32 position2,
+                        STRING_ERROR_CODE* error_code);
 
     /**
      * @brief Returns a copy of the string struct.
      * @param str
      * @return Returns a copy of itself.
      */
-    String* (*copy_heap)(const String* str);
+    String* (*copy_heap)(const String* str, STRING_ERROR_CODE* error_code);
 
     /**
      * @brief Returns a copy of the string struct.
      * @param str
      * @return Returns a copy of itself.
      */
-    String (*copy_stack)(const String* str);
+    String (*copy_stack)(const String* str, STRING_ERROR_CODE* error_code);
 };
 
-String* init_string_heap(const char* value);
-String init_string_stack(const char* value);
+String* init_string_heap(const char* value, STRING_ERROR_CODE* error_code);
+String init_string_stack(const char* value, STRING_ERROR_CODE* error_code);
 
 #endif  // __STRINGSTRUCT_H__

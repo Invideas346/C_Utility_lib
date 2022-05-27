@@ -43,16 +43,16 @@ ui16 man_dec_16(ui32 data, MAN_POLARITY polarity)
     {
         case LSB_LEFT:
         {
-            ui8 lower = man_dec_8((ui16)(data & 0xffff), LSB_LEFT);
-            ui8 upper = man_dec_8((ui16)((data & 0xffff0000) >> 16), LSB_LEFT);
+            ui8 lower = man_dec_8((ui16) (data & 0xffff), LSB_LEFT);
+            ui8 upper = man_dec_8((ui16) ((data & 0xffff0000) >> 16), LSB_LEFT);
             decData |= ((ui16) lower << 8) | upper;
         }
         break;
 
         case LSB_RIGHT:
         {
-            ui8 lower = man_dec_8((ui16)(data & 0xffff), LSB_RIGHT);
-            ui8 upper = man_dec_8((ui16)((data & 0xffff0000) >> 16), LSB_RIGHT);
+            ui8 lower = man_dec_8((ui16) (data & 0xffff), LSB_RIGHT);
+            ui8 upper = man_dec_8((ui16) ((data & 0xffff0000) >> 16), LSB_RIGHT);
             decData |= ((ui16) upper << 8) | lower;
         }
         break;
@@ -70,16 +70,16 @@ ui32 man_dec_32(ui64 data, MAN_POLARITY polarity)
     {
         case LSB_LEFT:
         {
-            ui16 lower = man_dec_16((ui32)(data & 0xffffffff), LSB_LEFT);
-            ui16 upper = man_dec_16((ui32)((data & 0xffffffff00000000) >> 32), LSB_LEFT);
+            ui16 lower = man_dec_16((ui32) (data & 0xffffffff), LSB_LEFT);
+            ui16 upper = man_dec_16((ui32) ((data & 0xffffffff00000000) >> 32), LSB_LEFT);
             decData |= ((ui32) lower << 16) | upper;
         }
         break;
 
         case LSB_RIGHT:
         {
-            ui16 lower = man_dec_16((ui32)(data & 0xffffffff), LSB_RIGHT);
-            ui16 upper = man_dec_16((ui32)((data & 0xffffffff00000000) >> 32), LSB_RIGHT);
+            ui16 lower = man_dec_16((ui32) (data & 0xffffffff), LSB_RIGHT);
+            ui16 upper = man_dec_16((ui32) ((data & 0xffffffff00000000) >> 32), LSB_RIGHT);
             decData |= ((ui32) upper << 16) | lower;
         }
         break;
@@ -137,16 +137,16 @@ ui32 man_enc_16(ui16 data, MAN_POLARITY polarity)
     {
         case LSB_LEFT:
         {
-            ui16 lower = man_enc_8((ui8)(data & 0xff), LSB_LEFT);
-            ui16 upper = man_enc_8((ui8)((data & 0xff00) >> 8), LSB_LEFT);
+            ui16 lower = man_enc_8((ui8) (data & 0xff), LSB_LEFT);
+            ui16 upper = man_enc_8((ui8) ((data & 0xff00) >> 8), LSB_LEFT);
             encData |= (lower << 16) | upper;
         }
         break;
 
         case LSB_RIGHT:
         {
-            ui16 lower = man_enc_8((ui8)(data & 0xff), LSB_RIGHT);
-            ui16 upper = man_enc_8((ui8)((data & 0xff00) >> 8), LSB_RIGHT);
+            ui16 lower = man_enc_8((ui8) (data & 0xff), LSB_RIGHT);
+            ui16 upper = man_enc_8((ui8) ((data & 0xff00) >> 8), LSB_RIGHT);
             encData |= (upper << 16) | lower;
         }
         break;
@@ -164,16 +164,16 @@ ui64 man_enc_32(ui32 data, MAN_POLARITY polarity)
     {
         case LSB_LEFT:
         {
-            ui32 lower = man_enc_16((ui16)(data & 0xffff), LSB_LEFT);
-            ui32 upper = man_enc_16((ui16)((data & 0xffff0000) >> 16), LSB_LEFT);
+            ui32 lower = man_enc_16((ui16) (data & 0xffff), LSB_LEFT);
+            ui32 upper = man_enc_16((ui16) ((data & 0xffff0000) >> 16), LSB_LEFT);
             encData |= ((ui64) lower << 32) | upper;
         }
         break;
 
         case LSB_RIGHT:
         {
-            ui32 lower = man_enc_16((ui16)(data & 0xffff), LSB_RIGHT);
-            ui32 upper = man_enc_16((ui16)((data & 0xffff0000) >> 16), LSB_RIGHT);
+            ui32 lower = man_enc_16((ui16) (data & 0xffff), LSB_RIGHT);
+            ui32 upper = man_enc_16((ui16) ((data & 0xffff0000) >> 16), LSB_RIGHT);
             encData |= ((ui64) upper << 32) | lower;
         }
         break;
@@ -201,7 +201,7 @@ void bin_output16(ui16 data)
 }
 void bin_output32(ui32 data)
 {
-    bin_output16((ui16)((data & (0xffff << 16)) >> 16));
+    bin_output16((ui16) ((data & (0xffff << 16)) >> 16));
     printf(" ");
     bin_output16(data & 0xffff);
 }
@@ -209,5 +209,5 @@ void bin_output64(ui64 data)
 {
     bin_output32((data & ((ui64) 0xffffffff << 32)) >> 32);
     printf(" ");
-    bin_output32((ui32)(data & 0xffffffff));
+    bin_output32((ui32) (data & 0xffffffff));
 }

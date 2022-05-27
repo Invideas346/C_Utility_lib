@@ -3,10 +3,10 @@
 
 #include <stdint.h>
 
-#define false 0
-#define true 1
+#define FALSE 0
+#define TRUE 1
 
-// 0xffffffff could be reached but is extremly unlikely.
+// 0xffffffff could be reached but is extremely unlikely.
 #define INDEX_NOTFOUND 0xffffffff
 
 typedef uint8_t boolean;

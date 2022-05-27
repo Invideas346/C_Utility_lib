@@ -1,19 +1,19 @@
+#include <stdlib.h>
 #include <stdio.h>
-#include <keyMap.h>
-#include <manchester.h>
-#include <vector.h>
-#include <linkedLists.h>
-#include <string.h>
+#include <stringStruct.h>
 
 int main(void)
 {
-    String str = init_string_stack("Test");
-    str.append_cstr(&str, "123");
-    str.insert_cstr(&str, "insert", 4);
-    printf("%s\n", str.value);
-    printf("%d\n", str.find_cstr(&str, "123"));
-    printf("%d\n", str.equal_cstr(&str, "Test123"));
-    printf("%d", str.length);
-    str.clear(&str);
+    String* string1 = init_string_heap("Test", NULL);
+    String* string2 = init_string_heap("Test", NULL);
+
+    boolean index = string1->insert_cstr(string1, "string1", 1, NULL);
+    printf("%u\n", index);
+    printf("%s\n", string1->value);
+
+    string1->clear(string1, NULL);
+    free(string1);
+    string2->clear(string2, NULL);
+    free(string2);
     return EXIT_SUCCESS;
 }
