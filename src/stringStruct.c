@@ -162,7 +162,6 @@ static ui32 find(const String* str, const String* str1, STRING_ERROR_CODE* error
     return (index == NULL) ? (ui32) INDEX_NOTFOUND : (ui32) (index - str->value);
 }
 
-//! not tested yet
 static boolean equal(const String* str, const String* str1, STRING_ERROR_CODE* error_code)
 {
     if(!str->is_initialized || !str1->is_initialized)
@@ -185,7 +184,6 @@ static boolean equal_cstr(const String* str, const char* str1, STRING_ERROR_CODE
     return (boolean) !strcmp(str->value, str1);
 }
 
-//! not tested yet
 static boolean insert(String* self, String* str, ui32 index, STRING_ERROR_CODE* error_code)
 {
     if(!str->is_initialized || !self->is_initialized)
@@ -193,7 +191,7 @@ static boolean insert(String* self, String* str, ui32 index, STRING_ERROR_CODE* 
         ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
         return FALSE;
     }
-    if(index >= self->length || str->length == 0)
+    if(index >= self->length || str->length == 0 || index < 0)
     {
         return FALSE;
     }
@@ -214,7 +212,6 @@ static boolean insert(String* self, String* str, ui32 index, STRING_ERROR_CODE* 
     return TRUE;
 }
 
-//! not tested yet
 static boolean insert_cstr(String* self, const char* str, ui32 index, STRING_ERROR_CODE* error_code)
 {
     if(!self->is_initialized)
@@ -223,7 +220,7 @@ static boolean insert_cstr(String* self, const char* str, ui32 index, STRING_ERR
         return FALSE;
     }
     ui32 str_len = strlen(str);
-    if(index >= self->length || str_len == 0)
+    if(index >= self->length || str_len == 0 || index < 0)
     {
         return FALSE;
     }
@@ -240,13 +237,12 @@ static boolean insert_cstr(String* self, const char* str, ui32 index, STRING_ERR
         ASSIGN_ERROR_CODE(error_code, MEMORY_ALLOCATION_ERROR);
         return FALSE;
     }
-    strncpy(self->value, copy, str_len);
+    strncpy(self->value, copy, self->length);
     free(copy);
     ASSIGN_ERROR_CODE(error_code, OK);
     return TRUE;
 }
 
-//! not tested yet
 static char* sub_string(const String* str, ui32 position1, ui32 position2,
                         STRING_ERROR_CODE* error_code)
 {
@@ -255,7 +251,7 @@ static char* sub_string(const String* str, ui32 position1, ui32 position2,
         ASSIGN_ERROR_CODE(error_code, STRING_NOT_INITIALIZED);
         return NULL;
     }
-    if(position1 >= position2)
+    if(position1 >= position2 || position1 > str->length || position2 > str->length)
     {
         return NULL;
     }
@@ -272,7 +268,6 @@ static char* sub_string(const String* str, ui32 position1, ui32 position2,
     return temp;
 }
 
-//! not tested yet
 static String* copy_heap(const String* str, STRING_ERROR_CODE* error_code)
 {
     if(!str->is_initialized)
@@ -281,11 +276,9 @@ static String* copy_heap(const String* str, STRING_ERROR_CODE* error_code)
         return NULL;
     }
     String* new_string = init_string_heap(str->value, error_code);
-    ASSIGN_ERROR_CODE(error_code, OK);
     return new_string;
 }
 
-//! not tested yet
 static String copy_stack(const String* str, STRING_ERROR_CODE* error_code)
 {
     if(!str->is_initialized)
@@ -294,7 +287,6 @@ static String copy_stack(const String* str, STRING_ERROR_CODE* error_code)
         return *str;
     }
     String new_string = init_string_stack(str->value, error_code);
-    ASSIGN_ERROR_CODE(error_code, OK);
     return new_string;
 }
 
