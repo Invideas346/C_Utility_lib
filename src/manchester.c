@@ -193,18 +193,21 @@ void bin_output8(ui8 data)
     }
     printf("%s", output);
 }
+
 void bin_output16(ui16 data)
 {
     bin_output8((data & (0xff << 8)) >> 8);
     printf(" ");
     bin_output8(data & 0xff);
 }
+
 void bin_output32(ui32 data)
 {
     bin_output16((ui16) ((data & (0xffff << 16)) >> 16));
     printf(" ");
     bin_output16(data & 0xffff);
 }
+
 void bin_output64(ui64 data)
 {
     bin_output32((data & ((ui64) 0xffffffff << 32)) >> 32);

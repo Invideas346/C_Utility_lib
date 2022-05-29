@@ -1,18 +1,23 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <stringStruct.h>
+#include <vector.h>
+
+void print(void* data, ui32 index, ui32 object_size)
+{
+    printf("Data: %u\n", *(ui32 *)data);
+    printf("Index: %u\n", index);
+    printf("\n");
+}
 
 int main(void)
 {
-    String* string1 = init_string_heap("Test", NULL);
-    String string2 = string1->copy_stack(string1, NULL);
-    printf("%s\n", string1->value);
-    printf("%s\n", string2.value);
-    string1->set_cstr(string1, "123", NULL);
-    printf("%s\n", string1->value);
-    printf("%s\n", string2.value);
-    string1->clear(string1, NULL);
-    string2.clear(&string2, NULL);
-    free(string1);
+    int data = 4;
+    Vector array = init_vector_stack(0, sizeof(ui32), NULL);
+    array.push_back(&array, &data, NULL);
+    array.push_back(&array, &data, NULL);
+    data = 10;
+    array.push_back(&array, &data, NULL);
+    array.for_each(&array, print, NULL);
+    array.clear(&array, NULL);
     return EXIT_SUCCESS;
 }
