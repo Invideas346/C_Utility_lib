@@ -6,16 +6,14 @@
 
 typedef struct String String;
 
-typedef enum STRING_ERROR_CODE
-{
+typedef enum STRING_ERROR_CODE {
     OK = 0,
     GENERAL_ERROR = 1,
     STRING_NOT_INITIALIZED = 2 | GENERAL_ERROR,
     MEMORY_ALLOCATION_ERROR = 3 | GENERAL_ERROR
 } STRING_ERROR_CODE;
 
-struct String
-{
+struct String {
     char* value;
     ui32 length;
 

@@ -5,8 +5,7 @@
 
 typedef struct Node Node;
 
-struct Node
-{
+struct Node {
     Node* previous;
     void* data;
     Node* next;
@@ -14,8 +13,7 @@ struct Node
 
 typedef struct LinkedList LinkedList;
 
-struct LinkedList
-{
+struct LinkedList {
     Node* head;
     Node* tail;
     ui32 length;

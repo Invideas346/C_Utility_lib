@@ -23,26 +23,20 @@ static Node *get_node(LinkedList *list, ui32 position)
 {
     ASSERT_INIT(list);
     Node *temp = NULL;
-    if(position >= list->length || list->length == 0)
-    {
+    if(position >= list->length || list->length == 0) {
         return NULL;
     }
-    if(position >= (int) (list->length / 2))
-    {
+    if(position >= (int) (list->length / 2)) {
         temp = list->tail;
         ui32 i = list->length - 1;
-        while(i != position)
-        {
+        while(i != position) {
             temp = temp->previous;
             i--;
         }
-    }
-    else
-    {
+    } else {
         temp = list->head;
         ui32 i = 0;
-        while(i != position)
-        {
+        while(i != position) {
             temp = temp->next;
             i++;
         }
@@ -59,8 +53,7 @@ static void *get_data(LinkedList *list, ui32 position)
 static void clear(LinkedList *list)
 {
     ASSERT_INIT(list);
-    for(ui32 i = 0; i < list->length; i++)
-    {
+    for(ui32 i = 0; i < list->length; i++) {
         free(list->get_node(list, i)->data);
         free(list->get_node(list, i));
     }
@@ -73,13 +66,10 @@ static void push_back(LinkedList *list, void *data, ui32 size)
 {
     ASSERT_INIT(list);
     Node *new_node = init_node(data, size);
-    if(list->length == 0)
-    {
+    if(list->length == 0) {
         list->head = new_node;
         list->tail = new_node;
-    }
-    else
-    {
+    } else {
         new_node->previous = list->tail;
         list->tail->next = new_node;
         list->tail = new_node;
@@ -91,13 +81,10 @@ static void push_front(LinkedList *list, void *data, ui32 size)
 {
     ASSERT_INIT(list);
     Node *new_node = init_node(data, size);
-    if(list->length == 0)
-    {
+    if(list->length == 0) {
         list->head = new_node;
         list->tail = new_node;
-    }
-    else
-    {
+    } else {
         new_node->next = list->head;
         list->head->previous = new_node;
         list->head = new_node;
@@ -108,8 +95,7 @@ static void push_front(LinkedList *list, void *data, ui32 size)
 static void *pop_back(LinkedList *list)
 {
     ASSERT_INIT(list);
-    if(list->length == 0)
-    {
+    if(list->length == 0) {
         return NULL;
     }
     void *temp = list->tail->data;
@@ -123,8 +109,7 @@ static void *pop_back(LinkedList *list)
 static void *pop_front(LinkedList *list)
 {
     ASSERT_INIT(list);
-    if(list->length == 0)
-    {
+    if(list->length == 0) {
         return NULL;
     }
     void *temp = list->head->data;
@@ -135,7 +120,7 @@ static void *pop_front(LinkedList *list)
     return temp;
 }
 
-static void assign_methods(LinkedList *list)
+inline static void assign_methods(LinkedList *list)
 {
     list->push_back = push_back;
     list->push_front = push_front;
@@ -149,8 +134,7 @@ static void assign_methods(LinkedList *list)
 LinkedList *init_list_heap(void)
 {
     LinkedList *list = (LinkedList *) malloc(sizeof(LinkedList));
-    if(list == NULL)
-    {
+    if(list == NULL) {
         return NULL;
     }
     list->head = NULL;

@@ -7,11 +7,7 @@
 
 #include <typedef.h>
 
-typedef enum MAN_POLARITY
-{
-    LSB_RIGHT,
-    LSB_LEFT
-} MAN_POLARITY;
+typedef enum MAN_POLARITY { LSB_RIGHT, LSB_LEFT } MAN_POLARITY;
 
 ui8 man_dec_8(ui16 data, MAN_POLARITY polarity);
 ui16 man_dec_16(ui32 data, MAN_POLARITY polarity);

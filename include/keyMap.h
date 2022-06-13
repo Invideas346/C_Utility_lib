@@ -9,8 +9,7 @@
 #include <stringStruct.h>
 
 typedef struct KeyPair KeyPair;
-struct KeyPair
-{
+struct KeyPair {
     String key;
     size_t size;
     void* data;
@@ -46,8 +45,7 @@ KeyPair* init_keypair_heap_cstr(const char* key, void* data, size_t size);
 KeyPair init_keypair_stack_cstr(const char* key, void* data, size_t size);
 
 typedef struct KeyMap KeyMap;
-struct KeyMap
-{
+struct KeyMap {
     KeyPair** pairs;
     ui32 length;
 

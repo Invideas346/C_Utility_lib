@@ -11,8 +11,7 @@
 // TODO: Maybe implement a toString function (not sure it is really ever gonna be needed)
 // TODO: Implement a remove via index function.
 
-typedef enum VECTOR_ERROR_CODE
-{
+typedef enum VECTOR_ERROR_CODE {
     OK = 0,
     GENERAL_ERROR = 1,
     VECTOR_NOT_INITIALIZED = 2 | GENERAL_ERROR,
@@ -21,8 +20,7 @@ typedef enum VECTOR_ERROR_CODE
 
 typedef struct Vector Vector;
 
-struct Vector
-{
+struct Vector {
     void* data;
     ui32 object_size;
     ui32 length;
@@ -113,29 +111,32 @@ struct Vector
      * @param code
      * @param error_code
      */
-    void (*for_each)(Vector* array, void(*func)(void* data, ui32 index, ui32 objectSize), VECTOR_ERROR_CODE* error_code);
+    void (*for_each)(Vector* array, void (*func)(void* data, ui32 index, ui32 objectSize),
+                     VECTOR_ERROR_CODE* error_code);
 };
 
 /**
  * @brief Creates a new dynamic array initialized with all function pointers.
  * @return Vector*
  */
-Vector* init_vector_heap(ui32 size, ui32 objectSize, VECTOR_ERROR_CODE* error_code);
+Vector* init_vector_heap(ui32 size, ui32 object_size, VECTOR_ERROR_CODE* error_code);
 /**
  * @brief Creates a new dynamic array initialized with all function pointers.
  * @return Vector*
  */
-Vector* init_vector_heap_data(ui32 size, const void* data, ui32 objectSize, VECTOR_ERROR_CODE* error_code);
+Vector* init_vector_heap_data(ui32 size, const void* data, ui32 object_size,
+                              VECTOR_ERROR_CODE* error_code);
 
 /**
  * @brief Creates a new dynamic array initialized with all function pointers.
  * @return Vector*
  */
-Vector init_vector_stack(ui32 size, ui32 objectSize, VECTOR_ERROR_CODE* error_code);
+Vector init_vector_stack(ui32 size, ui32 object_size, VECTOR_ERROR_CODE* error_code);
 /**
  * @brief Creates a new dynamic array initialized with all function pointers.
  * @return Vector*
  */
-Vector init_vector_stack_data(ui32 size, const void* data, ui32 objectSize, VECTOR_ERROR_CODE* error_code);
+Vector init_vector_stack_data(ui32 size, const void* data, ui32 object_size,
+                              VECTOR_ERROR_CODE* error_code);
 
 #endif  // __Vector_H__

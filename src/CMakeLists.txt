@@ -7,6 +7,7 @@ if(LIBARY)
         vector.c
         keyMap.c
         manchester.c
+        crc.c
     )
     add_library(${PROJECT_NAME} ${SOURCE_FILES})
 endif(LIBARY)
@@ -19,6 +20,7 @@ if(EXE)
         vector.c
         keyMap.c
         manchester.c
+        crc.c
     )
     add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 endif(EXE)

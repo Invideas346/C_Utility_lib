@@ -3,8 +3,7 @@
 
 #include <typedef.h>
 
-typedef enum CRC_POLYNOM
-{
+typedef enum CRC_POLYNOM {
     CRC1 = 0x1,
 
     CRC3_GSM_MSB = 0x3,
@@ -180,6 +179,6 @@ typedef enum CRC_POLYNOM
 } CRC_POLYNOM;
 
 void create_crc(void* data, CRC_POLYNOM polynome, ui32 objectSize, ui32 count);
-void create_crc_costum(void* data, ui64 polynome, ui32 objectSize, ui32 count);
+void create_crc_custom(void* data, ui64 polynome, ui32 objectSize, ui32 count);
 
 #endif  // __CRC_H__
