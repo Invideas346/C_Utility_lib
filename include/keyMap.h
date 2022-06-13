@@ -8,7 +8,15 @@
 #include <typedef.h>
 #include <stringStruct.h>
 
+typedef enum KEYPAIR_ERROR_CODE {
+    KEYPAIR_OK = 0,
+    KEYPAIR_GENERAL_ERROR = 1,
+    KEYPAIR_NOT_INITIALIZED = 2 | KEYPAIR_GENERAL_ERROR,
+    KEYPAIR_MEMORY_ALLOCATION_ERROR = 3 | KEYPAIR_GENERAL_ERROR
+} KEYPAIR_ERROR_CODE;
+
 typedef struct KeyPair KeyPair;
+
 struct KeyPair {
     String key;
     size_t size;
@@ -19,32 +27,41 @@ struct KeyPair {
     /**
      * @brief Clear a KeyPair and effecticly frees all allocated memory.
      */
-    void (*clear)(KeyPair* pair);
+    void (*clear)(KeyPair* pair, KEYPAIR_ERROR_CODE* error_code);
 };
 
 /**
  * @brief Creates a new KeyPair initalized with all function pointers.
  * @return KeyMap*
  */
-KeyPair* init_keypair_heap(String* key, void* data, size_t size);
+KeyPair* init_keypair_heap(String* key, void* data, size_t size, KEYPAIR_ERROR_CODE* error_code);
 /**
  * @brief Creates a new KeyPair initalized with all function pointers.
  * @return KeyMap
  */
-KeyPair init_keypair_stack(String* key, void* data, size_t size);
+KeyPair init_keypair_stack(String* key, void* data, size_t size, KEYPAIR_ERROR_CODE* error_code);
 
 /**
  * @brief Creates a new KeyPair initalized with all function pointers.
  * @return KeyMap*
  */
-KeyPair* init_keypair_heap_cstr(const char* key, void* data, size_t size);
+KeyPair* init_keypair_heap_cstr(const char* key, void* data, size_t size, KEYPAIR_ERROR_CODE* error_code);
 /**
  * @brief Creates a new KeyMap initalized with all function pointers.
  * @return KeyMap
  */
-KeyPair init_keypair_stack_cstr(const char* key, void* data, size_t size);
+KeyPair init_keypair_stack_cstr(const char* key, void* data, size_t size, KEYPAIR_ERROR_CODE* error_code);
+
+typedef enum KEYMAP_ERROR_CODE {
+    KEYMAP_OK = 0,
+    KEYMAP_GENERAL_ERROR = 1,
+    KEYMAP_NOT_INITIALIZED = 2 | KEYPAIR_GENERAL_ERROR,
+    KEYMAP_MEMORY_ALLOCATION_ERROR = 3 | KEYMAP_GENERAL_ERROR,
+    KEYMAP_PAIR_NOT_FOUND = 4 | KEYMAP_GENERAL_ERROR
+} KEYMAP_ERROR_CODE;
 
 typedef struct KeyMap KeyMap;
+
 struct KeyMap {
     KeyPair** pairs;
     ui32 length;
@@ -55,48 +72,48 @@ struct KeyMap {
      * @brief Adds an KeyPair to the array.
      * @return The Pointer onto the newly inserted KeyPair.
      */
-    KeyPair* (*add)(KeyMap* self, KeyPair* pair);
+    KeyPair* (*add)(KeyMap* self, KeyPair* pair, KEYMAP_ERROR_CODE* error_code);
 
     /**
      * @brief Removes a KeyPair from the array based on the index.
      * @return Returns the pointer onto the keymap is successful. If an error occured NULL is
      * returned.
      */
-    void* (*remove_index)(KeyMap* self, ui32 index);
+    void* (*remove_index)(KeyMap* self, ui32 index, KEYMAP_ERROR_CODE* error_code);
 
     /**
      * @brief Removes a KeyPair based on a string.
      * @return Returns the pointer onto the keymap is successful. If an error occured NULL is
      * returned.
      */
-    void* (*remove_key)(KeyMap* self, const String* key);
+    void* (*remove_key)(KeyMap* self, const String* key, KEYMAP_ERROR_CODE* error_code);
 
     /**
      * @brief Removes a KeyPair based on a string.
      * @return Returns the pointer onto the keymap is successful. If an error occured NULL is
      * returned.
      */
-    void* (*remove_key_cstr)(KeyMap* self, const char* key);
+    void* (*remove_key_cstr)(KeyMap* self, const char* key, KEYMAP_ERROR_CODE* error_code);
 
     /**
      * @brief Finds a KeyPair based on a string.
      * @return Returns the pointer onto the Keypair matching the passed in string.
      * If an error occured or the key was not found NULL is returned.
      */
-    KeyPair* (*find)(KeyMap* self, const String* key);
+    KeyPair* (*find)(KeyMap* self, const String* key, KEYMAP_ERROR_CODE* error_code);
 
     /**
      * @brief Finds a KeyPair based on a string.
      * @return Returns the pointer onto the Keypair matching the passed in string.
      * If an error occured or the key was not found NULL is returned.
      */
-    KeyPair* (*find_cstr)(KeyMap* self, const char* key);
+    KeyPair* (*find_cstr)(KeyMap* self, const char* key, KEYMAP_ERROR_CODE* error_code);
 
     /**
      * @brief Clear the entire KeyMap.
      * @return Returns nothing.
      */
-    void (*clear)(KeyMap* self);
+    void (*clear)(KeyMap* self, KEYMAP_ERROR_CODE* error_code);
 
     /**
      * @brief Returns a pointer onto the KeyPair residing on the specified index.
@@ -105,27 +122,27 @@ struct KeyMap {
      * @return Returns the pointer onto the Keypair located on the passed in index.
      * If an error occured or the index is invalid NULL is returned.
      */
-    KeyPair* (*at)(KeyMap* self, ui32 index);
+    KeyPair* (*at)(KeyMap* self, ui32 index, KEYMAP_ERROR_CODE* error_code);
 
     /**
      * @brief Creates a copy of itself.
      */
-    KeyMap* (*copy_heap)(KeyMap* self);
+    KeyMap* (*copy_heap)(KeyMap* self, KEYMAP_ERROR_CODE* error_code);
     /**
      * @brief Creates a copy of itself.
      */
-    KeyMap (*copy_stack)(KeyMap* self);
+    KeyMap (*copy_stack)(KeyMap* self, KEYMAP_ERROR_CODE* error_code);
 };
 
 /**
  * @brief Creates a new KeyMap initalized with all function pointers.
  * @return KeyMap*
  */
-KeyMap* init_keyMap_heap();
+KeyMap* init_keyMap_heap(KEYMAP_ERROR_CODE* error_code);
 /**
  * @brief Creates a new KeyMap initalized with all function pointers.
  * @return KeyMap
  */
-KeyMap init_keyMap_stack();
+KeyMap init_keyMap_stack(KEYMAP_ERROR_CODE* error_code);
 
 #endif  // __CUTILITY_KEYMAP_H__

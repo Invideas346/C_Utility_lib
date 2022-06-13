@@ -24,11 +24,11 @@ static void* push_back(Vector* array, const void* data, VECTOR_ERROR_CODE* error
     array->length += 1;
     void* newAddress = realloc(array->data, array->length * array->object_size);
     if(newAddress == NULL) {
-        assign_error_code(error_code, MEMORY_ALLOCATION_ERROR);
+        assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
         return NULL;
     }
     memcpy(array->data + ARRAY_INDEX(array->length - 1), data, array->object_size);
-    assign_error_code(error_code, OK);
+    assign_error_code(error_code, VECTOR_OK);
     return array->data + ARRAY_INDEX(array->length - 1);
 }
 
@@ -44,7 +44,7 @@ static void* push_front(Vector* array, const void* data, VECTOR_ERROR_CODE* erro
     array->length += 1;
     void* newAddress = realloc(array->data, array->length * array->object_size);
     if(newAddress == NULL) {
-        assign_error_code(error_code, MEMORY_ALLOCATION_ERROR);
+        assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
         return NULL;
     }
     if(array->length != 1) {
@@ -52,7 +52,7 @@ static void* push_front(Vector* array, const void* data, VECTOR_ERROR_CODE* erro
                array->object_size * (array->length - 1));
     }
     memcpy(array->data + ARRAY_INDEX(0), data, array->object_size);
-    assign_error_code(error_code, OK);
+    assign_error_code(error_code, VECTOR_OK);
     return array->data + ARRAY_INDEX(0);
 }
 
@@ -68,10 +68,10 @@ static boolean pop_back(Vector* array, VECTOR_ERROR_CODE* error_code)
     array->length -= 1;
     void* newAddress = realloc(array->data, array->length * array->object_size);
     if(newAddress == NULL) {
-        assign_error_code(error_code, MEMORY_ALLOCATION_ERROR);
+        assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
         return FALSE;
     }
-    assign_error_code(error_code, OK);
+    assign_error_code(error_code, VECTOR_OK);
     return TRUE;
 }
 
@@ -87,19 +87,19 @@ static boolean pop_front(Vector* array, VECTOR_ERROR_CODE* error_code)
     array->length -= 1;
     void* temp = malloc(array->object_size * array->length);
     if(temp == NULL) {
-        assign_error_code(error_code, MEMORY_ALLOCATION_ERROR);
+        assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
         return FALSE;
     }
     memcpy(temp, array->data + ARRAY_INDEX(1), array->length * array->object_size);
     void* newAddress = realloc(array->data, array->length * array->object_size);
     if(newAddress == NULL) {
-        assign_error_code(error_code, MEMORY_ALLOCATION_ERROR);
+        assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
         free(temp);
         return FALSE;
     }
     memcpy(array->data, temp, array->length * array->object_size);
     free(temp);
-    assign_error_code(error_code, OK);
+    assign_error_code(error_code, VECTOR_OK);
     return TRUE;
 }
 
@@ -112,7 +112,7 @@ static void* at(Vector* array, ui32 position, VECTOR_ERROR_CODE* error_code)
     if(array->length == 0 || array->object_size <= 0) {
         return NULL;
     }
-    assign_error_code(error_code, OK);
+    assign_error_code(error_code, VECTOR_OK);
     return array->data + ARRAY_INDEX(position);
 }
 
@@ -127,11 +127,11 @@ boolean resize(Vector* array, ui32 num_elements, VECTOR_ERROR_CODE* error_code)
     }
     void* newAddress = realloc(array->data, array->object_size * num_elements);
     if(newAddress == NULL) {
-        assign_error_code(error_code, MEMORY_ALLOCATION_ERROR);
+        assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
         return FALSE;
     }
     array->length = num_elements;
-    assign_error_code(error_code, OK);
+    assign_error_code(error_code, VECTOR_OK);
     return TRUE;
 }
 
@@ -143,7 +143,7 @@ static Vector* copy_heap(Vector* array, VECTOR_ERROR_CODE* error_code)
     }
     Vector* copy =
         init_vector_heap_data(array->length, array->data, array->object_size, error_code);
-    assign_error_code(error_code, OK);
+    assign_error_code(error_code, VECTOR_OK);
     return copy;
 }
 
@@ -155,7 +155,7 @@ static Vector copy_stack(Vector* array, VECTOR_ERROR_CODE* error_code)
     }
     Vector copy =
         init_vector_stack_data(array->length, array->data, array->object_size, error_code);
-    assign_error_code(error_code, OK);
+    assign_error_code(error_code, VECTOR_OK);
     return copy;
 }
 
@@ -168,7 +168,7 @@ static void clear(Vector* array, VECTOR_ERROR_CODE* error_code)
     free(array->data);
     array->data = NULL;
     array->length = 0;
-    assign_error_code(error_code, OK);
+    assign_error_code(error_code, VECTOR_OK);
 }
 
 static void for_each(Vector* array, void (*func)(void* data, ui32 index, ui32 object_size),
@@ -181,7 +181,7 @@ static void for_each(Vector* array, void (*func)(void* data, ui32 index, ui32 ob
     for(ui32 i = 0; i < array->length; ++i) {
         func(array->at(array, i, error_code), i, array->object_size);
         if(error_code != NULL)
-            if(*error_code != OK) break;
+            if(*error_code != VECTOR_OK) break;
     }
 }
 
@@ -203,19 +203,19 @@ Vector* init_vector_heap(ui32 size, ui32 object_size, VECTOR_ERROR_CODE* error_c
 {
     Vector* array = (Vector*) malloc(sizeof(Vector));
     if(array == NULL) {
-        assign_error_code(error_code, MEMORY_ALLOCATION_ERROR);
+        assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
         return NULL;
     }
     array->length = size;
     array->object_size = object_size;
     array->data = malloc(size * object_size);
     if(array->data == NULL) {
-        assign_error_code(error_code, MEMORY_ALLOCATION_ERROR);
+        assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
         return array;
     }
     assign_methods(array);
     array->is_initialized = TRUE;
-    assign_error_code(error_code, OK);
+    assign_error_code(error_code, VECTOR_OK);
     return array;
 }
 
@@ -224,20 +224,20 @@ Vector* init_vector_heap_data(ui32 size, const void* data, ui32 object_size,
 {
     Vector* array = (Vector*) malloc(sizeof(Vector));
     if(array == NULL) {
-        assign_error_code(error_code, MEMORY_ALLOCATION_ERROR);
+        assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
         return NULL;
     }
     array->length = size;
     array->object_size = object_size;
     array->data = malloc(size * object_size);
     if(array->data == NULL) {
-        assign_error_code(error_code, MEMORY_ALLOCATION_ERROR);
+        assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
         return array;
     }
     memcpy(array->data, data, size * object_size);
     assign_methods(array);
     array->is_initialized = TRUE;
-    assign_error_code(error_code, OK);
+    assign_error_code(error_code, VECTOR_OK);
     return array;
 }
 
@@ -248,12 +248,12 @@ Vector init_vector_stack(ui32 size, ui32 object_size, VECTOR_ERROR_CODE* error_c
     array.object_size = object_size;
     array.data = malloc(size * object_size);
     if(array.data == NULL) {
-        assign_error_code(error_code, MEMORY_ALLOCATION_ERROR);
+        assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
         return array;
     }
     assign_methods(&array);
     array.is_initialized = TRUE;
-    assign_error_code(error_code, OK);
+    assign_error_code(error_code, VECTOR_OK);
     return array;
 }
 
@@ -265,12 +265,12 @@ Vector init_vector_stack_data(ui32 size, const void* data, ui32 object_size,
     array.object_size = object_size;
     array.data = malloc(size * object_size);
     if(array.data == NULL) {
-        assign_error_code(error_code, MEMORY_ALLOCATION_ERROR);
+        assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
         return array;
     }
     memcpy(array.data, data, size * object_size);
     assign_methods(&array);
     array.is_initialized = TRUE;
-    assign_error_code(error_code, OK);
+    assign_error_code(error_code, VECTOR_OK);
     return array;
 }
