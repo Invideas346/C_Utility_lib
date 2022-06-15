@@ -6,7 +6,7 @@
 #define __CUTILITY_KEYMAP_H__
 
 #include <typedef.h>
-#include <stringStruct.h>
+#include <string_struct.h>
 
 typedef enum KEYPAIR_ERROR_CODE {
     KEYPAIR_OK = 0,

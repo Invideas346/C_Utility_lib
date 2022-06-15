@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 3.16.3)
 
 if(LIBARY)
     set(SOURCE_FILES
-        linkedLists.c
-        stringStruct.c
+            linked_lists.c
+            string_struct.c
         vector.c
-        keyMap.c
+            key_map.c
         manchester.c
         crc.c
     )
@@ -15,10 +15,10 @@ endif(LIBARY)
 if(EXE)
     set(SOURCE_FILES
         main.c
-        linkedLists.c
-        stringStruct.c
+            linked_lists.c
+            string_struct.c
         vector.c
-        keyMap.c
+            key_map.c
         manchester.c
         crc.c
     )

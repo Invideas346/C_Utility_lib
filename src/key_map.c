@@ -3,12 +3,8 @@
 //
 
 #include <stdlib.h>
-#include <assert.h>
 #include <string.h>
-#include <keyMap.h>
-
-// TODO: Research whether 1 can be a valid pointer if not change the NULL to 0 or
-// something like that
+#include <key_map.h>
 
 static inline void assign_error_code_keypair(KEYPAIR_ERROR_CODE* error_code,
                                              KEYPAIR_ERROR_CODE value)
