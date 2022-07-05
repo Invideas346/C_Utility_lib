@@ -9,17 +9,17 @@
 
 typedef enum MAN_POLARITY { LSB_RIGHT, LSB_LEFT } MAN_POLARITY;
 
-ui8 man_dec_8(ui16 data, MAN_POLARITY polarity);
-ui16 man_dec_16(ui32 data, MAN_POLARITY polarity);
-ui32 man_dec_32(ui64 data, MAN_POLARITY polarity);
+uint8_t man_dec_8(uint16_t data, MAN_POLARITY polarity);
+uint16_t man_dec_16(uint32_t data, MAN_POLARITY polarity);
+uint32_t man_dec_32(uint64_t data, MAN_POLARITY polarity);
 
-ui16 man_enc_8(ui8 data, MAN_POLARITY polarity);
-ui32 man_enc_16(ui16 data, MAN_POLARITY polarity);
-ui64 man_enc_32(ui32 data, MAN_POLARITY polarity);
+uint16_t man_enc_8(uint8_t data, MAN_POLARITY polarity);
+uint32_t man_enc_16(uint16_t data, MAN_POLARITY polarity);
+uint64_t man_enc_32(uint32_t data, MAN_POLARITY polarity);
 
-void bin_output8(ui8 data);
-void bin_output16(ui16 data);
-void bin_output32(ui32 data);
-void bin_output64(ui64 data);
+void bin_output8(uint8_t data);
+void bin_output16(uint16_t data);
+void bin_output32(uint32_t data);
+void bin_output64(uint64_t data);
 
 #endif  // __MANCHESTER_H__

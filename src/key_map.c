@@ -17,14 +17,14 @@ static inline void assign_error_code_keymap(KEYMAP_ERROR_CODE* error_code, KEYMA
     if(error_code != NULL) *error_code = value;
 }
 
-static ui32 find_index_keymap(KeyMap* self, const char* key, KEYMAP_ERROR_CODE* error_code)
+static uint32_t find_index_keymap(KeyMap* self, const char* key, KEYMAP_ERROR_CODE* error_code)
 {
     if(!self->is_initialized) {
         assign_error_code_keymap(error_code, KEYMAP_NOT_INITIALIZED);
         return INDEX_NOTFOUND;
     }
     STRING_ERROR_CODE code;
-    for(ui32 i = 0; i < self->length; i++) {
+    for(uint32_t i = 0; i < self->length; i++) {
         if(self->at(self, i, error_code)
                ->key.equal_cstr(&self->at(self, i, error_code)->key, key, &code)) {
             return i;
@@ -68,7 +68,7 @@ static KeyPair* add_keymap(KeyMap* self, KeyPair* pair, KEYMAP_ERROR_CODE* error
     return self->pairs[self->length - 1];
 }
 
-static void* remove_index(KeyMap* self, ui32 index, KEYMAP_ERROR_CODE* error_code)
+static void* remove_index(KeyMap* self, uint32_t index, KEYMAP_ERROR_CODE* error_code)
 {
     if(!self->is_initialized) {
         assign_error_code_keymap(error_code, KEYMAP_NOT_INITIALIZED);
@@ -82,7 +82,7 @@ static void* remove_index(KeyMap* self, ui32 index, KEYMAP_ERROR_CODE* error_cod
         assign_error_code_keymap(error_code, KEYMAP_MEMORY_ALLOCATION_ERROR);
         return NULL;
     }
-    for(ui32 i = 0, k = 0; i < self->length; i++) {
+    for(uint32_t i = 0, k = 0; i < self->length; i++) {
         if(i != index) {
             pair[k] = self->pairs[i];
             k++;  //! Should be examined whether k should really be incremented
@@ -107,7 +107,7 @@ static void* remove_key(KeyMap* self, const String* key, KEYMAP_ERROR_CODE* erro
         assign_error_code_keymap(error_code, KEYMAP_NOT_INITIALIZED);
         return NULL;
     }
-    ui32 index = find_index_keymap(self, key->value, error_code);
+    uint32_t index = find_index_keymap(self, key->value, error_code);
     if(index == INDEX_NOTFOUND) {
         assign_error_code_keymap(error_code, KEYMAP_PAIR_NOT_FOUND);
         return NULL;
@@ -122,7 +122,7 @@ static void clear_keymap(KeyMap* self, KEYMAP_ERROR_CODE* error_code)
         return;
     }
     STRING_ERROR_CODE code;
-    for(ui32 i = 0; i < self->length; ++i) {
+    for(uint32_t i = 0; i < self->length; ++i) {
         KeyPair* pair = self->pairs[i];
         pair->key.clear(&pair->key, &code);
         if(code != KEYMAP_OK) {
@@ -137,7 +137,7 @@ static void clear_keymap(KeyMap* self, KEYMAP_ERROR_CODE* error_code)
     assign_error_code_keymap(error_code, KEYMAP_OK);
 }
 
-static KeyPair* at(KeyMap* self, ui32 index, KEYMAP_ERROR_CODE* error_code)
+static KeyPair* at(KeyMap* self, uint32_t index, KEYMAP_ERROR_CODE* error_code)
 {
     if(!self->is_initialized) {
         assign_error_code_keymap(error_code, KEYMAP_NOT_INITIALIZED);
@@ -156,7 +156,7 @@ static void* remove_key_cstr(KeyMap* self, const char* key, KEYMAP_ERROR_CODE* e
         assign_error_code_keymap(error_code, KEYMAP_NOT_INITIALIZED);
         return NULL;
     }
-    ui32 index = find_index_keymap(self, key, error_code);
+    uint32_t index = find_index_keymap(self, key, error_code);
     if(index == INDEX_NOTFOUND) {
         return NULL;
     }
@@ -169,7 +169,7 @@ static KeyPair* find_cstr(KeyMap* self, const char* key, KEYMAP_ERROR_CODE* erro
         assign_error_code_keymap(error_code, KEYMAP_NOT_INITIALIZED);
         return NULL;
     }
-    ui32 index = find_index_keymap(self, key, error_code);
+    uint32_t index = find_index_keymap(self, key, error_code);
     if(index == INDEX_NOTFOUND) {
         return NULL;
     }
@@ -182,7 +182,7 @@ static KeyPair* find(KeyMap* self, const String* key, KEYMAP_ERROR_CODE* error_c
         assign_error_code_keymap(error_code, KEYMAP_NOT_INITIALIZED);
         return NULL;
     }
-    ui32 index = find_index_keymap(self, key->value, error_code);
+    uint32_t index = find_index_keymap(self, key->value, error_code);
     if(index == INDEX_NOTFOUND) {
         return NULL;
     }
@@ -196,7 +196,7 @@ static KeyMap* copy_heap(KeyMap* self, KEYMAP_ERROR_CODE* error_code)
         return NULL;
     }
     KeyMap* copy = init_keyMap_heap(error_code);
-    for(ui32 i = 0; i < self->length; i++) {
+    for(uint32_t i = 0; i < self->length; i++) {
         KeyPair* pair = self->at(self, i, error_code);
         if(error_code != KEYMAP_OK) {
             return NULL;
@@ -213,7 +213,7 @@ static KeyMap copy_stack(KeyMap* self, KEYMAP_ERROR_CODE* error_code)
         return init_keyMap_stack(NULL);
     }
     KeyMap copy = init_keyMap_stack(error_code);
-    for(ui32 i = 0; i < self->length; i++) {
+    for(uint32_t i = 0; i < self->length; i++) {
         KeyPair* pair = self->at(self, i, error_code);
         if(*error_code != KEYMAP_OK) {
             return init_keyMap_stack(NULL);

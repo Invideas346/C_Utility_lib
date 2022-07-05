@@ -22,7 +22,7 @@ struct KeyPair {
     size_t size;
     void* data;
 
-    boolean is_initialized;
+    uint8_t is_initialized;
 
     /**
      * @brief Clear a KeyPair and effecticly frees all allocated memory.
@@ -64,9 +64,9 @@ typedef struct KeyMap KeyMap;
 
 struct KeyMap {
     KeyPair** pairs;
-    ui32 length;
+    uint32_t length;
 
-    boolean is_initialized;
+    uint8_t is_initialized;
 
     /**
      * @brief Adds an KeyPair to the array.
@@ -79,7 +79,7 @@ struct KeyMap {
      * @return Returns the pointer onto the keymap is successful. If an error occured NULL is
      * returned.
      */
-    void* (*remove_index)(KeyMap* self, ui32 index, KEYMAP_ERROR_CODE* error_code);
+    void* (*remove_index)(KeyMap* self, uint32_t index, KEYMAP_ERROR_CODE* error_code);
 
     /**
      * @brief Removes a KeyPair based on a string.
@@ -122,7 +122,7 @@ struct KeyMap {
      * @return Returns the pointer onto the Keypair located on the passed in index.
      * If an error occured or the index is invalid NULL is returned.
      */
-    KeyPair* (*at)(KeyMap* self, ui32 index, KEYMAP_ERROR_CODE* error_code);
+    KeyPair* (*at)(KeyMap* self, uint32_t index, KEYMAP_ERROR_CODE* error_code);
 
     /**
      * @brief Creates a copy of itself.

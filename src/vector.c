@@ -56,7 +56,7 @@ static void* push_front(Vector* array, const void* data, VECTOR_ERROR_CODE* erro
     return array->data + ARRAY_INDEX(0);
 }
 
-static boolean pop_back(Vector* array, VECTOR_ERROR_CODE* error_code)
+static uint8_t pop_back(Vector* array, VECTOR_ERROR_CODE* error_code)
 {
     if(!array->is_initialized) {
         assign_error_code(error_code, VECTOR_NOT_INITIALIZED);
@@ -75,7 +75,7 @@ static boolean pop_back(Vector* array, VECTOR_ERROR_CODE* error_code)
     return TRUE;
 }
 
-static boolean pop_front(Vector* array, VECTOR_ERROR_CODE* error_code)
+static uint8_t pop_front(Vector* array, VECTOR_ERROR_CODE* error_code)
 {
     if(!array->is_initialized) {
         assign_error_code(error_code, VECTOR_NOT_INITIALIZED);
@@ -103,7 +103,7 @@ static boolean pop_front(Vector* array, VECTOR_ERROR_CODE* error_code)
     return TRUE;
 }
 
-static void* at(Vector* array, ui32 position, VECTOR_ERROR_CODE* error_code)
+static void* at(Vector* array, uint32_t position, VECTOR_ERROR_CODE* error_code)
 {
     if(!array->is_initialized) {
         assign_error_code(error_code, VECTOR_NOT_INITIALIZED);
@@ -116,7 +116,7 @@ static void* at(Vector* array, ui32 position, VECTOR_ERROR_CODE* error_code)
     return array->data + ARRAY_INDEX(position);
 }
 
-boolean resize(Vector* array, ui32 num_elements, VECTOR_ERROR_CODE* error_code)
+uint8_t resize(Vector* array, uint32_t num_elements, VECTOR_ERROR_CODE* error_code)
 {
     if(!array->is_initialized) {
         assign_error_code(error_code, VECTOR_NOT_INITIALIZED);
@@ -171,14 +171,14 @@ static void clear(Vector* array, VECTOR_ERROR_CODE* error_code)
     assign_error_code(error_code, VECTOR_OK);
 }
 
-static void for_each(Vector* array, void (*func)(void* data, ui32 index, ui32 object_size),
+static void for_each(Vector* array, void (*func)(void* data, uint32_t index, uint32_t object_size),
                      VECTOR_ERROR_CODE* error_code)
 {
     if(!array->is_initialized) {
         assign_error_code(error_code, VECTOR_NOT_INITIALIZED);
         return;
     }
-    for(ui32 i = 0; i < array->length; ++i) {
+    for(uint32_t i = 0; i < array->length; ++i) {
         func(array->at(array, i, error_code), i, array->object_size);
         if(error_code != NULL)
             if(*error_code != VECTOR_OK) break;
@@ -199,7 +199,7 @@ inline static void assign_methods(Vector* array)
     array->for_each = for_each;
 }
 
-Vector* init_vector_heap(ui32 size, ui32 object_size, VECTOR_ERROR_CODE* error_code)
+Vector* init_vector_heap(uint32_t size, uint32_t object_size, VECTOR_ERROR_CODE* error_code)
 {
     Vector* array = (Vector*) malloc(sizeof(Vector));
     if(array == NULL) {
@@ -219,7 +219,7 @@ Vector* init_vector_heap(ui32 size, ui32 object_size, VECTOR_ERROR_CODE* error_c
     return array;
 }
 
-Vector* init_vector_heap_data(ui32 size, const void* data, ui32 object_size,
+Vector* init_vector_heap_data(uint32_t size, const void* data, uint32_t object_size,
                               VECTOR_ERROR_CODE* error_code)
 {
     Vector* array = (Vector*) malloc(sizeof(Vector));
@@ -241,7 +241,7 @@ Vector* init_vector_heap_data(ui32 size, const void* data, ui32 object_size,
     return array;
 }
 
-Vector init_vector_stack(ui32 size, ui32 object_size, VECTOR_ERROR_CODE* error_code)
+Vector init_vector_stack(uint32_t size, uint32_t object_size, VECTOR_ERROR_CODE* error_code)
 {
     Vector array;
     array.length = size;
@@ -257,7 +257,7 @@ Vector init_vector_stack(ui32 size, ui32 object_size, VECTOR_ERROR_CODE* error_c
     return array;
 }
 
-Vector init_vector_stack_data(ui32 size, const void* data, ui32 object_size,
+Vector init_vector_stack_data(uint32_t size, const void* data, uint32_t object_size,
                               VECTOR_ERROR_CODE* error_code)
 {
     Vector array;

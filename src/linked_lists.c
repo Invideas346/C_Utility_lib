@@ -12,7 +12,7 @@ inline static void assign_error_code(LINKED_LIST_ERROR_CODE *error_code,
     if(error_code != NULL) *error_code = value;
 }
 
-static Node *init_node(const void *data, ui32 size, LINKED_LIST_ERROR_CODE *error_code)
+static Node *init_node(const void *data, uint32_t size, LINKED_LIST_ERROR_CODE *error_code)
 {
     Node *node = malloc(sizeof(Node));
     if(node == NULL) {
@@ -31,7 +31,7 @@ static Node *init_node(const void *data, ui32 size, LINKED_LIST_ERROR_CODE *erro
     return node;
 }
 
-static Node *get_node(LinkedList *list, ui32 position, LINKED_LIST_ERROR_CODE *error_code)
+static Node *get_node(LinkedList *list, uint32_t position, LINKED_LIST_ERROR_CODE *error_code)
 {
     if(!list->is_initialized) {
         assign_error_code(error_code, LINKED_LIST_NOT_INITIALIZED);
@@ -44,14 +44,14 @@ static Node *get_node(LinkedList *list, ui32 position, LINKED_LIST_ERROR_CODE *e
     }
     if(position >= (int) (list->length / 2)) {
         temp = list->tail;
-        ui32 i = list->length - 1;
+        uint32_t i = list->length - 1;
         while(i != position) {
             temp = temp->previous;
             i--;
         }
     } else {
         temp = list->head;
-        ui32 i = 0;
+        uint32_t i = 0;
         while(i != position) {
             temp = temp->next;
             i++;
@@ -61,7 +61,7 @@ static Node *get_node(LinkedList *list, ui32 position, LINKED_LIST_ERROR_CODE *e
     return temp;
 }
 
-static void *get_data(LinkedList *list, ui32 position, LINKED_LIST_ERROR_CODE *error_code)
+static void *get_data(LinkedList *list, uint32_t position, LINKED_LIST_ERROR_CODE *error_code)
 {
     if(!list->is_initialized) {
         assign_error_code(error_code, LINKED_LIST_NOT_INITIALIZED);
@@ -76,7 +76,7 @@ static void clear(LinkedList *list, LINKED_LIST_ERROR_CODE *error_code)
         assign_error_code(error_code, LINKED_LIST_NOT_INITIALIZED);
         return;
     }
-    for(ui32 i = 0; i < list->length; i++) {
+    for(uint32_t i = 0; i < list->length; i++) {
         Node* node = list->get_node(list, i, error_code);
         if(node == NULL) {
             assign_error_code(error_code, LINKED_LIST_ELEMENT_NULL);
@@ -93,7 +93,7 @@ static void clear(LinkedList *list, LINKED_LIST_ERROR_CODE *error_code)
     assign_error_code(error_code, LINKED_LIST_OK);
 }
 
-static void push_back(LinkedList *list, void *data, ui32 size, LINKED_LIST_ERROR_CODE *error_code)
+static void push_back(LinkedList *list, void *data, uint32_t size, LINKED_LIST_ERROR_CODE *error_code)
 {
     if(!list->is_initialized) {
         assign_error_code(error_code, LINKED_LIST_NOT_INITIALIZED);
@@ -113,7 +113,7 @@ static void push_back(LinkedList *list, void *data, ui32 size, LINKED_LIST_ERROR
     assign_error_code(error_code, LINKED_LIST_OK);
 }
 
-static void push_front(LinkedList *list, void *data, ui32 size, LINKED_LIST_ERROR_CODE *error_code)
+static void push_front(LinkedList *list, void *data, uint32_t size, LINKED_LIST_ERROR_CODE *error_code)
 {
     if(!list->is_initialized) {
         assign_error_code(error_code, LINKED_LIST_NOT_INITIALIZED);

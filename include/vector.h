@@ -22,10 +22,10 @@ typedef struct Vector Vector;
 
 struct Vector {
     void* data;
-    ui32 object_size;
-    ui32 length;
+    uint32_t object_size;
+    uint32_t length;
 
-    boolean is_initialized;
+    uint8_t is_initialized;
 
     /**
      * @brief Removes all indices and frees the occupied heap memory.
@@ -60,7 +60,7 @@ struct Vector {
      * @param error_code
      * @return Returns whether the operation was successful.
      */
-    boolean (*pop_back)(Vector* array, VECTOR_ERROR_CODE* error_code);
+    uint8_t (*pop_back)(Vector* array, VECTOR_ERROR_CODE* error_code);
 
     /**
      * @brief Removes the first item of the array.
@@ -68,7 +68,7 @@ struct Vector {
      * @param error_code
      * @return Returns whether the operation was successful.
      */
-    boolean (*pop_front)(Vector* array, VECTOR_ERROR_CODE* error_code);
+    uint8_t (*pop_front)(Vector* array, VECTOR_ERROR_CODE* error_code);
 
     /**
      * @brief Returns the pointer to the specified element within the array.
@@ -79,7 +79,7 @@ struct Vector {
      * @return Returns the pointer to the specified element within the array.
      * Returns NULL if a error occurred.
      */
-    void* (*at)(Vector* array, ui32 position, VECTOR_ERROR_CODE* error_code);
+    void* (*at)(Vector* array, uint32_t position, VECTOR_ERROR_CODE* error_code);
 
     /**
      * @brief Resizes the array with the specified number of elements.
@@ -88,7 +88,7 @@ struct Vector {
      * @param error_code
      * @return Returns whether the operation was successful.
      */
-    boolean (*resize)(Vector* array, ui32 numElements, VECTOR_ERROR_CODE* error_code);
+    uint8_t (*resize)(Vector* array, uint32_t numElements, VECTOR_ERROR_CODE* error_code);
 
     /**
      * @brief Returns a copy of itself.
@@ -111,7 +111,7 @@ struct Vector {
      * @param code
      * @param error_code
      */
-    void (*for_each)(Vector* array, void (*func)(void* data, ui32 index, ui32 objectSize),
+    void (*for_each)(Vector* array, void (*func)(void* data, uint32_t index, uint32_t objectSize),
                      VECTOR_ERROR_CODE* error_code);
 };
 
@@ -119,24 +119,24 @@ struct Vector {
  * @brief Creates a new dynamic array initialized with all function pointers.
  * @return Vector*
  */
-Vector* init_vector_heap(ui32 size, ui32 object_size, VECTOR_ERROR_CODE* error_code);
+Vector* init_vector_heap(uint32_t size, uint32_t object_size, VECTOR_ERROR_CODE* error_code);
 /**
  * @brief Creates a new dynamic array initialized with all function pointers.
  * @return Vector*
  */
-Vector* init_vector_heap_data(ui32 size, const void* data, ui32 object_size,
+Vector* init_vector_heap_data(uint32_t size, const void* data, uint32_t object_size,
                               VECTOR_ERROR_CODE* error_code);
 
 /**
  * @brief Creates a new dynamic array initialized with all function pointers.
  * @return Vector*
  */
-Vector init_vector_stack(ui32 size, ui32 object_size, VECTOR_ERROR_CODE* error_code);
+Vector init_vector_stack(uint32_t size, uint32_t object_size, VECTOR_ERROR_CODE* error_code);
 /**
  * @brief Creates a new dynamic array initialized with all function pointers.
  * @return Vector*
  */
-Vector init_vector_stack_data(ui32 size, const void* data, ui32 object_size,
+Vector init_vector_stack_data(uint32_t size, const void* data, uint32_t object_size,
                               VECTOR_ERROR_CODE* error_code);
 
 #endif  // __Vector_H__

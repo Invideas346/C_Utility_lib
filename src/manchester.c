@@ -5,12 +5,12 @@
 #include <stdio.h>
 
 //! not tested yet
-ui8 man_dec_8(ui16 data, MAN_POLARITY polarity)
+uint8_t man_dec_8(uint16_t data, MAN_POLARITY polarity)
 {
-    ui8 dec_data = 0;
+    uint8_t dec_data = 0;
     switch(polarity) {
         case LSB_LEFT:
-            for(ui32 i = 0; i < 16; i += 2) {
+            for(uint32_t i = 0; i < 16; i += 2) {
                 if((data & (0x8000 >> i))) {
                     dec_data |= (0x01 << (i >> 1));
                 }
@@ -18,7 +18,7 @@ ui8 man_dec_8(ui16 data, MAN_POLARITY polarity)
             break;
 
         case LSB_RIGHT:
-            for(ui32 i = 0; i < 16; i += 2) {
+            for(uint32_t i = 0; i < 16; i += 2) {
                 if((data & (0x02 << i))) {
                     dec_data |= (0x01 << (i >> 1));
                 }
@@ -32,20 +32,20 @@ ui8 man_dec_8(ui16 data, MAN_POLARITY polarity)
 }
 
 //! not tested yet
-ui16 man_dec_16(ui32 data, MAN_POLARITY polarity)
+uint16_t man_dec_16(uint32_t data, MAN_POLARITY polarity)
 {
-    ui16 dec_data = 0;
+    uint16_t dec_data = 0;
     switch(polarity) {
         case LSB_LEFT: {
-            ui8 lower = man_dec_8((ui16) (data & 0xffff), LSB_LEFT);
-            ui8 upper = man_dec_8((ui16) ((data & 0xffff0000) >> 16), LSB_LEFT);
-            dec_data |= ((ui16) lower << 8) | upper;
+            uint8_t lower = man_dec_8((uint16_t) (data & 0xffff), LSB_LEFT);
+            uint8_t upper = man_dec_8((uint16_t) ((data & 0xffff0000) >> 16), LSB_LEFT);
+            dec_data |= ((uint16_t) lower << 8) | upper;
         } break;
 
         case LSB_RIGHT: {
-            ui8 lower = man_dec_8((ui16) (data & 0xffff), LSB_RIGHT);
-            ui8 upper = man_dec_8((ui16) ((data & 0xffff0000) >> 16), LSB_RIGHT);
-            dec_data |= ((ui16) upper << 8) | lower;
+            uint8_t lower = man_dec_8((uint16_t) (data & 0xffff), LSB_RIGHT);
+            uint8_t upper = man_dec_8((uint16_t) ((data & 0xffff0000) >> 16), LSB_RIGHT);
+            dec_data |= ((uint16_t) upper << 8) | lower;
         } break;
 
         default:
@@ -55,20 +55,20 @@ ui16 man_dec_16(ui32 data, MAN_POLARITY polarity)
 }
 
 //! not tested yet
-ui32 man_dec_32(ui64 data, MAN_POLARITY polarity)
+uint32_t man_dec_32(uint64_t data, MAN_POLARITY polarity)
 {
-    ui32 dec_data = 0;
+    uint32_t dec_data = 0;
     switch(polarity) {
         case LSB_LEFT: {
-            ui16 lower = man_dec_16((ui32) (data & 0xffffffff), LSB_LEFT);
-            ui16 upper = man_dec_16((ui32) ((data & 0xffffffff00000000) >> 32), LSB_LEFT);
-            dec_data |= ((ui32) lower << 16) | upper;
+            uint16_t lower = man_dec_16((uint32_t) (data & 0xffffffff), LSB_LEFT);
+            uint16_t upper = man_dec_16((uint32_t) ((data & 0xffffffff00000000) >> 32), LSB_LEFT);
+            dec_data |= ((uint32_t) lower << 16) | upper;
         } break;
 
         case LSB_RIGHT: {
-            ui16 lower = man_dec_16((ui32) (data & 0xffffffff), LSB_RIGHT);
-            ui16 upper = man_dec_16((ui32) ((data & 0xffffffff00000000) >> 32), LSB_RIGHT);
-            dec_data |= ((ui32) upper << 16) | lower;
+            uint16_t lower = man_dec_16((uint32_t) (data & 0xffffffff), LSB_RIGHT);
+            uint16_t upper = man_dec_16((uint32_t) ((data & 0xffffffff00000000) >> 32), LSB_RIGHT);
+            dec_data |= ((uint32_t) upper << 16) | lower;
         } break;
 
         default:
@@ -78,12 +78,12 @@ ui32 man_dec_32(ui64 data, MAN_POLARITY polarity)
 }
 
 //! not tested yet
-ui16 man_enc_8(ui8 data, MAN_POLARITY polarity)
+uint16_t man_enc_8(uint8_t data, MAN_POLARITY polarity)
 {
-    ui16 enc_data = 0;
+    uint16_t enc_data = 0;
     switch(polarity) {
         case LSB_LEFT:
-            for(ui32 i = 0; i < 8; i++) {
+            for(uint32_t i = 0; i < 8; i++) {
                 if(data & (0x01 << i)) {
                     enc_data |= (0x8000 >> (i << 1));
                 } else {
@@ -93,7 +93,7 @@ ui16 man_enc_8(ui8 data, MAN_POLARITY polarity)
             break;
 
         case LSB_RIGHT:
-            for(ui32 i = 0; i < 8; i++) {
+            for(uint32_t i = 0; i < 8; i++) {
                 if(data & (0x01 << i)) {
                     enc_data |= (0x02 << (i << 1));
                 } else {
@@ -109,19 +109,19 @@ ui16 man_enc_8(ui8 data, MAN_POLARITY polarity)
 }
 
 //! not tested yet
-ui32 man_enc_16(ui16 data, MAN_POLARITY polarity)
+uint32_t man_enc_16(uint16_t data, MAN_POLARITY polarity)
 {
-    ui32 enc_data = 0;
+    uint32_t enc_data = 0;
     switch(polarity) {
         case LSB_LEFT: {
-            ui16 lower = man_enc_8((ui8) (data & 0xff), LSB_LEFT);
-            ui16 upper = man_enc_8((ui8) ((data & 0xff00) >> 8), LSB_LEFT);
+            uint16_t lower = man_enc_8((uint8_t) (data & 0xff), LSB_LEFT);
+            uint16_t upper = man_enc_8((uint8_t) ((data & 0xff00) >> 8), LSB_LEFT);
             enc_data |= (lower << 16) | upper;
         } break;
 
         case LSB_RIGHT: {
-            ui16 lower = man_enc_8((ui8) (data & 0xff), LSB_RIGHT);
-            ui16 upper = man_enc_8((ui8) ((data & 0xff00) >> 8), LSB_RIGHT);
+            uint16_t lower = man_enc_8((uint8_t) (data & 0xff), LSB_RIGHT);
+            uint16_t upper = man_enc_8((uint8_t) ((data & 0xff00) >> 8), LSB_RIGHT);
             enc_data |= (upper << 16) | lower;
         } break;
 
@@ -132,20 +132,20 @@ ui32 man_enc_16(ui16 data, MAN_POLARITY polarity)
 }
 
 //! not tested yet
-ui64 man_enc_32(ui32 data, MAN_POLARITY polarity)
+uint64_t man_enc_32(uint32_t data, MAN_POLARITY polarity)
 {
-    ui64 enc_data = 0u;
+    uint64_t enc_data = 0u;
     switch(polarity) {
         case LSB_LEFT: {
-            ui32 lower = man_enc_16((ui16) (data & 0xffff), LSB_LEFT);
-            ui32 upper = man_enc_16((ui16) ((data & 0xffff0000) >> 16), LSB_LEFT);
-            enc_data |= ((ui64) lower << 32) | upper;
+            uint32_t lower = man_enc_16((uint16_t) (data & 0xffff), LSB_LEFT);
+            uint32_t upper = man_enc_16((uint16_t) ((data & 0xffff0000) >> 16), LSB_LEFT);
+            enc_data |= ((uint64_t) lower << 32) | upper;
         } break;
 
         case LSB_RIGHT: {
-            ui32 lower = man_enc_16((ui16) (data & 0xffff), LSB_RIGHT);
-            ui32 upper = man_enc_16((ui16) ((data & 0xffff0000) >> 16), LSB_RIGHT);
-            enc_data |= ((ui64) upper << 32) | lower;
+            uint32_t lower = man_enc_16((uint16_t) (data & 0xffff), LSB_RIGHT);
+            uint32_t upper = man_enc_16((uint16_t) ((data & 0xffff0000) >> 16), LSB_RIGHT);
+            enc_data |= ((uint64_t) upper << 32) | lower;
         } break;
 
         default:
@@ -154,32 +154,32 @@ ui64 man_enc_32(ui32 data, MAN_POLARITY polarity)
     return enc_data;
 }
 
-void bin_output8(ui8 data)
+void bin_output8(uint8_t data)
 {
     char output[9] = {'0', '0', '0', '0', '0', '0', '0', '0', 0};
-    for(ui32 i = 0; i < 8; i++) {
+    for(uint32_t i = 0; i < 8; i++) {
         output[7 - i] += ((data & (0x1 << i)) >> i);
     }
     printf("%s", output);
 }
 
-void bin_output16(ui16 data)
+void bin_output16(uint16_t data)
 {
     bin_output8((data & (0xff << 8)) >> 8);
     printf(" ");
     bin_output8(data & 0xff);
 }
 
-void bin_output32(ui32 data)
+void bin_output32(uint32_t data)
 {
-    bin_output16((ui16) ((data & (0xffff << 16)) >> 16));
+    bin_output16((uint16_t) ((data & (0xffff << 16)) >> 16));
     printf(" ");
     bin_output16(data & 0xffff);
 }
 
-void bin_output64(ui64 data)
+void bin_output64(uint64_t data)
 {
-    bin_output32((data & ((ui64) 0xffffffff << 32)) >> 32);
+    bin_output32((data & ((uint64_t) 0xffffffff << 32)) >> 32);
     printf(" ");
-    bin_output32((ui32) (data & 0xffffffff));
+    bin_output32((uint32_t) (data & 0xffffffff));
 }
