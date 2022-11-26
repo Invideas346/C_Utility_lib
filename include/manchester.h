@@ -5,9 +5,12 @@
 #ifndef __MANCHESTER_H__
 #define __MANCHESTER_H__
 
-#include <typedef.h>
+#include <stdint.h>
 
-typedef enum MAN_POLARITY { LSB_RIGHT, LSB_LEFT } MAN_POLARITY;
+typedef enum MAN_POLARITY {
+    LSB_RIGHT,
+    LSB_LEFT
+} MAN_POLARITY;
 
 uint8_t man_dec_8(uint16_t data, MAN_POLARITY polarity);
 uint16_t man_dec_16(uint32_t data, MAN_POLARITY polarity);

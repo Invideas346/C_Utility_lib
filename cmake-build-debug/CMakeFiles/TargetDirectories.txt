@@ -1,5 +1,0 @@
-/home/wolfgang/Documents/C_Utility_lib/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/wolfgang/Documents/C_Utility_lib/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/wolfgang/Documents/C_Utility_lib/cmake-build-debug/src/CMakeFiles/CUtility.dir
-/home/wolfgang/Documents/C_Utility_lib/cmake-build-debug/src/CMakeFiles/edit_cache.dir
-/home/wolfgang/Documents/C_Utility_lib/cmake-build-debug/src/CMakeFiles/rebuild_cache.dir

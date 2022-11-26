@@ -3,6 +3,7 @@
 //
 #include <manchester.h>
 #include <stdio.h>
+#include <typedef.h>
 
 //! not tested yet
 uint8_t man_dec_8(uint16_t data, MAN_POLARITY polarity)
@@ -86,7 +87,8 @@ uint16_t man_enc_8(uint8_t data, MAN_POLARITY polarity)
             for(uint32_t i = 0; i < 8; i++) {
                 if(data & (0x01 << i)) {
                     enc_data |= (0x8000 >> (i << 1));
-                } else {
+                }
+                else {
                     enc_data |= (0x4000 >> (i << 1));
                 }
             }
@@ -96,7 +98,8 @@ uint16_t man_enc_8(uint8_t data, MAN_POLARITY polarity)
             for(uint32_t i = 0; i < 8; i++) {
                 if(data & (0x01 << i)) {
                     enc_data |= (0x02 << (i << 1));
-                } else {
+                }
+                else {
                     enc_data |= (0x01 << (i << 1));
                 }
             }

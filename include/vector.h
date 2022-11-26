@@ -6,7 +6,7 @@
 #define __Vector_H__
 
 #include <stdlib.h>
-#include <typedef.h>
+#include <stdint.h>
 
 // TODO: Maybe implement a toString function (not sure it is really ever gonna be needed)
 // TODO: Implement a remove via index function.

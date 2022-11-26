@@ -1,7 +1,7 @@
 #ifndef __CRC_H__
 #define __CRC_H__
 
-#include <typedef.h>
+#include <stdint.h>
 
 typedef enum CRC_POLYNOM {
     CRC1 = 0x1,

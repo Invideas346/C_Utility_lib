@@ -5,6 +5,8 @@
 #include <string_struct.h>
 #include <string.h>
 #include <stdlib.h>
+#include <typedef.h>
+#include <log.h>
 
 inline static void assign_error_code(STRING_ERROR_CODE* error_code, STRING_ERROR_CODE value)
 {
@@ -15,6 +17,7 @@ static void clear(String* str, STRING_ERROR_CODE* error_code)
 {
     if(!str->is_initialized) {
         assign_error_code(error_code, STRING_NOT_INITIALIZED);
+        LOG_ERROR("String not intialized");
         return;
     }
     free(str->value);
@@ -27,6 +30,7 @@ static uint8_t append_cstr(String* str, const char* string_to_append, STRING_ERR
 {
     if(!str->is_initialized) {
         assign_error_code(error_code, STRING_NOT_INITIALIZED);
+        LOG_ERROR("String not intialized");
         return FALSE;
     }
     uint32_t size_to_append = strlen(string_to_append);
@@ -34,12 +38,15 @@ static uint8_t append_cstr(String* str, const char* string_to_append, STRING_ERR
         void* new_address = malloc(sizeof(char) * size_to_append);
         if(new_address == NULL) {
             assign_error_code(error_code, STRING_MEMORY_ALLOCATION_ERROR);
+            LOG_ERROR("Could not allocate memory for string");
             return FALSE;
         }
-    } else {
+    }
+    else {
         void* new_address = realloc(str->value, size_to_append + str->length + 1);
         if(new_address == NULL) {
             assign_error_code(error_code, STRING_MEMORY_ALLOCATION_ERROR);
+            LOG_ERROR("Could not allocate memory for string");
             return FALSE;
         }
     }
@@ -54,18 +61,22 @@ static uint8_t append(String* str, const String* string_to_append, STRING_ERROR_
 {
     if(!str->is_initialized) {
         assign_error_code(error_code, STRING_NOT_INITIALIZED);
+        LOG_ERROR("String not intialized");
         return FALSE;
     }
     if(str->value == NULL) {
         void* new_address = malloc(sizeof(char) * string_to_append->length + 1);
         if(new_address == NULL) {
             assign_error_code(error_code, STRING_MEMORY_ALLOCATION_ERROR);
+            LOG_ERROR("Could not allocate memory for string");
             return FALSE;
         }
-    } else {
+    }
+    else {
         void* new_address = realloc(str->value, string_to_append->length + str->length + 1);
         if(new_address == NULL) {
             assign_error_code(error_code, STRING_MEMORY_ALLOCATION_ERROR);
+            LOG_ERROR("Could not allocate memory for string");
             return FALSE;
         }
     }
@@ -80,6 +91,7 @@ static uint8_t set_cstr(String* str, const char* string_to_be_set, STRING_ERROR_
 {
     if(!str->is_initialized) {
         assign_error_code(error_code, STRING_NOT_INITIALIZED);
+        LOG_ERROR("String not intialized");
         return FALSE;
     }
     uint32_t size_to_be_set = strlen(string_to_be_set);
@@ -87,6 +99,7 @@ static uint8_t set_cstr(String* str, const char* string_to_be_set, STRING_ERROR_
     str->value = malloc(size_to_be_set + 1);
     if(str->value == NULL) {
         assign_error_code(error_code, STRING_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for string");
         return FALSE;
     }
     strncpy(str->value, string_to_be_set, size_to_be_set);
@@ -100,12 +113,14 @@ static uint8_t set(String* str, const String* string_to_be_set, STRING_ERROR_COD
 {
     if(!str->is_initialized || !string_to_be_set->is_initialized) {
         assign_error_code(error_code, STRING_NOT_INITIALIZED);
+        LOG_ERROR("String not intialized");
         return FALSE;
     }
     free(str->value);
     str->value = malloc(string_to_be_set->length + 1);
     if(str->value == NULL) {
         assign_error_code(error_code, STRING_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for string");
         return FALSE;
     }
     strncpy(str->value, string_to_be_set->value, string_to_be_set->length);
@@ -119,9 +134,11 @@ static uint32_t find_cstr(const String* str, const char* str1, STRING_ERROR_CODE
 {
     if(!str->is_initialized) {
         assign_error_code(error_code, STRING_NOT_INITIALIZED);
+        LOG_ERROR("String not intialized");
         return INDEX_NOTFOUND;
     }
     if(str->value == NULL) {
+        LOG_INFO("Substring not found");
         return INDEX_NOTFOUND;
     }
     assign_error_code(error_code, STRING_OK);
@@ -133,6 +150,7 @@ static uint32_t find(const String* str, const String* str1, STRING_ERROR_CODE* e
 {
     if(!str->is_initialized || !str1->is_initialized) {
         assign_error_code(error_code, STRING_NOT_INITIALIZED);
+        LOG_ERROR("String not intialized");
         return INDEX_NOTFOUND;
     }
     if(str->value == NULL) {
@@ -140,13 +158,14 @@ static uint32_t find(const String* str, const String* str1, STRING_ERROR_CODE* e
     }
     assign_error_code(error_code, STRING_OK);
     const char* index = strstr(str->value, str1->value);
-    return (index == NULL) ?  INDEX_NOTFOUND : (index - str->value);
+    return (index == NULL) ? INDEX_NOTFOUND : (index - str->value);
 }
 
 static uint8_t equal(const String* str, const String* str1, STRING_ERROR_CODE* error_code)
 {
     if(!str->is_initialized || !str1->is_initialized) {
         assign_error_code(error_code, STRING_NOT_INITIALIZED);
+        LOG_ERROR("String not intialized");
         return FALSE;
     }
     assign_error_code(error_code, STRING_OK);
@@ -157,6 +176,7 @@ static uint8_t equal_cstr(const String* str, const char* str1, STRING_ERROR_CODE
 {
     if(!str->is_initialized || str1 == NULL) {
         assign_error_code(error_code, STRING_NOT_INITIALIZED);
+        LOG_ERROR("String not intialized");
         return FALSE;
     }
     assign_error_code(error_code, STRING_OK);
@@ -167,9 +187,11 @@ static uint8_t insert(String* self, String* str, uint32_t index, STRING_ERROR_CO
 {
     if(!str->is_initialized || !self->is_initialized) {
         assign_error_code(error_code, STRING_NOT_INITIALIZED);
+        LOG_ERROR("String not intialized");
         return FALSE;
     }
     if(index >= self->length || str->length == 0 || index < 0) {
+        LOG_WARNING("Index out-of-bounds");
         return FALSE;
     }
     char* copy = malloc(self->length);
@@ -180,6 +202,7 @@ static uint8_t insert(String* self, String* str, uint32_t index, STRING_ERROR_CO
     char* new_address = realloc(self->value, self->length);
     if(new_address == NULL) {
         assign_error_code(error_code, STRING_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for string");
         return FALSE;
     }
     strncpy(self->value, copy, self->length);
@@ -188,14 +211,17 @@ static uint8_t insert(String* self, String* str, uint32_t index, STRING_ERROR_CO
     return TRUE;
 }
 
-static uint8_t insert_cstr(String* self, const char* str, uint32_t index, STRING_ERROR_CODE* error_code)
+static uint8_t insert_cstr(String* self, const char* str, uint32_t index,
+                           STRING_ERROR_CODE* error_code)
 {
     if(!self->is_initialized) {
         assign_error_code(error_code, STRING_NOT_INITIALIZED);
+        LOG_ERROR("String not intialized");
         return FALSE;
     }
     uint32_t str_len = strlen(str);
     if(index >= self->length || str_len == 0 || index < 0) {
+        LOG_WARNING("Index out-of-bounds");
         return FALSE;
     }
     char* copy = malloc(self->length + str_len + 1);
@@ -208,6 +234,7 @@ static uint8_t insert_cstr(String* self, const char* str, uint32_t index, STRING
     char* new_address = realloc(self->value, self->length);
     if(new_address == NULL) {
         assign_error_code(error_code, STRING_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for string");
         return FALSE;
     }
     strncpy(self->value, copy, self->length);
@@ -221,15 +248,18 @@ static char* sub_string(const String* str, uint32_t position1, uint32_t position
 {
     if(!str->is_initialized) {
         assign_error_code(error_code, STRING_NOT_INITIALIZED);
+        LOG_ERROR("String not intialized");
         return NULL;
     }
     if(position1 >= position2 || position1 > str->length || position2 > str->length) {
+        LOG_WARNING("Index out-of-bounds");
         return NULL;
     }
     size_t size = (position2 - position1);
     char* temp = (char*) malloc(size + 1);
     if(temp == NULL) {
         assign_error_code(error_code, STRING_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for string");
         return NULL;
     }
     memcpy(temp, str->value + position1, position2 - position1);
@@ -242,6 +272,7 @@ static String* copy_heap(const String* str, STRING_ERROR_CODE* error_code)
 {
     if(!str->is_initialized) {
         assign_error_code(error_code, STRING_NOT_INITIALIZED);
+        LOG_ERROR("String not intialized");
         return NULL;
     }
     String* new_string = init_string_heap(str->value, error_code);
@@ -252,6 +283,7 @@ static String copy_stack(const String* str, STRING_ERROR_CODE* error_code)
 {
     if(!str->is_initialized) {
         assign_error_code(error_code, STRING_NOT_INITIALIZED);
+        LOG_ERROR("String not intialized");
         return *str;
     }
     String new_string = init_string_stack(str->value, error_code);
@@ -282,11 +314,13 @@ String* init_string_heap(const char* value, STRING_ERROR_CODE* error_code)
     String* new_string = malloc(sizeof(String));
     if(new_string == NULL) {
         assign_error_code(error_code, STRING_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for string");
         return NULL;
     }
     new_string->value = malloc(size + 1);
     if(new_string->value == NULL) {
         assign_error_code(error_code, STRING_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for string");
         return NULL;
     }
     strncpy(new_string->value, value, size);
@@ -304,6 +338,7 @@ String init_string_stack(const char* value, STRING_ERROR_CODE* error_code)
     new_string.value = malloc(size + 1);
     if(new_string.value == NULL) {
         assign_error_code(error_code, STRING_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for string");
         return new_string;
     }
     strncpy(new_string.value, value, size);

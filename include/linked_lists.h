@@ -1,7 +1,7 @@
 #ifndef __LINKEDLISTS_H__
 #define __LINKEDLISTS_H__
 
-#include <typedef.h>
+#include <stdint.h>
 
 typedef struct Node Node;
 
@@ -35,7 +35,8 @@ struct LinkedList {
      * @param data
      * @param size
      */
-    void (*push_back)(LinkedList* list, void* data, uint32_t size, LINKED_LIST_ERROR_CODE* error_code);
+    void (*push_back)(LinkedList* list, void* data, uint32_t size,
+                      LINKED_LIST_ERROR_CODE* error_code);
 
     /**
      * @brief Adds a new element at the beginning of the array.
@@ -43,7 +44,8 @@ struct LinkedList {
      * @param data
      * @param size
      */
-    void (*push_front)(LinkedList* list, void* data, uint32_t size, LINKED_LIST_ERROR_CODE* error_code);
+    void (*push_front)(LinkedList* list, void* data, uint32_t size,
+                       LINKED_LIST_ERROR_CODE* error_code);
 
     /**
      * @brief Removes a element from the end of the array.

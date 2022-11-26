@@ -5,6 +5,8 @@
 #include <linked_lists.h>
 #include <stdlib.h>
 #include <string.h>
+#include <typedef.h>
+#include <log.h>
 
 inline static void assign_error_code(LINKED_LIST_ERROR_CODE *error_code,
                                      LINKED_LIST_ERROR_CODE value)
@@ -17,11 +19,13 @@ static Node *init_node(const void *data, uint32_t size, LINKED_LIST_ERROR_CODE *
     Node *node = malloc(sizeof(Node));
     if(node == NULL) {
         assign_error_code(error_code, LINKED_LIST_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for linked list");
         return NULL;
     }
     node->data = malloc(size);
     if(node->data == NULL) {
         assign_error_code(error_code, LINKED_LIST_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for linked list");
         return NULL;
     }
     memcpy(node->data, data, size);
@@ -35,11 +39,13 @@ static Node *get_node(LinkedList *list, uint32_t position, LINKED_LIST_ERROR_COD
 {
     if(!list->is_initialized) {
         assign_error_code(error_code, LINKED_LIST_NOT_INITIALIZED);
+        LOG_ERROR("Linked list not intialized");
         return NULL;
     }
     Node *temp = NULL;
     if(position >= list->length || list->length == 0) {
         assign_error_code(error_code, LINKED_LIST_INDEX_OUT_OF_BOUNDS);
+        LOG_WARNING("Linked list index out-of-bounds");
         return NULL;
     }
     if(position >= (int) (list->length / 2)) {
@@ -49,7 +55,8 @@ static Node *get_node(LinkedList *list, uint32_t position, LINKED_LIST_ERROR_COD
             temp = temp->previous;
             i--;
         }
-    } else {
+    }
+    else {
         temp = list->head;
         uint32_t i = 0;
         while(i != position) {
@@ -65,6 +72,7 @@ static void *get_data(LinkedList *list, uint32_t position, LINKED_LIST_ERROR_COD
 {
     if(!list->is_initialized) {
         assign_error_code(error_code, LINKED_LIST_NOT_INITIALIZED);
+        LOG_ERROR("Linked list not intialized");
         return NULL;
     }
     return get_node(list, position, error_code)->data;
@@ -74,16 +82,17 @@ static void clear(LinkedList *list, LINKED_LIST_ERROR_CODE *error_code)
 {
     if(!list->is_initialized) {
         assign_error_code(error_code, LINKED_LIST_NOT_INITIALIZED);
+        LOG_ERROR("Linked list not intialized");
         return;
     }
     for(uint32_t i = 0; i < list->length; i++) {
-        Node* node = list->get_node(list, i, error_code);
+        Node *node = list->get_node(list, i, error_code);
         if(node == NULL) {
             assign_error_code(error_code, LINKED_LIST_ELEMENT_NULL);
+            LOG_WARNING("Get-Node returned null pointer");
             return;
         }
-        if(error_code != LINKED_LIST_OK)
-            return;
+        if(error_code != LINKED_LIST_OK) return;
         free(node->data);
         free(node);
     }
@@ -93,10 +102,12 @@ static void clear(LinkedList *list, LINKED_LIST_ERROR_CODE *error_code)
     assign_error_code(error_code, LINKED_LIST_OK);
 }
 
-static void push_back(LinkedList *list, void *data, uint32_t size, LINKED_LIST_ERROR_CODE *error_code)
+static void push_back(LinkedList *list, void *data, uint32_t size,
+                      LINKED_LIST_ERROR_CODE *error_code)
 {
     if(!list->is_initialized) {
         assign_error_code(error_code, LINKED_LIST_NOT_INITIALIZED);
+        LOG_ERROR("Linked list not intialized");
         return;
     }
     Node *new_node = init_node(data, size, error_code);
@@ -104,7 +115,8 @@ static void push_back(LinkedList *list, void *data, uint32_t size, LINKED_LIST_E
     if(list->length == 0) {
         list->head = new_node;
         list->tail = new_node;
-    } else {
+    }
+    else {
         new_node->previous = list->tail;
         list->tail->next = new_node;
         list->tail = new_node;
@@ -113,10 +125,12 @@ static void push_back(LinkedList *list, void *data, uint32_t size, LINKED_LIST_E
     assign_error_code(error_code, LINKED_LIST_OK);
 }
 
-static void push_front(LinkedList *list, void *data, uint32_t size, LINKED_LIST_ERROR_CODE *error_code)
+static void push_front(LinkedList *list, void *data, uint32_t size,
+                       LINKED_LIST_ERROR_CODE *error_code)
 {
     if(!list->is_initialized) {
         assign_error_code(error_code, LINKED_LIST_NOT_INITIALIZED);
+        LOG_ERROR("Linked list not intialized");
         return;
     }
     Node *new_node = init_node(data, size, error_code);
@@ -124,7 +138,8 @@ static void push_front(LinkedList *list, void *data, uint32_t size, LINKED_LIST_
     if(list->length == 0) {
         list->head = new_node;
         list->tail = new_node;
-    } else {
+    }
+    else {
         new_node->next = list->head;
         list->head->previous = new_node;
         list->head = new_node;
@@ -137,6 +152,7 @@ static void *pop_back(LinkedList *list, LINKED_LIST_ERROR_CODE *error_code)
 {
     if(!list->is_initialized) {
         assign_error_code(error_code, LINKED_LIST_NOT_INITIALIZED);
+        LOG_ERROR("Linked list not intialized");
         return NULL;
     }
     if(list->length == 0) {
@@ -155,6 +171,7 @@ static void *pop_front(LinkedList *list, LINKED_LIST_ERROR_CODE *error_code)
 {
     if(!list->is_initialized) {
         assign_error_code(error_code, LINKED_LIST_NOT_INITIALIZED);
+        LOG_ERROR("Linked list not intialized");
         return NULL;
     }
     if(list->length == 0) {
@@ -185,6 +202,7 @@ LinkedList *init_list_heap(LINKED_LIST_ERROR_CODE *error_code)
     LinkedList *list = (LinkedList *) malloc(sizeof(LinkedList));
     if(list == NULL) {
         assign_error_code(error_code, LINKED_LIST_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for linked list");
         return NULL;
     }
     list->head = NULL;

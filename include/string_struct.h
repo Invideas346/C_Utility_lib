@@ -1,7 +1,6 @@
 #ifndef __STRINGSTRUCT_H__
 #define __STRINGSTRUCT_H__
 
-#include <typedef.h>
 #include <stdint.h>
 
 typedef struct String String;
@@ -42,7 +41,7 @@ struct String {
      * @param index
      * @param error_code Can be used to retrieve a error code
      */
-    uint8_t(*insert_cstr)(String* self, const char* str, uint32_t index,
+    uint8_t (*insert_cstr)(String* self, const char* str, uint32_t index,
                            STRING_ERROR_CODE* error_code);
 
     /**
@@ -51,7 +50,7 @@ struct String {
      * @param string_to_append
      * @param error_code Can be used to retrieve a error code
      */
-    uint8_t(*append_cstr)(String* str, const char* string_to_append,
+    uint8_t (*append_cstr)(String* str, const char* string_to_append,
                            STRING_ERROR_CODE* error_code);
     /**
      * @brief Appends a string to the end of the string.
@@ -59,7 +58,7 @@ struct String {
      * @param other_string
      * @param error_code Can be used to retrieve a error code
      */
-    uint8_t(*append)(String* str, const String* other_string, STRING_ERROR_CODE* error_code);
+    uint8_t (*append)(String* str, const String* other_string, STRING_ERROR_CODE* error_code);
 
     /**
      * @brief Sets the string with the passed in char-array.
@@ -67,7 +66,7 @@ struct String {
      * @param string_to_be_set
      * @param error_code Can be used to retrieve a error code
      */
-    uint8_t(*set_cstr)(String* str, const char* string_to_be_set, STRING_ERROR_CODE* error_code);
+    uint8_t (*set_cstr)(String* str, const char* string_to_be_set, STRING_ERROR_CODE* error_code);
     /**
      * @brief Sets the string with the passed in string.
      * @param str

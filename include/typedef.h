@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 #define FALSE 0
-#define TRUE 1
+#define TRUE  1
 
 // 0xffffffff could be reached but is extremely unlikely.
 #define INDEX_NOTFOUND 0xffffffff

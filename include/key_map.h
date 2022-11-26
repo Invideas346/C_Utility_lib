@@ -5,8 +5,7 @@
 #ifndef __CUTILITY_KEYMAP_H__
 #define __CUTILITY_KEYMAP_H__
 
-#include <typedef.h>
-#include <string_struct.h>
+#include "string_struct.h"
 
 typedef enum KEYPAIR_ERROR_CODE {
     KEYPAIR_OK = 0,
@@ -45,12 +44,14 @@ KeyPair init_keypair_stack(String* key, void* data, size_t size, KEYPAIR_ERROR_C
  * @brief Creates a new KeyPair initalized with all function pointers.
  * @return KeyMap*
  */
-KeyPair* init_keypair_heap_cstr(const char* key, void* data, size_t size, KEYPAIR_ERROR_CODE* error_code);
+KeyPair* init_keypair_heap_cstr(const char* key, void* data, size_t size,
+                                KEYPAIR_ERROR_CODE* error_code);
 /**
  * @brief Creates a new KeyMap initalized with all function pointers.
  * @return KeyMap
  */
-KeyPair init_keypair_stack_cstr(const char* key, void* data, size_t size, KEYPAIR_ERROR_CODE* error_code);
+KeyPair init_keypair_stack_cstr(const char* key, void* data, size_t size,
+                                KEYPAIR_ERROR_CODE* error_code);
 
 typedef enum KEYMAP_ERROR_CODE {
     KEYMAP_OK = 0,

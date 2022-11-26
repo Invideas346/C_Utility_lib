@@ -4,6 +4,8 @@
 
 #include <vector.h>
 #include <string.h>
+#include <typedef.h>
+#include <log.h>
 
 #define ARRAY_INDEX(index) ((index) * (array->object_size))
 
@@ -16,6 +18,7 @@ static void* push_back(Vector* array, const void* data, VECTOR_ERROR_CODE* error
 {
     if(!array->is_initialized) {
         assign_error_code(error_code, VECTOR_NOT_INITIALIZED);
+        LOG_ERROR("Vector not intialized");
         return NULL;
     }
     if(array->object_size == 0) {
@@ -25,6 +28,7 @@ static void* push_back(Vector* array, const void* data, VECTOR_ERROR_CODE* error
     void* newAddress = realloc(array->data, array->length * array->object_size);
     if(newAddress == NULL) {
         assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for vector");
         return NULL;
     }
     memcpy(array->data + ARRAY_INDEX(array->length - 1), data, array->object_size);
@@ -36,6 +40,7 @@ static void* push_front(Vector* array, const void* data, VECTOR_ERROR_CODE* erro
 {
     if(!array->is_initialized) {
         assign_error_code(error_code, VECTOR_NOT_INITIALIZED);
+        LOG_ERROR("Vector not intialized");
         return NULL;
     }
     if(array->object_size == 0) {
@@ -45,6 +50,7 @@ static void* push_front(Vector* array, const void* data, VECTOR_ERROR_CODE* erro
     void* newAddress = realloc(array->data, array->length * array->object_size);
     if(newAddress == NULL) {
         assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for vector");
         return NULL;
     }
     if(array->length != 1) {
@@ -60,15 +66,18 @@ static uint8_t pop_back(Vector* array, VECTOR_ERROR_CODE* error_code)
 {
     if(!array->is_initialized) {
         assign_error_code(error_code, VECTOR_NOT_INITIALIZED);
+        LOG_ERROR("Vector not intialized");
         return FALSE;
     }
     if(array->length == 0 || array->object_size <= 0) {
+        LOG_WARNING("Index out-of-bounds");
         return FALSE;
     }
     array->length -= 1;
     void* newAddress = realloc(array->data, array->length * array->object_size);
     if(newAddress == NULL) {
         assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for vector");
         return FALSE;
     }
     assign_error_code(error_code, VECTOR_OK);
@@ -79,21 +88,25 @@ static uint8_t pop_front(Vector* array, VECTOR_ERROR_CODE* error_code)
 {
     if(!array->is_initialized) {
         assign_error_code(error_code, VECTOR_NOT_INITIALIZED);
+        LOG_ERROR("Vector not intialized");
         return FALSE;
     }
     if(array->length == 0 || array->object_size <= 0) {
+        LOG_WARNING("Index out-of-bounds");
         return FALSE;
     }
     array->length -= 1;
     void* temp = malloc(array->object_size * array->length);
     if(temp == NULL) {
         assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for vector");
         return FALSE;
     }
     memcpy(temp, array->data + ARRAY_INDEX(1), array->length * array->object_size);
     void* newAddress = realloc(array->data, array->length * array->object_size);
     if(newAddress == NULL) {
         assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for vector");
         free(temp);
         return FALSE;
     }
@@ -107,9 +120,11 @@ static void* at(Vector* array, uint32_t position, VECTOR_ERROR_CODE* error_code)
 {
     if(!array->is_initialized) {
         assign_error_code(error_code, VECTOR_NOT_INITIALIZED);
+        LOG_ERROR("Vector not intialized");
         return NULL;
     }
     if(array->length == 0 || array->object_size <= 0) {
+        LOG_WARNING("Index out-of-bounds");
         return NULL;
     }
     assign_error_code(error_code, VECTOR_OK);
@@ -120,14 +135,17 @@ uint8_t resize(Vector* array, uint32_t num_elements, VECTOR_ERROR_CODE* error_co
 {
     if(!array->is_initialized) {
         assign_error_code(error_code, VECTOR_NOT_INITIALIZED);
+        LOG_ERROR("Vector not intialized");
         return FALSE;
     }
     if(array->object_size <= 0 || num_elements < 0) {
+        LOG_WARNING("Object size 0 or number elements 0 or smaller");
         return FALSE;
     }
     void* newAddress = realloc(array->data, array->object_size * num_elements);
     if(newAddress == NULL) {
         assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for vector");
         return FALSE;
     }
     array->length = num_elements;
@@ -139,6 +157,7 @@ static Vector* copy_heap(Vector* array, VECTOR_ERROR_CODE* error_code)
 {
     if(!array->is_initialized) {
         assign_error_code(error_code, VECTOR_NOT_INITIALIZED);
+        LOG_ERROR("Vector not intialized");
         return NULL;
     }
     Vector* copy =
@@ -151,6 +170,7 @@ static Vector copy_stack(Vector* array, VECTOR_ERROR_CODE* error_code)
 {
     if(!array->is_initialized) {
         assign_error_code(error_code, VECTOR_NOT_INITIALIZED);
+        LOG_ERROR("Vector not intialized");
         return *array;
     }
     Vector copy =
@@ -163,6 +183,7 @@ static void clear(Vector* array, VECTOR_ERROR_CODE* error_code)
 {
     if(!array->is_initialized) {
         assign_error_code(error_code, VECTOR_NOT_INITIALIZED);
+        LOG_ERROR("Vector not intialized");
         return;
     }
     free(array->data);
@@ -176,6 +197,7 @@ static void for_each(Vector* array, void (*func)(void* data, uint32_t index, uin
 {
     if(!array->is_initialized) {
         assign_error_code(error_code, VECTOR_NOT_INITIALIZED);
+        LOG_ERROR("Vector not intialized");
         return;
     }
     for(uint32_t i = 0; i < array->length; ++i) {
@@ -204,6 +226,7 @@ Vector* init_vector_heap(uint32_t size, uint32_t object_size, VECTOR_ERROR_CODE*
     Vector* array = (Vector*) malloc(sizeof(Vector));
     if(array == NULL) {
         assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for vector");
         return NULL;
     }
     array->length = size;
@@ -211,6 +234,7 @@ Vector* init_vector_heap(uint32_t size, uint32_t object_size, VECTOR_ERROR_CODE*
     array->data = malloc(size * object_size);
     if(array->data == NULL) {
         assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for vector");
         return array;
     }
     assign_methods(array);
@@ -225,6 +249,7 @@ Vector* init_vector_heap_data(uint32_t size, const void* data, uint32_t object_s
     Vector* array = (Vector*) malloc(sizeof(Vector));
     if(array == NULL) {
         assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for vector");
         return NULL;
     }
     array->length = size;
@@ -232,6 +257,7 @@ Vector* init_vector_heap_data(uint32_t size, const void* data, uint32_t object_s
     array->data = malloc(size * object_size);
     if(array->data == NULL) {
         assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for vector");
         return array;
     }
     memcpy(array->data, data, size * object_size);
@@ -249,6 +275,7 @@ Vector init_vector_stack(uint32_t size, uint32_t object_size, VECTOR_ERROR_CODE*
     array.data = malloc(size * object_size);
     if(array.data == NULL) {
         assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for vector");
         return array;
     }
     assign_methods(&array);
@@ -266,6 +293,7 @@ Vector init_vector_stack_data(uint32_t size, const void* data, uint32_t object_s
     array.data = malloc(size * object_size);
     if(array.data == NULL) {
         assign_error_code(error_code, VECTOR_MEMORY_ALLOCATION_ERROR);
+        LOG_ERROR("Could not allocate memory for vector");
         return array;
     }
     memcpy(array.data, data, size * object_size);
