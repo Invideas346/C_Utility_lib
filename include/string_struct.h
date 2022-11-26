@@ -3,8 +3,9 @@
 
 #include <stdint.h>
 
-typedef struct String String;
-
+/**
+ * @brief This enum represents every error which can occure with strings.
+ */
 typedef enum STRING_ERROR_CODE {
     STRING_OK = 0,
     STRING_GENERAL_ERROR = 1,
@@ -12,7 +13,10 @@ typedef enum STRING_ERROR_CODE {
     STRING_MEMORY_ALLOCATION_ERROR = 3 | STRING_GENERAL_ERROR
 } STRING_ERROR_CODE;
 
-struct String {
+/**
+ * @brief This struct represents a string and contains all functions to work with strings.
+ */
+typedef struct String {
     char* value;
     uint32_t length;
 
@@ -136,9 +140,23 @@ struct String {
      * @return Returns a copy of itself.
      */
     String (*copy_stack)(const String* str, STRING_ERROR_CODE* error_code);
-};
+} String;
 
+/**
+ * @brief Creates a new string on the heap.
+ *
+ * @param value
+ * @param error_code
+ * @return String*
+ */
 String* init_string_heap(const char* value, STRING_ERROR_CODE* error_code);
+/**
+ * @brief Creates a new string on the stack.
+ *
+ * @param value
+ * @param error_code
+ * @return String*
+ */
 String init_string_stack(const char* value, STRING_ERROR_CODE* error_code);
 
 #endif  // __STRINGSTRUCT_H__

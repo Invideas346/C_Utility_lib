@@ -6,6 +6,9 @@
 
 #define LOG_DEFAULT_LOGFILE "logfile.txt"
 
+/**
+ * @brief This enum represents all available log levels.
+ */
 typedef enum LOG_LEVEL {
     INFO = 0,
     TRACE = 1,
@@ -14,15 +17,53 @@ typedef enum LOG_LEVEL {
     ERROR = 4
 } LOG_LEVEL;
 
+/**
+ * @brief Returns a string representation of the passed in log level.
+ * This function is used in the log_msg and log_msg_str function.
+ *
+ * @param level
+ * @param out_str
+ */
 void log_level_to_string(LOG_LEVEL level, char** out_str);
 
+/**
+ * @brief Initializes a isoleted instance of the logger struct in the file log.c.
+ *
+ * @param logfile
+ */
 void log_init(const char* logfile);
+/**
+ * @brief Deinitializes the isoleted instance of the logger struct in the file log.c.
+ * To reuse the logger it has to be initialized once again.
+ */
 void log_deinit(void);
 
+/**
+ * @brief Enables the logger. This feature can be used to enable the logger at runtime.
+ */
 void log_enable(void);
+/**
+ * @brief Disables the logger. This feature can be used to disable the logger at runtime.
+ */
 void log_disable(void);
 
+/**
+ * @brief Logs a message to the terminal and also writes to the spcified logfile.
+ * The logfile is specified when the logger gets initialized.
+ *
+ * @param msg
+ * @param level
+ * @param ...
+ */
 void log_msg(const char* msg, LOG_LEVEL level, ...);
+/**
+ * @brief Logs a message to the terminal and also writes to the spcified logfile.
+ * The logfile is specified when the logger gets initialized.
+ *
+ * @param msg
+ * @param level
+ * @param ...
+ */
 void log_msg_str(String* msg, LOG_LEVEL level, ...);
 
 #ifdef NO_LOG

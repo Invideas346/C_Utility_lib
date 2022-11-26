@@ -7,6 +7,9 @@
 
 #include "string_struct.h"
 
+/**
+ * @brief Enum which represents every possible error which can occure with keypairs.
+ */
 typedef enum KEYPAIR_ERROR_CODE {
     KEYPAIR_OK = 0,
     KEYPAIR_GENERAL_ERROR = 1,
@@ -14,9 +17,11 @@ typedef enum KEYPAIR_ERROR_CODE {
     KEYPAIR_MEMORY_ALLOCATION_ERROR = 3 | KEYPAIR_GENERAL_ERROR
 } KEYPAIR_ERROR_CODE;
 
-typedef struct KeyPair KeyPair;
-
-struct KeyPair {
+/**
+ * @brief This struct represents a Keypair. A keypair is used in a so-called keymap and matches
+ * a string with a value (data type can be arbitrarly).
+ */
+typedef struct KeyPair {
     String key;
     size_t size;
     void* data;
@@ -27,7 +32,7 @@ struct KeyPair {
      * @brief Clear a KeyPair and effecticly frees all allocated memory.
      */
     void (*clear)(KeyPair* pair, KEYPAIR_ERROR_CODE* error_code);
-};
+} KeyPair;
 
 /**
  * @brief Creates a new KeyPair initalized with all function pointers.
@@ -53,6 +58,9 @@ KeyPair* init_keypair_heap_cstr(const char* key, void* data, size_t size,
 KeyPair init_keypair_stack_cstr(const char* key, void* data, size_t size,
                                 KEYPAIR_ERROR_CODE* error_code);
 
+/**
+ * @brief Enum which represents every possible error which can occure with keymaps.
+ */
 typedef enum KEYMAP_ERROR_CODE {
     KEYMAP_OK = 0,
     KEYMAP_GENERAL_ERROR = 1,
@@ -61,9 +69,10 @@ typedef enum KEYMAP_ERROR_CODE {
     KEYMAP_PAIR_NOT_FOUND = 4 | KEYMAP_GENERAL_ERROR
 } KEYMAP_ERROR_CODE;
 
-typedef struct KeyMap KeyMap;
-
-struct KeyMap {
+/**
+ * @brief This struct represensts a keymap which is a collection of keypairs.
+ */
+typedef struct KeyMap {
     KeyPair** pairs;
     uint32_t length;
 
@@ -133,7 +142,7 @@ struct KeyMap {
      * @brief Creates a copy of itself.
      */
     KeyMap (*copy_stack)(KeyMap* self, KEYMAP_ERROR_CODE* error_code);
-};
+} KeyMap;
 
 /**
  * @brief Creates a new KeyMap initalized with all function pointers.

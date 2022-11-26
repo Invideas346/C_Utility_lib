@@ -3,14 +3,19 @@
 
 #include <stdint.h>
 
-typedef struct Node Node;
-
-struct Node {
+/**
+ * @brief This struct represents a node within a linked list.
+ * A node is simply a value with 2 pointers poiting to the previous and the next node in the list.
+ */
+typedef struct Node {
     Node* previous;
     void* data;
     Node* next;
-};
+} Node;
 
+/**
+ * @brief This enum represents every error whichg can occure with linked lists.
+ */
 typedef enum LINKED_LIST_ERROR_CODE {
     LINKED_LIST_OK = 0,
     LINKED_LIST_GENERAL_ERROR = 1,
@@ -20,9 +25,11 @@ typedef enum LINKED_LIST_ERROR_CODE {
     LINKED_LIST_INDEX_OUT_OF_BOUNDS = 5 | LINKED_LIST_GENERAL_ERROR,
 } LINKED_LIST_ERROR_CODE;
 
-typedef struct LinkedList LinkedList;
-
-struct LinkedList {
+/**
+ * @brief This struct represnts a linked list.
+ * A linked list consits of nodes which point to another in the series as they were inserted into the linked list.
+ */
+typedef struct LinkedList {
     Node* head;
     Node* tail;
     uint32_t length;
@@ -83,7 +90,7 @@ struct LinkedList {
      * @param list
      */
     void (*clear)(LinkedList* list, LINKED_LIST_ERROR_CODE* error_code);
-};
+} LinkedList;
 
 LinkedList init_list_stack(LINKED_LIST_ERROR_CODE* error_code);
 LinkedList* init_list_heap(LINKED_LIST_ERROR_CODE* error_code);

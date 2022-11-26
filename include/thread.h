@@ -7,8 +7,15 @@
 #include <windows.h>
 #endif
 
-struct Thread {};
+/**
+ * @brief This struct represents a thread object which can be pused to create new
+ * threads and manage those from the current line-of-execution
+ */
+typedef struct Thread {
+    uint32_t pid;
+    uint32_t ppid;
 
-typedef struct Thread Thread;
+    void* func_ptr;
+} Thread;
 
 #endif  // __THREAD_H__

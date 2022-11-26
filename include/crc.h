@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 
+/**
+ * @brief This enum is a collection of popular used crc polynoms to perform a crc calculation.
+ */
 typedef enum CRC_POLYNOM {
     CRC1 = 0x1,
 
@@ -178,7 +181,23 @@ typedef enum CRC_POLYNOM {
     CRC64_ISO_LSB = 0xD800000000000000,
 } CRC_POLYNOM;
 
+/**
+ * @brief Performs a basic crc calculation on the given data and returns the checksum.
+ *
+ * @param data
+ * @param polynome
+ * @param objectSize
+ * @param count
+ */
 void create_crc(void* data, CRC_POLYNOM polynome, uint32_t objectSize, uint32_t count);
+/**
+ * @brief Performs a crc calculation on the given data with a costum polynom and returns the checksum.
+ *
+ * @param data
+ * @param polynome
+ * @param objectSize
+ * @param count
+ */
 void create_crc_custom(void* data, uint64_t polynome, uint32_t objectSize, uint32_t count);
 
 #endif  // __CRC_H__

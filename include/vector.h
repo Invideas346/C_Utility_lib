@@ -11,6 +11,9 @@
 // TODO: Maybe implement a toString function (not sure it is really ever gonna be needed)
 // TODO: Implement a remove via index function.
 
+/**
+ * @brief This enum represents every possible error when working with vectors.
+ */
 typedef enum VECTOR_ERROR_CODE {
     VECTOR_OK = 0,
     VECTOR_GENERAL_ERROR = 1,
@@ -18,9 +21,10 @@ typedef enum VECTOR_ERROR_CODE {
     VECTOR_MEMORY_ALLOCATION_ERROR = 3 | VECTOR_GENERAL_ERROR
 } VECTOR_ERROR_CODE;
 
-typedef struct Vector Vector;
-
-struct Vector {
+/**
+ * @brief This struct represents a vector. A vector is essentially a dynamic array.
+ */
+typedef struct Vector {
     void* data;
     uint32_t object_size;
     uint32_t length;
@@ -113,7 +117,7 @@ struct Vector {
      */
     void (*for_each)(Vector* array, void (*func)(void* data, uint32_t index, uint32_t objectSize),
                      VECTOR_ERROR_CODE* error_code);
-};
+} Vector;
 
 /**
  * @brief Creates a new dynamic array initialized with all function pointers.
