@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-#define FALSE 0
-#define TRUE  1
+#define FALSE (uint8_t) 0
+#define TRUE  (uint8_t) 1
 
 // 0xffffffff could be reached but is extremely unlikely.
 #define INDEX_NOTFOUND 0xffffffff

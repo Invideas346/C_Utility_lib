@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+typedef struct Node Node;
+
 /**
  * @brief This struct represents a node within a linked list.
  * A node is simply a value with 2 pointers poiting to the previous and the next node in the list.
@@ -24,6 +26,8 @@ typedef enum LINKED_LIST_ERROR_CODE {
     LINKED_LIST_ELEMENT_NULL = 4 | LINKED_LIST_GENERAL_ERROR,
     LINKED_LIST_INDEX_OUT_OF_BOUNDS = 5 | LINKED_LIST_GENERAL_ERROR,
 } LINKED_LIST_ERROR_CODE;
+
+typedef struct LinkedList LinkedList;
 
 /**
  * @brief This struct represnts a linked list.

@@ -17,6 +17,8 @@ typedef enum KEYPAIR_ERROR_CODE {
     KEYPAIR_MEMORY_ALLOCATION_ERROR = 3 | KEYPAIR_GENERAL_ERROR
 } KEYPAIR_ERROR_CODE;
 
+typedef struct KeyPair KeyPair;
+
 /**
  * @brief This struct represents a Keypair. A keypair is used in a so-called keymap and matches
  * a string with a value (data type can be arbitrarly).
@@ -68,6 +70,8 @@ typedef enum KEYMAP_ERROR_CODE {
     KEYMAP_MEMORY_ALLOCATION_ERROR = 3 | KEYMAP_GENERAL_ERROR,
     KEYMAP_PAIR_NOT_FOUND = 4 | KEYMAP_GENERAL_ERROR
 } KEYMAP_ERROR_CODE;
+
+typedef struct KeyMap KeyMap;
 
 /**
  * @brief This struct represensts a keymap which is a collection of keypairs.

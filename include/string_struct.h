@@ -13,6 +13,8 @@ typedef enum STRING_ERROR_CODE {
     STRING_MEMORY_ALLOCATION_ERROR = 3 | STRING_GENERAL_ERROR
 } STRING_ERROR_CODE;
 
+typedef struct String String;
+
 /**
  * @brief This struct represents a string and contains all functions to work with strings.
  */

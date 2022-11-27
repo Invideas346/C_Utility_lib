@@ -4,7 +4,7 @@ if(LOG)
     set(LOG_SOURCES log.c)
 else()
     set(LOG_SOURCES)
-endif(THREADS)
+endif(LOG)
 
 set(SOURCE_FILES
         main.c
@@ -24,3 +24,7 @@ endif(EXE)
 if(LIBARY)
     add_library(${PROJECT_NAME} ${SOURCE_FILES})
 endif(LIBARY)
+
+if(UNIX)
+    target_link_libraries(${PROJECT_NAME} pthread)
+endif(UNIX)

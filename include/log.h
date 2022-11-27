@@ -66,6 +66,20 @@ void log_msg(const char* msg, LOG_LEVEL level, ...);
  */
 void log_msg_str(String* msg, LOG_LEVEL level, ...);
 
+/**
+ * @brief Checks whether the logger is active.
+ *
+ * @return uint8_t
+ */
+uint8_t logger_is_enabled(void);
+
+/**
+ * @brief Checks whether the logger is initialized.
+ *
+ * @return uint8_t
+ */
+uint8_t logger_is_initialized(void);
+
 #ifdef NO_LOG
 #define LOG_INIT()   (void*) 0
 #define LOG_DEINIT() (void*) 0
@@ -84,6 +98,9 @@ void log_msg_str(String* msg, LOG_LEVEL level, ...);
 #define LOG_DEBUG_STR(msg, ...)   (void*) 0
 #define LOG_WARNING_STR(msg, ...) (void*) 0
 #define LOG_ERROR_STR(msg, ...)   (void*) 0
+
+#define LOG_IS_ENABLED()     (void*) 0
+#define LOG_IS_INITIALIZED() (void*) 0
 #else
 #define LOG_INIT()   log_init(LOG_DEFAULT_LOGFILE)
 #define LOG_DEINIT() log_deinit(void)
@@ -102,6 +119,9 @@ void log_msg_str(String* msg, LOG_LEVEL level, ...);
 #define LOG_DEBUG_STR(msg, ...)   log_msg_str(msg, DEBUG, ##__VA_ARGS__)
 #define LOG_WARNING_STR(msg, ...) log_msg_str(msg, WARNING, ##__VA_ARGS__)
 #define LOG_ERROR_STR(msg, ...)   log_msg_str(msg, ERROR, ##__VA_ARGS__)
+
+#define LOG_IS_ENABLED()     logger_is_enabled()
+#define LOG_IS_INITIALIZED() logger_is_initialized()
 #endif
 
 #endif  //__LOG_H__

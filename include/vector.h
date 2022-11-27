@@ -21,6 +21,8 @@ typedef enum VECTOR_ERROR_CODE {
     VECTOR_MEMORY_ALLOCATION_ERROR = 3 | VECTOR_GENERAL_ERROR
 } VECTOR_ERROR_CODE;
 
+typedef struct Vector Vector;
+
 /**
  * @brief This struct represents a vector. A vector is essentially a dynamic array.
  */
