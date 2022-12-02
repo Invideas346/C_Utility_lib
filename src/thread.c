@@ -32,7 +32,7 @@ static void start(Thread* thread, THREAD_ERROR_CODE* error_code)
 #endif
     assign_error_code(error_code, THREAD_OK);
 }
-static void attach(Thread* thread, void* (*func)(void*), void* args, THREAD_ERROR_CODE* error_code)
+static void attach(Thread* thread, void* (*func)(void*), void** args, THREAD_ERROR_CODE* error_code)
 {
 }
 static void join(Thread* thread, THREAD_ERROR_CODE* error_code)
@@ -67,7 +67,7 @@ Thread* init_thread_heap(THREAD_ERROR_CODE* error_code)
     thread->is_initialized = TRUE;
     return thread;
 }
-Thread* init_thread_heap_func(void* (*func_ptr)(void*), THREAD_ERROR_CODE* error_code)
+Thread* init_thread_heap_func(void* (*func_ptr)(void**), THREAD_ERROR_CODE* error_code)
 {
     Thread* thread = (Thread*) malloc(sizeof(Thread));
     thread->is_initialized = FALSE;
@@ -91,7 +91,7 @@ Thread init_thread_stack()
     thread.is_initialized = TRUE;
     return thread;
 }
-Thread init_thread_stack_func(void* (*func_ptr)(void*) )
+Thread init_thread_stack_func(void* (*func_ptr)(void**) )
 {
     Thread thread;
     thread.is_finished = FALSE;
@@ -107,14 +107,24 @@ Thread init_thread_stack_func(void* (*func_ptr)(void*) )
 // TODO: There are multiple ways to solve this issue.
 // 1. pass in an array with the size of every argument the size and a pointer onto the data
 // 2. pass in an linked list. The linked list struct would have to be adapted to also store the object_size in each node
-void* thread_pack_data(void* arg, ...)
+void** thread_pack_data(uint32_t item_count, void* arg, ...)
 {
+    void** data = NULL;
     va_list args;
     va_start(args, arg);
-    /*for(int i = 0; i < count; ++i) {
-        double num = va_arg(args, double);
-        sum += num;
-        sum_sq += num * num;
-    }*/
+    if(arg == NULL) {
+        LOG_WARNING("Invalid arguments!");
+        return NULL;
+    }
+    data = malloc(item_count + 1 * sizeof(void*));
+    if(data == NULL) {
+        LOG_WARNING("Failed to allocate memory for data");
+        return NULL;
+    }
+    data[0] = arg;
+    for(uint32_t i = 1; i < item_count + 1; i++) {
+        data[i] = va_arg(args, void*);
+    }
     va_end(args);
+    return data;
 }

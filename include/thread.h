@@ -28,17 +28,18 @@ typedef struct Thread Thread;
 typedef struct Thread {
     uint32_t tid;
     uint32_t ptid;
-    void* args;
+    void** args;
     pthread_mutex_t mutex;
 #if linux
     pthread_t thread_handle;
 #elif win32
 #endif
 
-    void* (*func_ptr)(void* args);
+    void* (*func_ptr)(void** args);
 
     void (*start)(Thread* thread, THREAD_ERROR_CODE* error_code);
-    void (*attach)(Thread* thread, void* (*func)(void*), void* args, THREAD_ERROR_CODE* error_code);
+    void (*attach)(Thread* thread, void* (*func)(void**), void** args,
+                   THREAD_ERROR_CODE* error_code);
     void (*join)(Thread* thread, THREAD_ERROR_CODE* error_code);
     void (*terminate)(Thread* thread, THREAD_ERROR_CODE* error_code);
     uint8_t (*is_finished)(Thread* thread, THREAD_ERROR_CODE* error_code);
@@ -58,7 +59,7 @@ Thread* init_thread_heap(THREAD_ERROR_CODE* error_code);
  * @param func_ptr
  * @return Thread*
  */
-Thread* init_thread_heap_func(void* (*func_ptr)(void*), THREAD_ERROR_CODE* error_code);
+Thread* init_thread_heap_func(void* (*func_ptr)(void**), THREAD_ERROR_CODE* error_code);
 /**
  * @brief Creates a new thread struct on the stack.
  *
@@ -71,15 +72,16 @@ Thread init_thread_stack();
  * @param func_ptr
  * @return Thread*
  */
-Thread init_thread_stack_func(void* (*func_ptr)(void*) );
+Thread init_thread_stack_func(void* (*func_ptr)(void**) );
 
 /**
  * @brief This function packs all passed in arguments in order as they were passed in into a array.
  * This is necessary because pthread needs all arguments to be consecutivly stored in memory.
  *
+ * @param item_count
  * @param arg The first argument to be packed
  * @return void*
  */
-void* thread_pack_data(void* arg, ...);
+void** thread_pack_data(uint32_t item_count, void* arg, ...);
 
 #endif  // __THREAD_H__
